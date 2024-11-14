@@ -16,10 +16,10 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "types": ["vite-plugin-svgr/client", "node"],
-    "paths": {
-      "@/": ["src/"]
-    }
+    "types": ["vite-plugin-svgr/client", "node"]
+    // "paths": {
+    //   "@/": ["src/"]
+    // }
   },
   "include": ["src", "public/firebase-messaging-sw.js"],
   "exclude": ["node_modules", "build"],
