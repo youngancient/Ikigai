@@ -1,0 +1,411 @@
+@use "../../assets/styles/index" as *;
+
+.landing-page {
+  background-color: #101419;
+  position: relative;
+  overflow: hidden;
+
+  .ring-parent {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    position: relative;
+
+    img {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      min-width: 2100px;
+      min-height: 2100px;
+    }
+  }
+
+  button {
+    outline: none !important;
+    border: none;
+    cursor: pointer;
+  }
+
+  button.get-started-btn {
+    padding: 10px;
+    border-radius: 200px;
+    background: var(--gradient9);
+    width: 163px;
+    height: 52px;
+    font-size: 0.9375em;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    color: var(--white);
+
+    @include mq(768px) {
+      width: 140px;
+    }
+  }
+
+  .hero {
+    padding-top: 66px;
+    position: relative;
+    width: 100%;
+    max-width: 1920px;
+    margin: auto;
+    height: max-content;
+    .eth-coin {
+      position: absolute;
+
+      @include mq(800px) {
+        display: none;
+      }
+
+      &.one {
+        width: 160px;
+        height: 160px;
+        top: 184px;
+        left: 137px;
+      }
+      &.two {
+        width: 90px;
+        height: 90px;
+        left: 104px;
+        bottom: 65px;
+      }
+      &.three {
+        width: 90px;
+        height: 90px;
+        top: 292px;
+        right: 84px;
+      }
+      &.four {
+        width: 150px;
+        height: 150px;
+        bottom: 55px;
+        right: 84px;
+      }
+    }
+  }
+
+  nav,
+  .connect-wallet-flex {
+    position: relative;
+    margin: auto;
+
+    margin-bottom: 195px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 90%;
+    max-width: 1920px;
+
+    @include mq(768px) {
+      margin-bottom: 80px;
+    }
+
+    p {
+      font-size: 1.5em;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 32px;
+
+      background: var(--gradient9);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  }
+
+  .gradient-box {
+    margin: auto;
+    position: absolute;
+    width: 654px;
+    height: 654px;
+    top: -588px;
+    left: 0;
+    right: 0;
+    margin: auto;
+    border-radius: 775.002px;
+    background: var(--gradient9);
+    filter: blur(100px);
+  }
+
+  .connect-wallet-flex {
+    margin-bottom: 0;
+    margin-top: 30px;
+    padding: 40px 0;
+    width: 95%;
+    button {
+      width: 200px;
+    }
+  }
+
+  .first-section {
+    padding-bottom: 132px;
+    margin: auto;
+    width: 90%;
+    max-width: 1920px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    .info {
+      margin: auto;
+      padding: 4px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      width: 100%;
+      max-width: 280px;
+      border-radius: 32px;
+      background: linear-gradient(
+        90deg,
+        rgba(229, 156, 255, 0.24) 0.01%,
+        rgba(186, 156, 255, 0.24) 50.01%,
+        rgba(156, 178, 255, 0.24) 100%
+      );
+
+      img {
+        width: 24px;
+      }
+
+      p {
+        font-size: 0.875em;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 20px;
+        background: linear-gradient(
+          90deg,
+          #e59cff 0.01%,
+          #ba9cff 50.01%,
+          #9cb2ff 100%
+        );
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+    }
+
+    h1 {
+      margin: 30px 0 33px;
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+      font-size: 3.5em;
+      font-style: normal;
+      font-weight: 600;
+      line-height: 70px;
+      background: var(--gradient9);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+
+      @include mq(768px) {
+        font-size: 2em;
+        line-height: 40px;
+      }
+    }
+
+    .desc {
+      margin-bottom: 33px;
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 24px;
+      color: var(--white);
+      text-align: center;
+    }
+
+    .get-started-btn {
+      margin: auto;
+    }
+
+    .supported-chain {
+      margin-top: 101px;
+
+      @include mq(768px) {
+        margin-top: 50px;
+      }
+      p {
+        margin-bottom: 0.75em;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 20px;
+        color: var(--white);
+      }
+
+      .chain-flex {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        flex-wrap: wrap;
+        button {
+          min-width: 138px;
+          border-radius: 20px;
+          border: 1px solid var(--grey200);
+          background: #fff;
+          @include mq(768px) {
+            min-width: 100px;
+          }
+        }
+        img {
+          width: 52px;
+        }
+      }
+    }
+  }
+
+  .second-section {
+    position: relative;
+    background: #272a2e;
+
+    .d-flex {
+      padding: 110px 0 155px;
+      margin: auto;
+      display: flex;
+      max-width: 1920px;
+      width: 70%;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      row-gap: 40px;
+      color: var(--white);
+
+      @include mq(768px) {
+        padding: 50px 0;
+        width: 90%;
+      }
+      .about-app {
+        width: 40%;
+        @include mq(768px) {
+          width: 100%;
+        }
+
+        h4 {
+          margin-bottom: 32px;
+          font-size: 2em;
+          font-style: normal;
+          font-weight: 700;
+          line-height: 40px;
+          color: var(--white);
+
+          @include mq(768px) {
+            margin-bottom: 10px;
+            font-size: 1.5em;
+          }
+        }
+
+        p {
+          font-size: 1em;
+          font-style: normal;
+          font-weight: 400;
+          line-height: 24px;
+        }
+      }
+
+      .app-sections {
+        width: 55%;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+
+        @include mq(768px) {
+          width: 100%;
+        }
+
+        .section-item {
+          width: 48%;
+          img {
+            width: 48px;
+          }
+
+          .title {
+            margin-bottom: 24px;
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: 24px;
+            @include mq(768px) {
+              margin-bottom: 10px;
+            }
+          }
+
+          .desc {
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 24px;
+          }
+        }
+      }
+    }
+
+    .secure-container {
+      margin: auto;
+      padding: 62px 54px 0;
+      display: flex;
+      gap: 4px;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: 24px;
+      background: var(--gradient9);
+      width: 90%;
+      max-width: 1920px;
+
+      @include mq(768px) {
+        padding: 40px 20px 0;
+        flex-direction: column;
+        row-gap: 20px;
+      }
+
+      .text-container {
+        h3 {
+          font-size: 3em;
+          font-style: normal;
+          font-weight: 600;
+          line-height: 60px;
+          @include mq(1000px) {
+            font-size: 2em;
+            line-height: 40px;
+          }
+
+          @include mq(768px) {
+            margin-bottom: 10px;
+            font-size: 1.5em;
+            line-height: 20px;
+          }
+        }
+
+        p {
+          margin-bottom: 45px;
+          font-size: 1.125em;
+          font-style: normal;
+          font-weight: 500;
+          line-height: 24px;
+          color: var(--white);
+        }
+
+        button {
+          padding: 10px;
+          border-radius: 200px;
+          background: var(--grey900);
+          width: 163px;
+          height: 52px;
+          color: var(--white);
+        }
+      }
+
+      img {
+        width: 400px;
+
+        @include mq(1000px) {
+          width: 300px;
+        }
+
+        @include mq(768px) {
+          margin-top: 20px;
+          width: 100%;
+        }
+      }
+    }
+  }
+}
