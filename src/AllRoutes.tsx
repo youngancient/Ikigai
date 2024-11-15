@@ -12,7 +12,6 @@ export const AllRoutes = () => {
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/app" element={<h2>Welcome, You are In</h2>} />
         </Routes>
       </BrowserRouter>
     </>
