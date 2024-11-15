@@ -10,8 +10,25 @@ import eth4 from "../../assets/images/eth4.png";
 import rings from "../../assets/icons/rings.svg";
 
 import "./style.scss";
+import { useAppKit, useAppKitAccount } from "@reown/appkit/react";
+import { formatAddress } from "../../utils/helpers";
+import { useNavigate } from "react-router-dom";
 
 const Landing = () => {
+  const { open } = useAppKit();
+  const { address, isConnected } = useAppKitAccount();
+  const navigate = useNavigate();
+
+  const handleConnectWallet = () => {
+    open();
+  };
+  const goToApp = () => {
+    if(!isConnected){
+      open();
+    }else{
+      navigate("/app");
+    }
+  };
   return (
     <div className="landing-page">
       <div className="ring-parent">
@@ -27,7 +44,9 @@ const Landing = () => {
 
         <nav>
           <p>Crypto Will</p>
-          <button className="get-started-btn">Open app</button>
+          <button className="get-started-btn" onClick={goToApp}>
+            {isConnected ? "Open App": "Connect Wallet"}
+          </button>
         </nav>
 
         <div className="first-section">
@@ -47,13 +66,13 @@ const Landing = () => {
             fulfilled.
           </p>
 
-          <button className="get-started-btn">Get Started</button>
+          <button className="get-started-btn" onClick={goToApp} >Get Started</button>
 
           <div className="supported-chain">
             <p>Supported chain:</p>
 
             <div className="chain-flex">
-              {[1, 2, 3].map((item) => (
+              {[1, 2, 3].map(() => (
                 <button>
                   <img src={lisk} alt="lisk" />
                 </button>
@@ -113,7 +132,9 @@ const Landing = () => {
 
         <div className="connect-wallet-flex">
           <p>Crypto will</p>
-          <button className="get-started-btn">Connect Wallet</button>
+          <button className="get-started-btn" onClick={handleConnectWallet}>
+            {isConnected ? formatAddress(address ?? "") : "Connect Wallet"}
+          </button>
         </div>
       </div>
     </div>

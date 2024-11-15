@@ -10,6 +10,7 @@ export const AllRoutes = () => {
         <ScrollToTop />
         <Routes>
           <Route path="/" element={<Landing />} />
+          <Route path="/app" element={<h2>Welcome, You are In</h2>} />
         </Routes>
       </BrowserRouter>
     </>

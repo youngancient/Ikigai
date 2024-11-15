@@ -1,4 +1,4 @@
-export const StarIcon = ({ className }: { className?: string }) => (
+export const StarIcon = () => (
   <svg
     width="80"
     height="80"

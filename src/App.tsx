@@ -1,4 +1,6 @@
 import { AllRoutes } from "./AllRoutes";
+import "./connection.ts";
+
 function App() {
   return (
     <>
