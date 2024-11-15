@@ -1,13 +1,12 @@
-import './App.css'
-
+import { AllRoutes } from "./AllRoutes";
 function App() {
-  
-
   return (
     <>
-     <h1>Hello world</h1>
+      <div className={`theme w-full`}>
+        <AllRoutes />
+      </div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
