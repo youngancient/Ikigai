@@ -50,6 +50,10 @@
     max-width: 1920px;
     margin: auto;
     height: max-content;
+
+    @include mq(768px) {
+      padding-top: 30px;
+    }
     .eth-coin {
       position: absolute;
 
@@ -88,7 +92,6 @@
   .connect-wallet-flex {
     position: relative;
     margin: auto;
-
     margin-bottom: 195px;
     display: flex;
     align-items: center;
@@ -97,7 +100,7 @@
     max-width: 1920px;
 
     @include mq(768px) {
-      margin-bottom: 80px;
+      margin-bottom: 60px;
     }
 
     p {
@@ -205,13 +208,17 @@
     }
 
     .desc {
-      margin-bottom: 33px;
+      margin: 0 auto 33px;
+      width: 40%;
       font-size: 16px;
       font-style: normal;
       font-weight: 400;
       line-height: 24px;
       color: var(--white);
       text-align: center;
+      @include mq(900px) {
+        width: 100%;
+      }
     }
 
     .get-started-btn {
