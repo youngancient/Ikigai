@@ -57,7 +57,7 @@ const InputField = forwardRef<HTMLInputElement, InputProps>(
         {label && (
           <label className={`${extralabel ? "flex_label" : ""}  `}>
             {label}{" "}
-            {props.required ? <span className="text-error">*</span> : ""}
+            {/* {props.required ? <span className="text-error">*</span> : ""} */}
             {extralabel && extralabel}
           </label>
         )}
