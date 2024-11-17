@@ -4,11 +4,11 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import { IoClose } from "react-icons/io5";
 
 export const Layout = ({
-  children,
   title,
+  children,
 }: {
-  children?: React.ReactNode;
   title: string;
+  children?: React.ReactNode;
 }) => {
   const [showSidebar, setShowSidebar] = useState(false);
 
