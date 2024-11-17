@@ -227,12 +227,15 @@
 
     .supported-chain {
       margin-top: 101px;
-
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       @include mq(768px) {
         margin-top: 50px;
       }
+
       p {
-        margin-bottom: 0.75em;
+        margin-bottom: 20px;
         font-size: 14px;
         font-style: normal;
         font-weight: 400;
@@ -240,22 +243,12 @@
         color: var(--white);
       }
 
-      .chain-flex {
-        display: flex;
-        align-items: center;
-        gap: 11px;
-        flex-wrap: wrap;
-        button {
-          min-width: 138px;
-          border-radius: 20px;
-          border: 1px solid var(--grey200);
-          background: #fff;
-          @include mq(768px) {
-            min-width: 100px;
-          }
-        }
-        img {
-          width: 52px;
+      img {
+        width: 100px;
+        object-fit: contain;
+
+        @include mq(768px) {
+          width: 150px;
         }
       }
     }

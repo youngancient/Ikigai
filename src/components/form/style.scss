@@ -1,0 +1,248 @@
+@use "../../assets/styles/index" as *;
+
+.form-group-flex {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  @include mq(768px) {
+    flex-direction: column;
+  }
+  .form-group-wrapper,
+  .select-group {
+    width: 49%;
+    flex-grow: 1;
+    @include mq(768px) {
+      width: 100%;
+      flex-grow: 1;
+    }
+  }
+  &.three {
+    gap: 24px;
+    row-gap: 16px;
+  }
+}
+
+.form-group-autoflex {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  row-gap: 12px;
+  @include mq(768px) {
+    flex-direction: column;
+  }
+  .form-group-wrapper,
+  .select-group {
+    flex: 1;
+
+    @include mq(768px) {
+      width: 100%;
+      .form-group {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
+.form-group-wrapper,
+.select-group,
+.TextArea {
+  label {
+    margin-bottom: 4px;
+    font-size: 1em;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 24px;
+    display: flex;
+    align-items: center;
+
+    color: var(--grey50);
+    &.error {
+      color: var(--error);
+    }
+    .text-error {
+      color: var(--error);
+    }
+    .info_button {
+      transform: translateY(-2px);
+      margin-left: 4px;
+    }
+  }
+}
+
+.TextArea {
+  textarea {
+    border-radius: 8px;
+    border: 1.5px solid var(--grey50);
+    &.errorbg {
+      border: 1.5px solid var(--error);
+    }
+  }
+}
+
+.form-group-wrapper,
+.TextArea {
+  margin-bottom: 16px;
+  @apply flex-grow;
+
+  .form-group {
+    @apply relative flex justify-between items-center flex-grow;
+    padding-left: 14px;
+    padding-right: 14px;
+    overflow: hidden;
+    height: 58px;
+    border-radius: 8px;
+    border: 1.5px solid #f9fafb33;
+    background: var(--bg2);
+    &.no_padding {
+      padding-right: 0;
+    }
+    &.textarea-wrap {
+      min-height: 120px;
+      textarea {
+        @apply h-full;
+        min-height: 120px;
+        padding: 12px 16px;
+      }
+    }
+
+    &.errorbg {
+      border: 1.5px solid var(--error) !important;
+    }
+
+    input,
+    textArea {
+      padding-left: 4px;
+      padding-right: 4px;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 24px;
+      flex-grow: 1;
+      height: 100%;
+      color: var(--white);
+      &:focus {
+        outline: none;
+      }
+      &::placeholder {
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 24px;
+        color: #e4e7ec;
+      }
+    }
+    @include mq(600px) {
+      height: 46px;
+    }
+  }
+}
+
+.select-group {
+  .form-group {
+    align-items: flex-start;
+    margin: 0;
+    margin-bottom: 16px;
+    &.howTo {
+      label {
+        z-index: auto;
+        justify-content: flex-start;
+      }
+    }
+  }
+  .MuiAutocomplete-clearIndicator {
+    display: none;
+  }
+
+  .select-mui {
+    padding: 0;
+    height: 58px;
+    overflow-y: hidden;
+    width: 100%;
+    color: var(--white);
+
+    @include mq(600px) {
+      height: 46px;
+    }
+
+    .MuiSelect-select {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .MuiButtonBase-root {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .MuiAutocomplete-inputRoot {
+      height: 58px;
+      @include mq(600px) {
+        height: auto;
+      }
+    }
+
+    svg {
+      width: 20px;
+      color: var(--white);
+    }
+    &,
+    input {
+      border: none !important;
+      padding: 0 !important;
+    }
+
+    fieldset {
+      border-radius: 8px;
+      border: 1.5px solid var(--grey50) !important;
+      &:focus {
+        color: var(--primary);
+      }
+    }
+  }
+
+  .menu-item {
+    font-size: 14px !important;
+    &.placeholder {
+      color: #b5b5bd;
+    }
+  }
+}
+
+.input-err-msg {
+  width: 100%;
+  font-weight: 400;
+  font-size: 12px;
+  display: flex;
+  text-align: right;
+  margin-top: 5px;
+  color: rgb(218 20 20);
+}
+.input_extra_message {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 24px;
+  margin-top: 3px;
+  color: var(--black02);
+}
+.input_extra_indicator {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-top: 8px;
+  svg {
+    width: 14px;
+    transform: translateY(3px);
+  }
+  p {
+    color: var(--primary);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    &.disabledNote {
+      color: #848d99;
+    }
+    @include mq(600px) {
+      font-size: 12px;
+    }
+  }
+}

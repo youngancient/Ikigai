@@ -23,9 +23,9 @@ const Landing = () => {
     open();
   };
   const goToApp = () => {
-    if(!isConnected){
+    if (!isConnected) {
       open();
-    }else{
+    } else {
       navigate("/dashboard");
     }
   };
@@ -45,7 +45,7 @@ const Landing = () => {
         <nav>
           <p>Crypto Will</p>
           <button className="get-started-btn" onClick={goToApp}>
-            {isConnected ? "Open App": "Connect Wallet"}
+            {isConnected ? "Open App" : "Connect Wallet"}
           </button>
         </nav>
 
@@ -66,18 +66,16 @@ const Landing = () => {
             fulfilled.
           </p>
 
-          <button className="get-started-btn" onClick={goToApp} >Get Started</button>
+          <button className="get-started-btn" onClick={goToApp}>
+            Get Started
+          </button>
 
           <div className="supported-chain">
-            <p>Supported chain:</p>
+            <p>Powered By:</p>
 
-            <div className="chain-flex">
-              {[1, 2, 3].map(() => (
-                <button>
-                  <img src={lisk} alt="lisk" />
-                </button>
-              ))}
-            </div>
+            <button>
+              <img src={lisk} alt="lisk" />
+            </button>
           </div>
         </div>
       </div>
