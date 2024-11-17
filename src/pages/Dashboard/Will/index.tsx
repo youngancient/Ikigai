@@ -25,6 +25,13 @@ const WillPage = () => {
     });
   }, [sentBalance, walletBalance, balance]);
 
+  // remove this block later
+  useEffect(() => {
+    setBalance(0);
+    setWalletBalance(0);
+    setSentBalance(0);
+  }, []);
+
   return (
     <>
       <Layout

@@ -26,9 +26,7 @@ type Props = {
   handleCustomChange?: (arg: any) => void;
 };
 
-export default function SelectField<
-  TFormValues extends Record<string, unknown>
->({
+export default function SelectField({
   name,
   className,
   selectOption = [],
