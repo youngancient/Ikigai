@@ -112,10 +112,10 @@ const WillPage = () => {
             </div>
           </div>
 
-          <div className="activity-container">
+          <div className={`activity-container ${true && "empty"}`}>
             <p className="topic">Activity</p>
 
-            <div className="activity-table">
+            <div className={`activity-table `}>
               {false ? "" : <EmptyState text="You have no fund yet" />}
             </div>
           </div>
