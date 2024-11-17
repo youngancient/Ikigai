@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ScrollToTop from "./components/scrollToTop";
 import Landing from "./pages/Landing";
 import { Dashboard } from "./pages/Dashboard/Dashboard";
-import WillPage from "./pages/Will";
+import WillPage from "./pages/Dashboard/Will";
 import { Trustfund } from "./pages/Dashboard/Trustfund";
 
 export const AllRoutes = () => {

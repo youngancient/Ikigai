@@ -15,4 +15,19 @@
     #ff56a9 54.03%,
     #ffaa6c 85.28%
   );
+  --gradient10: linear-gradient(
+    91deg,
+    rgba(96, 123, 132, 0.7) 0%,
+    rgba(57, 21, 63, 0.7) 29.54%,
+    rgba(81, 11, 46, 0.7) 54.03%,
+    rgba(103, 45, 3, 0.7) 85.28%
+  );
+  --gradient960: linear-gradient(
+    91deg,
+    #8ad4ec99 0%,
+    #ef96ff99 29.54%,
+    #ff56a999 54.03%,
+    #ffaa6c99 85.28%
+  );
+  --error: #d90429;
 }

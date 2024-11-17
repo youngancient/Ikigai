@@ -1,0 +1,24 @@
+@use "../../assets/styles/index" as *;
+.modal-wrap {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  //   background: rgba(9, 9, 23, 0.319);
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  overflow: hidden;
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .modal-content {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+}

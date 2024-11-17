@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { ReactNode, useState } from "react";
 import logo from "../../assets/images/cryptowillLogo.png";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoClose } from "react-icons/io5";
@@ -6,10 +6,12 @@ import { NavLink } from "react-router-dom";
 
 export const Layout = ({
   title,
+  titleChild,
   children,
 }: {
   title: string;
-  children?: React.ReactNode;
+  titleChild?: ReactNode;
+  children?: ReactNode;
 }) => {
   const [showSidebar, setShowSidebar] = useState(false);
 
@@ -299,7 +301,8 @@ export const Layout = ({
               <h3 className="text-2xl capitalize">{title}</h3>
             </div>
 
-            <div>
+            <div className="flex gap-4">
+              {titleChild}
               <button className="bg-gradient-to-r from-[#8AD4EC99] via-[#EF96FF99] to-[#FF56A999] px-4 py-2 rounded-xl">
                 Connect Wallet
               </button>
