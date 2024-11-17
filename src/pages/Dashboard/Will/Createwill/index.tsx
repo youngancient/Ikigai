@@ -56,6 +56,7 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
     e.preventDefault();
     if (step === TOTALSTEP) {
       console.log(formData, "formdata");
+      setIsLoading(true);
       // sign function goes here
     } else {
       setStep(step + 1);
@@ -77,8 +78,10 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
 
   const closeModalFunc = () => {
     closeModal();
-    setStep(0);
+    setStep(1);
     clearForm();
+    setIsLoading(false);
+    setIsSubmitted(false);
   };
 
   return (
@@ -88,186 +91,197 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
       closeOnOverlayClick={false}
     >
       <div className="create-will-modal">
-        <div className="title">
-          <h4>
-            {isLoading || isSubmitted
-              ? ""
-              : step === TOTALSTEP
-              ? "Signature Request"
-              : "Create Will"}
-          </h4>
+        <div className="modal-contents">
+          <div className="title">
+            <h4>
+              {isLoading || isSubmitted
+                ? ""
+                : step === TOTALSTEP
+                ? "Signature Request"
+                : "Create Will"}
+            </h4>
 
-          <IconButton onClick={closeModalFunc}>
-            <CancelIcon />
-          </IconButton>
-        </div>
-
-        {isLoading && (
-          <div className="loading-state">
-            <img src={refresh} alt="refresh" />
-
-            <h5>Loading confirmation</h5>
-            <p>
-              Creating a trust fund category here Confirm this action in your
-              dashboard
-            </p>
+            <IconButton onClick={closeModalFunc}>
+              <CancelIcon />
+            </IconButton>
           </div>
-        )}
 
-        {isSubmitted && (
-          <div className="submitted-state">
-            <img src={check_circle} alt="check" />
+          {isLoading && (
+            <div className="loading-state">
+              <img src={refresh} alt="refresh" />
 
-            <h5>Action Completed!</h5>
+              <h5>Loading confirmation</h5>
+              <p>
+                Creating a trust fund category here Confirm this action in your
+                dashboard
+              </p>
+            </div>
+          )}
 
-            <a href="http://localhost:5176/vault">Confirm on Ethereum</a>
-          </div>
-        )}
+          {isSubmitted && (
+            <div className="submitted-state">
+              <img src={check_circle} alt="check" />
 
-        {!isLoading && !isSubmitted && (
-          <form onSubmit={handleSubmit}>
-            {step === 1 && (
-              <div className="form-step-one">
-                <InputField
-                  name="name"
-                  label="Name of Beneficiary"
-                  required={true}
-                  value={formData.name}
-                  type={"text"}
-                  onChange={handleChange}
-                />
-                <InputField
-                  name="email"
-                  label="E-mail address of beneficiary"
-                  required={true}
-                  value={formData.email}
-                  type={"email"}
-                  onChange={handleChange}
-                />{" "}
-                <InputField
-                  name="phone"
-                  label="Phone number of beneficiary"
-                  required={true}
-                  value={formData.phone}
-                  type={"text"}
-                  onChange={handleChange}
-                />{" "}
-                <InputField
-                  name="address"
-                  label="Beneficiary Wallet address"
-                  required={true}
-                  value={formData.address}
-                  type={"text"}
-                  onChange={handleChange}
-                />
-                <Button className="submit-button" type="submit">
-                  Next
-                </Button>
-              </div>
-            )}
+              <h5>Action Completed!</h5>
 
-            {step === 2 && (
-              <div className="form-step-two">
-                <SelectField
-                  label={"Asset to transfer"}
-                  name="asset"
-                  handleCustomChange={handleChange}
-                  value={formData.asset}
-                  selectOption={assetList}
-                />
+              <a href="http://localhost:5176/vault">Confirm on Ethereum</a>
+            </div>
+          )}
 
-                <div className="amount-container">
-                  <label>Enter Amount</label>
-
-                  <textarea
-                    name="amount"
-                    required
+          {!isLoading && !isSubmitted && (
+            <form onSubmit={handleSubmit}>
+              {step === 1 && (
+                <div className="form-step-one">
+                  <InputField
+                    name="name"
+                    label="Name of Beneficiary"
+                    required={true}
+                    value={formData.name}
+                    type={"text"}
                     onChange={handleChange}
-                  ></textarea>
-
-                  <div className="quick-select-amount">
-                    {[1, 2, 3].map((item) => (
-                      <IconButton>{`${item} ${formData.asset}`}</IconButton>
-                    ))}
-                  </div>
+                  />
+                  <InputField
+                    name="email"
+                    label="E-mail address of beneficiary"
+                    required={true}
+                    value={formData.email}
+                    type={"email"}
+                    onChange={handleChange}
+                  />{" "}
+                  <InputField
+                    name="phone"
+                    label="Phone number of beneficiary"
+                    required={true}
+                    value={formData.phone}
+                    type={"text"}
+                    onChange={handleChange}
+                  />{" "}
+                  <InputField
+                    name="address"
+                    label="Beneficiary Wallet address"
+                    required={true}
+                    value={formData.address}
+                    type={"text"}
+                    onChange={handleChange}
+                    errMsg={
+                      formData.address
+                        ? "Please confirm correctly that this is the right address for the beneficiary"
+                        : ""
+                    }
+                  />
+                  <Button className="submit-button" type="submit">
+                    Next
+                  </Button>
                 </div>
+              )}
 
-                <Button className="submit-button" type="submit">
-                  Continue
-                </Button>
-              </div>
-            )}
+              {step === 2 && (
+                <div className="form-step-two">
+                  <SelectField
+                    label={"Asset to transfer"}
+                    name="asset"
+                    handleCustomChange={handleChange}
+                    value={formData.asset}
+                    selectOption={assetList}
+                  />
 
-            {step === 3 && (
-              <div className="form-step-three">
-                <SelectField
-                  label={"Set will duration"}
-                  name="deadline"
-                  handleCustomChange={handleChange}
-                  value={formData.deadline}
-                  selectOption={assetList}
-                  required
-                />
+                  <div className="amount-container">
+                    <label>Enter Amount</label>
 
-                <SelectField
-                  label={"Set grace period trigger"}
-                  name="grace_period"
-                  handleCustomChange={handleChange}
-                  value={formData.grace_period}
-                  selectOption={assetList}
-                  required
-                />
+                    <textarea
+                      name="amount"
+                      required
+                      onChange={handleChange}
+                    ></textarea>
 
-                <Button className="submit-button" type="submit">
-                  Continue
-                </Button>
-              </div>
-            )}
-
-            {step === 4 && (
-              <div className="form-step-four">
-                <p className="desc">
-                  Output is estimated.If the price changes by more than 0.5%
-                  your transaction will revert.
-                </p>
-
-                <div className="summary">
-                  <h6>Summary;</h6>
-
-                  <div className="form-preview">
-                    <div className="d-flex">
-                      <p>Beneficiary name</p>
-                      <p>{formData.name}</p>
-                    </div>
-
-                    <div className="d-flex">
-                      <p>Email</p>
-                      <p>{formData.email}</p>
-                    </div>
-
-                    <div className="d-flex">
-                      <p>Phone</p>
-                      <p>{formData.phone}</p>
-                    </div>
-                    <div className="d-flex">
-                      <p>Beneficiary address</p>
-                      <p className="  ">{formData.address}</p>
-                    </div>
-                    <div className="d-flex">
-                      <p>Deadline</p>
-                      <p>{formData.deadline}</p>
+                    <div className="quick-select-amount">
+                      {[1, 2, 3].map((item) => (
+                        <IconButton>{`${item} ${formData.asset}`}</IconButton>
+                      ))}
                     </div>
                   </div>
-                </div>
 
-                <div className="btn-flex">
-                  <Button className="cancel">Cancel</Button>
-                  <Button className="submit-button">Sign</Button>
+                  <Button className="submit-button" type="submit">
+                    Continue
+                  </Button>
                 </div>
-              </div>
-            )}
-          </form>
-        )}
+              )}
+
+              {step === 3 && (
+                <div className="form-step-three">
+                  <SelectField
+                    label={"Set will duration"}
+                    name="deadline"
+                    handleCustomChange={handleChange}
+                    value={formData.deadline}
+                    selectOption={assetList}
+                    required
+                  />
+
+                  <SelectField
+                    label={"Set grace period trigger"}
+                    name="grace_period"
+                    handleCustomChange={handleChange}
+                    value={formData.grace_period}
+                    selectOption={assetList}
+                    required
+                  />
+
+                  <Button className="submit-button" type="submit">
+                    Continue
+                  </Button>
+                </div>
+              )}
+
+              {step === 4 && (
+                <div className="form-step-four">
+                  <p className="desc">
+                    Output is estimated.If the price changes by more than 0.5%
+                    your transaction will revert.
+                  </p>
+
+                  <div className="summary">
+                    <h6>Summary;</h6>
+
+                    <div className="form-preview">
+                      <div className="d-flex">
+                        <p>Beneficiary name</p>
+                        <p>{formData.name}</p>
+                      </div>
+
+                      <div className="d-flex">
+                        <p>Email</p>
+                        <p>{formData.email}</p>
+                      </div>
+
+                      <div className="d-flex">
+                        <p>Phone</p>
+                        <p>{formData.phone}</p>
+                      </div>
+                      <div className="d-flex">
+                        <p>Beneficiary address</p>
+                        <p className="  ">{formData.address}</p>
+                      </div>
+                      <div className="d-flex">
+                        <p>Deadline</p>
+                        <p>{formData.deadline}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="btn-flex">
+                    <Button onClick={closeModalFunc} className="cancel">
+                      Cancel
+                    </Button>
+                    <Button type="submit" className="submit-button">
+                      Sign
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </form>
+          )}
+        </div>
       </div>
     </Modal>
   );

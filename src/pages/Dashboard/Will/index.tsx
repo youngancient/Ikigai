@@ -6,6 +6,7 @@ import folder from "../../../assets/icons/avatar.svg";
 import "./style.scss";
 import { EmptyState } from "../../../components/EmptyState";
 import CreateWill from "./Createwill";
+import { Button } from "@mui/material";
 
 const WillPage = () => {
   const [openModal, setOpenModal] = useState(false);
@@ -29,12 +30,12 @@ const WillPage = () => {
       <Layout
         title="Vault"
         titleChild={
-          <button
+          <Button
             onClick={() => setOpenModal(true)}
             className="create-will-button"
           >
-            Create Will
-          </button>
+            <div className="button-cover-bg">Create Will</div>
+          </Button>
         }
       >
         <div className="will-page">

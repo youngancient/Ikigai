@@ -1,12 +1,20 @@
 @use "../../../assets/styles/index" as *;
 
 .create-will-button {
+  padding: 1px !important ;
   width: 126px;
   height: 48px;
-  padding: 10px;
-  border-radius: 200px;
-  border: 1px solid var(--gradient960);
-  background: var(--gradient10);
+  background: var(--gradient960);
+  border-radius: 200px !important;
+
+  .button-cover-bg {
+    padding: 10px;
+    width: 100%;
+    height: 100%;
+    border-radius: 200px;
+    background: var(--gradient10);
+    color: var(--white);
+  }
 }
 
 .will-page {
