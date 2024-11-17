@@ -13,3 +13,12 @@
 .rounded-inherit{
   border-radius: inherit;
 }
+
+.active{
+  background: linear-gradient(to right, #8AD4EC99, #EF96FF99, #FF56A999, #FFAA6C99);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  padding: 4px;
+}
