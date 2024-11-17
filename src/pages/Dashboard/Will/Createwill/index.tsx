@@ -108,7 +108,7 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
 
           {isLoading && (
             <div className="loading-state">
-              <img src={refresh} alt="refresh" />
+              <img src={refresh} alt="refresh" className="animate-spin" />
 
               <h5>Loading confirmation</h5>
               <p>
