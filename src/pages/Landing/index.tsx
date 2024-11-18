@@ -26,7 +26,7 @@ const Landing = () => {
     if (!isConnected) {
       open();
     } else {
-      navigate("/dashboard");
+      navigate("/vault");
     }
   };
   return (
