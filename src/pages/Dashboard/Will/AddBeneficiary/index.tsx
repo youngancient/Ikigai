@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 
 import { Button, IconButton } from "@mui/material";
 
@@ -8,8 +8,6 @@ import check_circle from "../../../../assets/icons/check-circle.svg";
 
 import Modal from "../../../../components/Modal/modal";
 import InputField from "../../../../components/form/InputField";
-
-import axios from "axios";
 
 import { ethers } from "ethers";
 
@@ -54,6 +52,7 @@ const AddBeneficiaryToWill = ({
 
     if (ethers.isAddress(formData.wallet_address)) {
       setAddressErrorMsg("");
+      console.log(selectedWill);
       setIsLoading(true);
     } else {
       setAddressErrorMsg("Enter a valid wallet address");
