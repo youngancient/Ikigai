@@ -73,7 +73,7 @@
         color: var(--white);
         outline: none;
         text-align: center;
-        font-size: 1em;
+        font-size: 3em;
       }
 
       .quick-select-amount {
@@ -126,6 +126,7 @@
           display: flex;
           align-items: center;
           justify-content: space-between;
+          gap: 8px;
           &:last-child {
             margin-bottom: 0;
           }
