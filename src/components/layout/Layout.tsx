@@ -1,5 +1,4 @@
 import { ReactNode, useState } from "react";
-import logo from "../../assets/images/cryptowillLogo.png";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoClose } from "react-icons/io5";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -30,11 +29,20 @@ export const Layout = ({
             <div>
               {/* <img className="max-w-[150px]" src={logo} /> */}
               <nav>
-                <p onClick={() => navigate("/")} className="cursor-pointer">LegacyX</p>
+                <div className="logo-container mb-[70px]">
+                  <div className="cover-logo">
+                    <p
+                      onClick={() => navigate("/")}
+                      className=" logo-text cursor-pointer"
+                    >
+                      LegacyX
+                    </p>
+                  </div>
+                </div>
               </nav>
             </div>
 
-            <NavLink className={"w-full mt-20 "} to={"/dashboard"}>
+            {/* <NavLink className={"w-full mt-20 "} to={"/dashboard"}>
               <div className="w-full flex items-centertext-xl">
                 <div>
                   <span>
@@ -58,7 +66,7 @@ export const Layout = ({
                   <h3>Dashboard</h3>
                 </div>
               </div>
-            </NavLink>
+            </NavLink> */}
 
             <NavLink className={"w-full mt-5 "} to={"/vault"}>
               <div className="w-full flex items-center text-xl">
@@ -160,8 +168,16 @@ export const Layout = ({
             <div className="w-[250px] p-[1px] bg-gradient-to-r from-[#8AD4EC99] via-[#EF96FF99] to-[#FF56A999] h-[98%] max-h-full fixed rounded-lg flex lg:hidden">
               <div className="w-full h-full bg-black rounded-[inherit] p-4 flex flex-col text-white">
                 <div className="w-full flex items-center justify-between">
-                  <img className="max-w-[150px]" src={logo} />
-
+                  <div className="logo-container">
+                    <div className="cover-logo">
+                      <p
+                        onClick={() => navigate("/")}
+                        className=" logo-text cursor-pointer"
+                      >
+                        LegacyX
+                      </p>
+                    </div>
+                  </div>
                   <span onClick={() => setShowSidebar(!showSidebar)}>
                     <IoClose color="white" size={26} />
                   </span>
@@ -313,8 +329,11 @@ export const Layout = ({
 
             <div className="flex gap-4">
               {titleChild}
-              <button className="bg-gradient-to-r from-[#8AD4EC99] via-[#EF96FF99] to-[#FF56A999] px-4 py-2 rounded-xl" onClick={handleConnectWallet} >
-              {isConnected ? formatAddress(address ?? "") : "Connect Wallet"}
+              <button
+                className="bg-gradient-to-r from-[#8AD4EC99] via-[#EF96FF99] to-[#FF56A999] px-4 py-2 rounded-xl"
+                onClick={handleConnectWallet}
+              >
+                {isConnected ? formatAddress(address ?? "") : "Connect Wallet"}
               </button>
             </div>
           </div>

@@ -1,4 +1,5 @@
 import { AllRoutes } from "./AllRoutes";
+import "react-toastify/dist/ReactToastify.css";
 import "./connection.ts";
 
 function App() {
