@@ -2,7 +2,9 @@ import { ReactNode, useState } from "react";
 import logo from "../../assets/images/cryptowillLogo.png";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoClose } from "react-icons/io5";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useAppKit, useAppKitAccount } from "@reown/appkit/react";
+import { formatAddress } from "../../utils/helpers";
 
 export const Layout = ({
   title,
@@ -14,14 +16,22 @@ export const Layout = ({
   children?: ReactNode;
 }) => {
   const [showSidebar, setShowSidebar] = useState(false);
-
+  const { open } = useAppKit();
+  const { address, isConnected } = useAppKitAccount();
+  const handleConnectWallet = () => {
+    open();
+  };
+  const navigate = useNavigate();
   return (
     <div className="w-full max-w-full overflow-hidden fixed top-0 left-0 h-full flex items-center justify-center font-Kodchasan bg-black">
       <div className="w-full h-full max-w-[1920px] flex justify-between">
         <div className="lg:w-[250px] p-[1px] bg-gradient-to-r from-[#8AD4EC99] via-[#EF96FF99] to-[#FF56A999] h-[98%] max-h-full fixed rounded-lg hidden lg:flex">
           <div className="w-full h-full bg-black rounded-[inherit] p-4 flex flex-col text-white">
             <div>
-              <img className="max-w-[150px]" src={logo} />
+              {/* <img className="max-w-[150px]" src={logo} /> */}
+              <nav>
+                <p onClick={() => navigate("/")} className="cursor-pointer">LegacyX</p>
+              </nav>
             </div>
 
             <NavLink className={"w-full mt-20 "} to={"/dashboard"}>
@@ -303,8 +313,8 @@ export const Layout = ({
 
             <div className="flex gap-4">
               {titleChild}
-              <button className="bg-gradient-to-r from-[#8AD4EC99] via-[#EF96FF99] to-[#FF56A999] px-4 py-2 rounded-xl">
-                Connect Wallet
+              <button className="bg-gradient-to-r from-[#8AD4EC99] via-[#EF96FF99] to-[#FF56A999] px-4 py-2 rounded-xl" onClick={handleConnectWallet} >
+              {isConnected ? formatAddress(address ?? "") : "Connect Wallet"}
               </button>
             </div>
           </div>

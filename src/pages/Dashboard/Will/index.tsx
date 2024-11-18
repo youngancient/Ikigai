@@ -97,7 +97,7 @@ const WillPage = () => {
             <div className="will-vault-container">
               <div className="d-flex">
                 <img src={trustfund} alt="trustfund" />
-                <p>Wall Vault</p>
+                <p>Will Vault</p>
               </div>
 
               <div className="vault-list">

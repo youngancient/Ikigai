@@ -43,7 +43,10 @@ const Landing = () => {
         <img src={eth4} className="eth-coin four" alt="eth" />
 
         <nav>
-          <p>Crypto Will</p>
+          <p
+          >
+            LegacyX
+          </p>
           <button className="get-started-btn" onClick={goToApp}>
             {isConnected ? "Open App" : "Connect Wallet"}
           </button>
