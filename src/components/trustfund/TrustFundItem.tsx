@@ -1,10 +1,9 @@
-import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 export const TrustFundItem = () => {
-  const [numberOfEth, setNumberOfEth] = useState(5);
-  const [amountSaved, setAmountSaved] = useState(2);
-  const [percentage, setPercentage] = useState(50);
+  const numberOfEth = 5;
+  const amountSaved = 2;
+  const percentage = 50;
 
   return (
     <Link to={"/trustfund/details"} className="w-fit">
