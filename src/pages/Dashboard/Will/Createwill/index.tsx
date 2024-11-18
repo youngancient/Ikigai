@@ -23,9 +23,6 @@ type propType = {
 
 const TOTALSTEP = 4;
 
-const MIN_GRACE_PERIOD = 24 * 60 * 60; 
-const MIN_ACTIVITY_THRESHOLD = 30 * 24 * 60 * 60;
-
 const CreateWill = ({ closeModal, openModal }: propType) => {
   const [step, setStep] = useState(1);
   const { address, isConnected } = useAppKitAccount();
@@ -38,15 +35,13 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
     name: "",
     email: "",
     phone: "",
-    wallet_address: "",
+    beneficiary_address: "",
     asset: "",
     assetSymbol: "",
     amount: "",
     activity_period: "",
     grace_period: "",
   });
-
-  console.log(tokenList);
 
   // fetch tokens
 
@@ -78,17 +73,19 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const Name = "Jude Will"
-    const gracePeriod = MIN_GRACE_PERIOD * 2; 
-    const activityThreshold = MIN_ACTIVITY_THRESHOLD * 2; 
+    const Name = formData.name;
+    const gracePeriod = formData.grace_period;
+    const activityThreshold = formData.activity_period;
 
-    const tokenAllocations = [{
-      tokenAddress: "0x669eEe68Ef39E12D1b38d1f274BFc9aC46D771CB",
-      tokenType: 1, 
-      tokenIds: [],
-      amounts: [100000000],
-      beneficiaries: ["0xa6B1feB40D1c8eeAD5AFD6f7372E02B637F142FA"]
-    }];
+    const tokenAllocations = [
+      {
+        tokenAddress: formData.asset,
+        tokenType: 1,
+        tokenIds: [],
+        amounts: [formData.amount],
+        beneficiaries: [formData.beneficiary_address],
+      },
+    ];
 
     console.log({ Name, gracePeriod, activityThreshold, tokenAllocations });
     if (step === TOTALSTEP) {
@@ -96,7 +93,7 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
       // sign function goes here
     } else {
       if (step === 1) {
-        if (ethers.isAddress(formData.wallet_address)) {
+        if (ethers.isAddress(formData.beneficiary_address)) {
           setStep(step + 1);
           setAddressErrorMsg("");
         } else {
@@ -113,7 +110,7 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
       name: "",
       email: "",
       phone: "",
-      wallet_address: "",
+      beneficiary_address: "",
       asset: "ETH",
       amount: "",
       activity_period: "",
@@ -131,11 +128,9 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
   };
 
   useEffect(() => {
-    // if (isConnected && address) {
-    //   fetchTokens(address);
-    // }
-
-    fetchTokens("0x53182725595443ba2bB9EbEfE716EE72761a3CD3");
+    if (isConnected && address) {
+      fetchTokens(address);
+    }
   }, [address, isConnected]);
 
   useEffect(() => {
@@ -225,14 +220,14 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
                     onChange={handleChange}
                   />{" "}
                   <InputField
-                    name="wallet_address"
+                    name="beneficiary_address"
                     label="Beneficiary Wallet address"
                     required={true}
-                    value={formData.wallet_address}
+                    value={formData.beneficiary_address}
                     type={"text"}
                     onChange={handleChange}
                     errMsg={
-                      formData.wallet_address && addressErrorMsg
+                      formData.beneficiary_address && addressErrorMsg
                         ? addressErrorMsg
                         : ""
                     }
@@ -350,7 +345,9 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
                       </div>
                       <div className="d-flex">
                         <p>Beneficiary address</p>
-                        <p className=" truncate ">{formData.wallet_address}</p>
+                        <p className=" truncate ">
+                          {formData.beneficiary_address}
+                        </p>
                       </div>
                       <div className="d-flex">
                         <p>Activity Period</p>
