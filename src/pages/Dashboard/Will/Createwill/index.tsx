@@ -111,7 +111,7 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
       email: "",
       phone: "",
       beneficiary_address: "",
-      asset: "ETH",
+      asset: "",
       amount: "",
       activity_period: "",
       grace_period: "",
@@ -130,6 +130,8 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
   useEffect(() => {
     if (isConnected && address) {
       fetchTokens(address);
+    } else {
+      setTokenList([]);
     }
   }, [address, isConnected]);
 
@@ -187,7 +189,7 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
 
               <h5>Action Completed!</h5>
 
-              <a href="http://localhost:5176/vault">Confirm on Ethereum</a>
+              <a href="">Confirm on Ethereum</a>
             </div>
           )}
 
@@ -280,7 +282,7 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
                               amount: `${item}`,
                             }))
                           }
-                        >{`${item} ${formData.assetSymbol}`}</IconButton>
+                        >{`${item} ${formData?.assetSymbol || ""}`}</IconButton>
                       ))}
                     </div>
                   </div>

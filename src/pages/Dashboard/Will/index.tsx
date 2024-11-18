@@ -22,8 +22,8 @@ const userToken = [
 
 const WillPage = () => {
   const [userSelectedToken, setUserSelectedToken] = useState({
-    symbol: "",
-    address: "",
+    symbol: "CWT",
+    address: "0xaFcA068ECDb7576720f480B6868120a13e7c7461",
   });
   const [openViewModal, setOpenViewModal] = useState(false);
   const [openAddBeneficiaryModal, setOpenAddBeneficiaryModal] = useState(false);
@@ -109,7 +109,9 @@ const WillPage = () => {
 
               <div className="total-balance">
                 <p>Total Balance</p>
-                <h3>{balance} ETH</h3>
+                <h3>
+                  {balance} {userSelectedToken?.symbol}
+                </h3>
               </div>
 
               <div className="wallet-will-container">
@@ -120,7 +122,9 @@ const WillPage = () => {
                       <p>In Wallet</p>
                     </div>
 
-                    <p className="amount">{walletBalance} ETH</p>
+                    <p className="amount">
+                      {walletBalance} {userSelectedToken?.symbol}
+                    </p>
                   </div>
 
                   <div className="wallet">
@@ -129,7 +133,9 @@ const WillPage = () => {
                       <p>Willed Away</p>
                     </div>
 
-                    <p className="amount">{sentBalance} ETH</p>
+                    <p className="amount">
+                      {sentBalance} {userSelectedToken?.symbol}
+                    </p>
                   </div>
                 </div>
 
