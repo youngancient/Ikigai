@@ -13,6 +13,11 @@ interface IHistory {
 export const TrustfundDetails = () => {
   const [showHistory, setShowHistory] = useState(false);
 
+  const [status, setStatus] = useState("");
+  const [withdrawals, setWithdrawals] = useState(0.3);
+  const [interest, setInterest] = useState(0.3);
+  const [goalCreatedOn, setGoalCreated] = useState("12 Nov,2024");
+
   const toggleShowHistory = () => {
     setShowHistory(!showHistory);
   };
@@ -123,22 +128,22 @@ export const TrustfundDetails = () => {
                 <div className="w-full p-3">
                   <div className="w-full flex items-center justify-between text-gray-500">
                     <h3>Goal Status</h3>
-                    <h3>Active</h3>
+                    <h3>{status}</h3>
                   </div>
 
                   <div className="w-full flex items-center justify-between text-gray-500 mt-3">
                     <h3>Total Withdrawals</h3>
-                    <h3>0.35567 ETH</h3>
+                    <h3>{withdrawals} ETH</h3>
                   </div>
 
                   <div className="w-full flex items-center justify-between text-gray-500 mt-3">
                     <h3>Interest Gained</h3>
-                    <h3>0.35567 ETH</h3>
+                    <h3>{interest} ETH</h3>
                   </div>
 
                   <div className="w-full flex items-center justify-between text-gray-500 mt-3">
                     <h3>Goal Created on</h3>
-                    <h3>12 Nov,2024</h3>
+                    <h3>{goalCreatedOn}</h3>
                   </div>
                 </div>
               </div>
