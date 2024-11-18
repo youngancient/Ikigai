@@ -13,10 +13,10 @@ interface IHistory {
 export const TrustfundDetails = () => {
   const [showHistory, setShowHistory] = useState(false);
 
-  const [status, setStatus] = useState("");
-  const [withdrawals, setWithdrawals] = useState(0.3);
-  const [interest, setInterest] = useState(0.3);
-  const [goalCreatedOn, setGoalCreated] = useState("12 Nov,2024");
+  const status = "Active";
+  const withdrawals = 0.3;
+  const interest = 0.3;
+  const goalCreatedOn = "12 Nov,2024";
 
   const toggleShowHistory = () => {
     setShowHistory(!showHistory);
