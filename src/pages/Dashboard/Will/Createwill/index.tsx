@@ -84,6 +84,8 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
     setIsSubmitted(false);
   };
 
+  
+
   return (
     <Modal
       closeModal={closeModalFunc}

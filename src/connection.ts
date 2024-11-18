@@ -20,8 +20,8 @@ const networks = [liskSepoliaNetwork];
 
 // 3. Create a metadata object - optional
 const metadata = {
-  name: "CryptoWill",
-  description: "CryptoWill Service",
+  name: "LegacyX",
+  description: "LegacyX Service",
   url: "https://mywebsite.com",
   icons: ["https://avatars.mywebsite.com/"],
 };
