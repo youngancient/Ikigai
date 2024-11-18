@@ -1,23 +1,49 @@
+import { Link } from "react-router-dom";
 import { Layout } from "../../components/layout/Layout";
-import { FaChevronLeft } from "react-icons/fa";
+import { FaChevronLeft, FaChevronDown } from "react-icons/fa";
+import { useState } from "react";
+
+interface IHistory {
+  type: string;
+  title: string;
+  amount: string;
+  isDeposit: boolean;
+}
 
 export const TrustfundDetails = () => {
+  const [showHistory, setShowHistory] = useState(false);
+
+  const toggleShowHistory = () => {
+    setShowHistory(!showHistory);
+  };
+
+  const history: IHistory[] = [
+    {
+      type: "Deposit",
+      title: "to Home Trust Fund",
+      amount: "3.0000",
+      isDeposit: true,
+    },
+  ];
+
   return (
     <Layout title="Trust Fund">
       <div className="w-full">
         <div className="w-full p-5">
-          <div className="bg-gradient-to-r from-[#8AD4EC99] via-[#EF96FF99] to-[#FF56A999] p-[2px] w-fit rounded-xl cursor-pointer">
-            <div className="w-full h-full rounded-inherit bg-black px-5 py-2  text-white flex items-center">
-              <span>
-                <FaChevronLeft />
-              </span>
-              <h3 className="text-xl ml-3"> Back</h3>
+          <Link to={"/trustfund"}>
+            <div className="bg-gradient-to-r from-[#8AD4EC99] via-[#EF96FF99] to-[#FF56A999] p-[2px] w-fit rounded-xl cursor-pointer">
+              <div className="w-full h-full rounded-inherit bg-black px-5 py-2  text-white flex items-center">
+                <span>
+                  <FaChevronLeft />
+                </span>
+                <h3 className="text-xl ml-3"> Back</h3>
+              </div>
             </div>
-          </div>
+          </Link>
         </div>
 
         <div className="w-full p-5">
-          <div className="bg-gradient-to-r from-[#8AD4EC99] via-[#EF96FF99] to-[#FF56A999] p-[2px]  rounded-xl cursor-pointer w-full">
+          <div className="bg-gradient-to-r from-[#8AD4EC99] via-[#EF96FF99] to-[#FF56A999] p-[2px]  rounded-xl  w-full">
             <div className="w-full h-full rounded-inherit bg-black px-5 py-10  text-white flex items-center flex-col">
               <div className="w-full text-white">
                 <h3 className="text-xl">Trust Fund Progress</h3>
@@ -66,7 +92,7 @@ export const TrustfundDetails = () => {
 
                 <div className="w-full p-3">
                   <div className="w-full bg-gradient-to-r from-[#8AD4EC99] via-[#EF96FF99] via-[#FF56A999] to-[#FFAA6C99] p-[1px] py-5 px-5 flex flex-col items-center justify-center rounded-xl">
-                    <div className="w-full flex items-center justify-center">
+                    <div className="w-full flex items-center justify-center lg:flex-row flex-col">
                       <h3 className="text-3xl font-bold bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 bg-clip-text text-transparent">
                         5 ETH
                       </h3>
@@ -92,6 +118,84 @@ export const TrustfundDetails = () => {
                   <button className="px-5 py-3 bg-gradient-to-r from-[#8AD4EC99] via-[#EF96FF99] via-[#FF56A999] to-[#FFAA6C]  text-white  rounded-2xl ml-5 w-[200px]">
                     Add Funds
                   </button>
+                </div>
+
+                <div className="w-full p-3">
+                  <div className="w-full flex items-center justify-between text-gray-500">
+                    <h3>Goal Status</h3>
+                    <h3>Active</h3>
+                  </div>
+
+                  <div className="w-full flex items-center justify-between text-gray-500 mt-3">
+                    <h3>Total Withdrawals</h3>
+                    <h3>0.35567 ETH</h3>
+                  </div>
+
+                  <div className="w-full flex items-center justify-between text-gray-500 mt-3">
+                    <h3>Interest Gained</h3>
+                    <h3>0.35567 ETH</h3>
+                  </div>
+
+                  <div className="w-full flex items-center justify-between text-gray-500 mt-3">
+                    <h3>Goal Created on</h3>
+                    <h3>12 Nov,2024</h3>
+                  </div>
+                </div>
+              </div>
+
+              <div className="w-full mt-10 p-2">
+                <div
+                  onClick={toggleShowHistory}
+                  className="w-full flex items-center justify-between text-xl text-white mb-5 cursor-pointer"
+                >
+                  <h3 className="">History</h3>
+
+                  <span>
+                    <FaChevronDown />
+                  </span>
+                </div>
+
+                <div className="w-full">
+                  {showHistory &&
+                    history.map((x, i) => (
+                      <div
+                        key={i}
+                        className="w-full flex items-center justify-between"
+                      >
+                        <div className="flex items-center">
+                          <div className="h-[50px] w-[50px] bg-[#E7F6EC] rounded-full flex items-center justify-center">
+                            <span>
+                              <svg
+                                width="20"
+                                height="20"
+                                viewBox="0 0 20 20"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  fill-rule="evenodd"
+                                  clip-rule="evenodd"
+                                  d="M15.4419 4.55806C15.686 4.80214 15.686 5.19786 15.4419 5.44194L6.50888 14.375L12.5 14.375C12.8452 14.375 13.125 14.6548 13.125 15C13.125 15.3452 12.8452 15.625 12.5 15.625H5C4.65482 15.625 4.375 15.3452 4.375 15L4.375 7.5C4.375 7.15482 4.65482 6.875 5 6.875C5.34518 6.875 5.625 7.15482 5.625 7.5L5.625 13.4911L14.5581 4.55806C14.8021 4.31398 15.1979 4.31398 15.4419 4.55806Z"
+                                  fill="#0F973D"
+                                />
+                              </svg>
+                            </span>
+                          </div>
+
+                          <div className="ml-3">
+                            <h3>{x.title}</h3>
+                            <p className="text-gray-500">{x.type}</p>
+                          </div>
+                        </div>
+
+                        <div>
+                          <h3 className="text-gray-500">
+                            {x.isDeposit ? "+" : "-"}
+                            {x.amount} ETH
+                          </h3>
+                        </div>
+                      </div>
+                    ))}
                 </div>
               </div>
             </div>
