@@ -10,12 +10,18 @@
   font-weight: 400;
 }
 
-.rounded-inherit{
+.rounded-inherit {
   border-radius: inherit;
 }
 
-.active{
-  background: linear-gradient(to right, #8AD4EC99, #EF96FF99, #FF56A999, #FFAA6C99);
+.active {
+  background: linear-gradient(
+    to right,
+    #8ad4ec99,
+    #ef96ff99,
+    #ff56a999,
+    #ffaa6c99
+  );
   display: flex;
   justify-content: center;
   align-items: center;
