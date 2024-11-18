@@ -23,6 +23,9 @@ const assetList = [
   { value: "SOL", key: "SOL" },
 ];
 
+const MIN_GRACE_PERIOD = 24 * 60 * 60; 
+const MIN_ACTIVITY_THRESHOLD = 30 * 24 * 60 * 60;
+
 const CreateWill = ({ closeModal, openModal }: propType) => {
   const [step, setStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
@@ -54,6 +57,20 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    const Name = "Jude Will"
+    const gracePeriod = MIN_GRACE_PERIOD * 2; 
+    const activityThreshold = MIN_ACTIVITY_THRESHOLD * 2; 
+
+    const tokenAllocations = [{
+      tokenAddress: "0x669eEe68Ef39E12D1b38d1f274BFc9aC46D771CB",
+      tokenType: 1, 
+      tokenIds: [],
+      amounts: [100000000],
+      beneficiaries: ["0xa6B1feB40D1c8eeAD5AFD6f7372E02B637F142FA"]
+    }];
+
+    console.log({ Name, gracePeriod, activityThreshold, tokenAllocations });
     if (step === TOTALSTEP) {
       console.log(formData, "formdata");
       setIsLoading(true);
