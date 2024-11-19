@@ -45,24 +45,31 @@ export const useRegisterWill = (tokenAddress: string) => {
             BigInt(0)
           )
           .toString();
-  
+
         await approve(totalAmount); // Wait for the approval to complete
-  
+
         setIsLoading(true);
-  
+
+        console.log("Estimating gas for createWill...");
+        console.log("Parameters:", {
+          name,
+          tokenAllocations,
+          gracePeriodInSeconds: gracePeriod * 86400,
+          activityThresholdInSeconds: activityThreshold * 30 * 24 * 60 * 60,
+        });
         const estimatedGas = await willContract.createWill.estimateGas(
           name,
           tokenAllocations,
-          gracePeriod,
-          activityThreshold
+          gracePeriod * 86400,
+          activityThreshold * 30 * 24 * 60 * 60 // convert to seconds
         );
         console.log({ estimatedGas });
         // construct transaction
         const tx = await willContract.createWill(
           name,
           tokenAllocations,
-          gracePeriod,
-          activityThreshold,
+          gracePeriod * 86400,
+          activityThreshold * 30 * 24 * 60 * 60, // convert to seconds
           {
             gasLimit: (estimatedGas * BigInt(120)) / BigInt(100),
           }
