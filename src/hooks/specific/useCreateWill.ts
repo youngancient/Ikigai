@@ -47,7 +47,7 @@ export const useRegisterWill = (tokenAddress: string) => {
 
         setIsLoading(true);
 
-        console.log("Estimating gas for createWill...");
+        // console.log("Estimating gas for createWill...");
         console.log("Parameters:", {
           name,
           tokenAllocations,
@@ -55,14 +55,14 @@ export const useRegisterWill = (tokenAddress: string) => {
           activityThresholdInSeconds: activityThreshold * 30 * 24 * 60 * 60,
         });
 
-        const estimatedGas = await willContract.createWill.estimateGas(
-          name,
-          tokenAllocations,
-          gracePeriod * 86400,
-          activityThreshold * 24 * 60 * 60 // convert to seconds
-        );
+        // const estimatedGas = await willContract.createWill.estimateGas(
+        //   name,
+        //   tokenAllocations,
+        //   gracePeriod * 86400,
+        //   activityThreshold * 24 * 60 * 60 // convert to seconds
+        // );
 
-        console.log({ estimatedGas });
+        // console.log({ estimatedGas });
         // construct transaction
         const tx = await willContract.createWill(
           name,
@@ -70,12 +70,12 @@ export const useRegisterWill = (tokenAddress: string) => {
           gracePeriod * 86400,
           activityThreshold * 24 * 60 * 60, // convert to seconds
           {
-            gasLimit: (estimatedGas * BigInt(120)) / BigInt(100),
+            gasLimit: 1000000,
           }
         );
         const receipt = await tx.wait();
         if (receipt.status === 1) {
-          console.log(receipt.transactionHash);
+          console.log(receipt);
           toast.success("Will creation successful");
           setIsDone(true);  
           return;
@@ -88,7 +88,10 @@ export const useRegisterWill = (tokenAddress: string) => {
     },
     [willContract, address, chainId, navigate]
   );
-  return { registerWill, isRegisterLoading, isDone };
+  const reset = () => {
+    setIsDone(false);
+  }
+  return { registerWill, isRegisterLoading, isDone, reset };
 };
 
 

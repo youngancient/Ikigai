@@ -72,7 +72,7 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
     }));
   };
 
-  const { registerWill, isRegisterLoading, isDone } = useRegisterWill(
+  const { registerWill, isRegisterLoading, isDone, reset } = useRegisterWill(
     formData.asset
   );
 
@@ -136,6 +136,7 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
     clearForm();
     // setIsLoading(false);
     //setIsSubmitted(false);
+    reset();
   };
 
   useEffect(() => {
