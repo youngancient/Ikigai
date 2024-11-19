@@ -7,6 +7,7 @@ import WillPage from "./pages/Dashboard/Will";
 import { Trustfund } from "./pages/Dashboard/Trustfund";
 import { TrustfundDetails } from "./pages/Dashboard/TrustfundDetails";
 import Liquidity from "./pages/Dashboard/Liquidity";
+import { Dashboard } from "./pages/Dashboard/Dashboard";
 
 export const AllRoutes = () => {
   return (
@@ -15,7 +16,7 @@ export const AllRoutes = () => {
         <ScrollToTop />
         <Routes>
           <Route path="/" element={<Landing />} />
-          {/* <Route path="/dashboard" element={<Dashboard />} /> */}
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/vault" element={<WillPage />} />
           <Route path="/liquidity" element={<Liquidity />} />
 

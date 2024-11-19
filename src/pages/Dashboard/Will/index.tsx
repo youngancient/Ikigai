@@ -220,21 +220,16 @@ const WillPage = () => {
             <div className={`activity-table `}>
               {address ? (
                 <div className="relative overflow-x-auto shadow-md ">
-                  <table className="w-full text-sm text-left border-[#FFD505] border-solid border-[1px]">
+                  <table className="w-full text-sm text-left border-[#FF56A999] border-solid border-[1px]">
                     <thead className="text-xs uppercase ">
-                      <tr className="border-[#FFD505] border-b ">
+                      <tr className="border-[#FF56A999] border-b ">
                         <th
                           scope="col"
                           className="px-6 py-8 text-[#ffffff] text-center"
                         >
                           Beneficiaries
                         </th>
-                        <th
-                          scope="col"
-                          className="px-6 py-8 text-[#ffffff] text-center"
-                        >
-                          Asset
-                        </th>
+
                         <th
                           scope="col"
                           className="px-6 py-8 text-[#ffffff] text-center "
@@ -263,16 +258,14 @@ const WillPage = () => {
                     </thead>
                     <tbody>
                       {[1, 2, 3, 4].map((item) => (
-                        <tr className=" border-[#FFD505] border-b  ">
+                        <tr className=" border-[#FF56A999] border-b  ">
                           <td
                             scope="row"
                             className=" text-center px-6 py-4 font-medium  whitespace-nowrap text-[#ffffff]"
                           >
                             7
                           </td>
-                          <td className="text-center px-6 py-4 text-[#ffffff]">
-                            CTF
-                          </td>
+
                           <td className="text-center px-6 py-4 text-[#ffffff]">
                             1,000
                           </td>

@@ -29,7 +29,7 @@ export const Layout = ({
             <div>
               {/* <img className="max-w-[150px]" src={logo} /> */}
               <nav>
-                <div className="logo-container mb-[70px]">
+                <div className="logo-container ">
                   <div className="cover-logo">
                     <p
                       onClick={() => navigate("/")}
@@ -42,7 +42,7 @@ export const Layout = ({
               </nav>
             </div>
 
-            {/* <NavLink className={"w-full mt-20 "} to={"/dashboard"}>
+            <NavLink className={"w-full mt-20 "} to={"/dashboard"}>
               <div className="w-full flex items-centertext-xl">
                 <div>
                   <span>
@@ -66,7 +66,7 @@ export const Layout = ({
                   <h3>Dashboard</h3>
                 </div>
               </div>
-            </NavLink> */}
+            </NavLink>
 
             <NavLink className={"w-full mt-5 "} to={"/vault"}>
               <div className="w-full flex items-center text-xl">
