@@ -4,6 +4,7 @@ import { useAppKitAccount, useAppKitNetwork } from "@reown/appkit/react";
 import { liskSepoliaNetwork } from "../../connection";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { ethers } from "ethers";
 
 export const useTokenApproval = (tokenAddress : string) => {
     const { address } = useAppKitAccount();
@@ -16,7 +17,7 @@ export const useTokenApproval = (tokenAddress : string) => {
     // const errorDecoder = ErrorDecoder.create()
     const approve = useCallback(
       async (
-        amount: number
+        amount: string
       ) => {
         if (!erc20Contract) {
           toast.error("Contract not found");
@@ -32,22 +33,29 @@ export const useTokenApproval = (tokenAddress : string) => {
         }
         try {
           setisLoadingBalance(true);
-  
+            console.log("here", amount);
+            const _amount = ethers.parseUnits(amount,18);
           const estimatedGas = await erc20Contract.approve.estimateGas(
-            import.meta.env.VITE_WILL_CONTRACT_ADDRESS,amount
+            import.meta.env.VITE_WILL_CONTRACT_ADDRESS,_amount
           );
           console.log({ estimatedGas });
+          const allowance = await erc20Contract.allowance(address,import.meta.env.VITE_WILL_CONTRACT_ADDRESS);
+          console.log("allowance: ",allowance);
+
+          if (BigInt(allowance) >= BigInt(amount)) {
+            toast.success("Approval successful");
+            return;
+          }
           // construct transaction
           const tx = await erc20Contract.approve(
-            import.meta.env.VITE_WILL_CONTRACT_ADDRESS,amount,
+            import.meta.env.VITE_WILL_CONTRACT_ADDRESS,_amount,
             {
               gasLimit: (estimatedGas * BigInt(120)) / BigInt(100),
             }
           );
           const reciept = await tx.wait();
           if (reciept.status === 1) {
-            toast.success("User Registration successful");
-  
+            //toast.success("Approval successful");
             return;
           }
         } catch (error) {
