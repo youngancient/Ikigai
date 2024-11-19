@@ -6,6 +6,7 @@ import Landing from "./pages/Landing";
 import WillPage from "./pages/Dashboard/Will";
 import { Trustfund } from "./pages/Dashboard/Trustfund";
 import { TrustfundDetails } from "./pages/Dashboard/TrustfundDetails";
+import Liquidity from "./pages/Dashboard/Liquidity";
 
 export const AllRoutes = () => {
   return (
@@ -16,6 +17,8 @@ export const AllRoutes = () => {
           <Route path="/" element={<Landing />} />
           {/* <Route path="/dashboard" element={<Dashboard />} /> */}
           <Route path="/vault" element={<WillPage />} />
+          <Route path="/liquidity" element={<Liquidity />} />
+
           <Route path="/trustfund" element={<Trustfund />} />
           <Route path="/trustfund/details" element={<TrustfundDetails />} />
         </Routes>

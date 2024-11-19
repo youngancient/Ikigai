@@ -1,0 +1,41 @@
+@use "../assets/styles/index" as *;
+
+/* ComingSoon.scss */
+
+$font-color: #ffffff;
+
+.coming-soon-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  text-align: center;
+  padding-top: 140px;
+  .coming-soon-content {
+    max-width: 500px;
+
+    .coming-soon-title {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--white);
+    }
+
+    .coming-soon-text {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      color: var(--white);
+    }
+  }
+}
+
+/* Loader Animation */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

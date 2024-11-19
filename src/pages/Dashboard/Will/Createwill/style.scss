@@ -7,6 +7,8 @@
   max-width: 540px;
   border-radius: 20px;
   background: var(--gradient960);
+  @include webkitnone;
+  overflow-y: auto;
 
   input:-webkit-autofill {
     -webkit-box-shadow: 0 0 0 30px #141414 inset !important;
@@ -14,7 +16,6 @@
   }
 
   .modal-contents {
-    @include webkitscrollbar;
     padding: 30px 32px;
     overflow-y: auto;
     position: relative;
