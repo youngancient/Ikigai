@@ -6,9 +6,28 @@ import folder from "../../../assets/icons/avatar.svg";
 import "./style.scss";
 import { EmptyState } from "../../../components/EmptyState";
 import CreateWill from "./Createwill";
-import { Button } from "@mui/material";
+import { Button, IconButton } from "@mui/material";
+import DropDownWrapper from "../../../components/DropDownWrapper";
+import { PrimaryFillIcon } from "../../../assets/icons/PrimaryFillIcon";
+import { EyeIcon } from "../../../assets/icons/EyeIcon";
+import { EditIcon } from "../../../assets/icons/EditIcon";
+import ViewWill from "./ViewWill";
+import AddBeneficiaryToWill from "./AddBeneficiary";
+import { useWill } from "../../../hooks/specific/useCreateWill";
+
+const userToken = [
+  { symbol: "CWT", address: "0xaFcA068ECDb7576720f480B6868120a13e7c7461" },
+  { symbol: "WTK", address: "0xaFcA068ECDb7576720f480B6868120a13e7c7461" },
+  { symbol: "CPGT", address: "0xaFcA068ECDb7576720f480B6868120a13e7c7461" },
+];
 
 const WillPage = () => {
+  const [userSelectedToken, setUserSelectedToken] = useState({
+    symbol: "CWT",
+    address: "0xaFcA068ECDb7576720f480B6868120a13e7c7461",
+  });
+  const [openViewModal, setOpenViewModal] = useState(false);
+  const [openAddBeneficiaryModal, setOpenAddBeneficiaryModal] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [balance, setBalance] = useState(60);
   const [walletBalance, setWalletBalance] = useState(40);
@@ -17,7 +36,13 @@ const WillPage = () => {
     wallet: 0,
     sent: 0,
   });
-
+  const [selectedWill, setSelectedWill] = useState<any>(null);
+  const {will} = useWill();
+  const changeUserToken = (token: { symbol: string; address: string }) => {
+    setUserSelectedToken(token);
+  };
+  console.log(will);
+  
   useEffect(() => {
     setBalancePercentage({
       wallet: (walletBalance / balance) * 100,
@@ -48,11 +73,47 @@ const WillPage = () => {
         <div className="will-page">
           <div className="summary-container">
             <div className="balance-container">
-              <p className="balance">Balance</p>
+              <div className="balance-token-container mb-4 flex justify-between items-center">
+                <p className="balance">Balance</p>
+
+                <DropDownWrapper
+                  origin="right"
+                  closeOnChildClick
+                  className="navbar_dropdown location_picker"
+                  action={
+                    <Button
+                      className="grey_btn"
+                      endIcon={<PrimaryFillIcon stroke={"#ffff"} />}
+                    >
+                      {userSelectedToken.address
+                        ? userSelectedToken.symbol
+                        : " Select token"}
+                    </Button>
+                  }
+                >
+                  <div className="cover_buttons">
+                    <ul className="select_list btn_list">
+                      {userToken?.map((item, i) => (
+                        <li key={i}>
+                          <Button
+                            onClick={() => {
+                              changeUserToken(item);
+                            }}
+                          >
+                            {item.symbol}
+                          </Button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </DropDownWrapper>
+              </div>
 
               <div className="total-balance">
                 <p>Total Balance</p>
-                <h3>{balance} ETH</h3>
+                <h3>
+                  {balance} {userSelectedToken?.symbol}
+                </h3>
               </div>
 
               <div className="wallet-will-container">
@@ -63,7 +124,9 @@ const WillPage = () => {
                       <p>In Wallet</p>
                     </div>
 
-                    <p className="amount">{walletBalance} ETH</p>
+                    <p className="amount">
+                      {walletBalance} {userSelectedToken?.symbol}
+                    </p>
                   </div>
 
                   <div className="wallet">
@@ -72,7 +135,9 @@ const WillPage = () => {
                       <p>Willed Away</p>
                     </div>
 
-                    <p className="amount">{sentBalance} ETH</p>
+                    <p className="amount">
+                      {sentBalance} {userSelectedToken?.symbol}
+                    </p>
                   </div>
                 </div>
 
@@ -107,7 +172,7 @@ const WillPage = () => {
 
                     <div className="name-and-view">
                       <div className="name">
-                        <h5>Name of Beneficiary</h5>
+                        <h5>Donald</h5>
                         <p>Asset willed: 2 ETH</p>
                       </div>
 
@@ -123,15 +188,116 @@ const WillPage = () => {
             <p className="topic">Activity</p>
 
             <div className={`activity-table `}>
-              {false ? "" : <EmptyState text="You have no fund yet" />}
+              {true ? (
+                <div className="relative overflow-x-auto shadow-md ">
+                  <table className="w-full text-sm text-left border-[#FFD505] border-solid border-[1px]">
+                    <thead className="text-xs uppercase ">
+                      <tr className="border-[#FFD505] border-b ">
+                        <th
+                          scope="col"
+                          className="px-6 py-8 text-[#ffffff] text-center"
+                        >
+                          Beneficiaries
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-6 py-8 text-[#ffffff] text-center"
+                        >
+                          Asset
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-6 py-8 text-[#ffffff] text-center "
+                        >
+                          Amount
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-6 py-8 text-[#ffffff] text-center"
+                        >
+                          Activity Period
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-6 py-8 text-[#ffffff] text-center"
+                        >
+                          Grace Period
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-6 py-8 text-[#ffffff] text-center"
+                        >
+                          Action
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {[1, 2, 3, 4].map((item) => (
+                        <tr className=" border-[#FFD505] border-b  ">
+                          <td
+                            scope="row"
+                            className=" text-center px-6 py-4 font-medium  whitespace-nowrap text-[#ffffff]"
+                          >
+                            7
+                          </td>
+                          <td className="text-center px-6 py-4 text-[#ffffff]">
+                            CTF
+                          </td>
+                          <td className="text-center px-6 py-4 text-[#ffffff]">
+                            1,000
+                          </td>
+                          <td className="text-center px-6 py-4 text-[#ffffff]">
+                            200 days
+                          </td>
+                          <td className="text-center px-6 py-4 text-[#ffffff]">
+                            20 days
+                          </td>
+                          <td className="px-6 py-4 text-right">
+                            <div className="flex items-center justify-center">
+                              <IconButton
+                                onClick={() => {
+                                  setSelectedWill(item);
+                                  setOpenViewModal(true);
+                                }}
+                              >
+                                <EyeIcon />
+                              </IconButton>
+
+                              <IconButton
+                                onClick={() => {
+                                  setSelectedWill(item);
+                                  setOpenAddBeneficiaryModal(true);
+                                }}
+                              >
+                                <EditIcon />
+                              </IconButton>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <EmptyState text="You have no activity yet" />
+              )}
             </div>
           </div>
         </div>
       </Layout>
-
       <CreateWill
         openModal={openModal}
         closeModal={() => setOpenModal(false)}
+      />
+      <ViewWill
+        openModal={openViewModal}
+        closeModal={() => setOpenViewModal(false)}
+        selectedWill={selectedWill}
+      />
+      <AddBeneficiaryToWill
+        openModal={openAddBeneficiaryModal}
+        selectedWill={selectedWill}
+        closeModal={() => setOpenAddBeneficiaryModal(false)}
       />
     </>
   );

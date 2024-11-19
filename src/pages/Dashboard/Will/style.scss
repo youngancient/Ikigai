@@ -37,8 +37,16 @@
     }
 
     .balance-container {
+      margin-bottom: 36px;
+
+      .grey_btn {
+        background: var(--gradient10) !important;
+        color: var(--white);
+        border-radius: 200px;
+        padding: 4px 18px;
+      }
+
       p.balance {
-        margin-bottom: 36px;
         font-size: 1.125em;
         font-style: normal;
         font-weight: 700;
