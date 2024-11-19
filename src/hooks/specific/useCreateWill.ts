@@ -5,7 +5,7 @@ import { liskSepoliaNetwork } from "../../connection";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useTokenApproval } from "./useERC20";
-import { ethers } from "ethers";
+// import { ethers } from "ethers";
 
 export const useRegisterWill = (tokenAddress: string) => {
   const { address } = useAppKitAccount();
