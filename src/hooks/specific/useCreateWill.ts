@@ -54,12 +54,14 @@ export const useRegisterWill = (tokenAddress: string) => {
           gracePeriodInSeconds: gracePeriod * 86400,
           activityThresholdInSeconds: activityThreshold * 30 * 24 * 60 * 60,
         });
+
         const estimatedGas = await willContract.createWill.estimateGas(
           name,
           tokenAllocations,
           gracePeriod * 86400,
           activityThreshold * 24 * 60 * 60 // convert to seconds
         );
+
         console.log({ estimatedGas });
         // construct transaction
         const tx = await willContract.createWill(
@@ -73,6 +75,7 @@ export const useRegisterWill = (tokenAddress: string) => {
         );
         const receipt = await tx.wait();
         if (receipt.status === 1) {
+          console.log(receipt.transactionHash);
           toast.success("Will creation successful");
           setIsDone(true);  
           return;

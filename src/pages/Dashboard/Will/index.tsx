@@ -17,6 +17,8 @@ import { useWill } from "../../../hooks/specific/useCreateWill";
 import { useTokenBalance } from "../../../hooks/specific/useERC20";
 import { ethers } from "ethers";
 import { floorToDecimals } from "../../../utils/helpers";
+import { useAppKitAccount } from "@reown/appkit/react";
+import { toast } from "react-toastify";
 
 const userToken = [
   { symbol: "CWT", address: "0xaFcA068ECDb7576720f480B6868120a13e7c7461" },
@@ -53,6 +55,8 @@ const WillPage = () => {
     console.log(ethers.formatUnits(tokenBalance, 18));
   }
 
+  const {address} = useAppKitAccount();
+
   useEffect(() => {
     setBalancePercentage({
       wallet: (walletBalance / balance) * 100,
@@ -67,13 +71,21 @@ const WillPage = () => {
     setSentBalance(0);
   }, []);
 
+  const handleOpenModal =()=>{
+    if(!address){
+      toast.error("Connect your wallet!");
+      return;
+    }
+    setOpenModal(true);
+  }
+
   return (
     <>
       <Layout
         title="Vault"
         titleChild={
           <Button
-            onClick={() => setOpenModal(true)}
+            onClick={handleOpenModal}
             className="create-will-button"
           >
             <div className="button-cover-bg">Create Will</div>
@@ -206,7 +218,7 @@ const WillPage = () => {
             <p className="topic">Activity</p>
 
             <div className={`activity-table `}>
-              {true ? (
+              {address ? (
                 <div className="relative overflow-x-auto shadow-md ">
                   <table className="w-full text-sm text-left border-[#FFD505] border-solid border-[1px]">
                     <thead className="text-xs uppercase ">
