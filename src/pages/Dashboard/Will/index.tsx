@@ -13,7 +13,7 @@ import { EyeIcon } from "../../../assets/icons/EyeIcon";
 import { EditIcon } from "../../../assets/icons/EditIcon";
 import ViewWill from "./ViewWill";
 import AddBeneficiaryToWill from "./AddBeneficiary";
-import { useWill } from "../../../hooks/specific/useCreateWill";
+// import { useWill } from "../../../hooks/specific/useCreateWill";
 import { useTokenBalance } from "../../../hooks/specific/useERC20";
 import { ethers } from "ethers";
 import { floorToDecimals } from "../../../utils/helpers";
@@ -42,11 +42,11 @@ const WillPage = () => {
     sent: 0,
   });
   const [selectedWill, setSelectedWill] = useState<any>(null);
-  const { will } = useWill();
+  // const { will } = useWill();
   const changeUserToken = (token: { symbol: string; address: string }) => {
     setUserSelectedToken(token);
   };
-  console.log(will);
+  // console.log(will);
 
   const { tokenBalance, isLoadingBalance } = useTokenBalance(
     userSelectedToken.address
