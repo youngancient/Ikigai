@@ -156,7 +156,7 @@ const AddBeneficiaryToWill = ({
       <div className="create-will-modal">
         <div className="modal-contents">
           <div className="title">
-            <h4>{isLoading || isSubmitted ? "" : "Edit"}</h4>
+            <h4>{isLoading || isSubmitted ? "" : "Add Beneficiary"}</h4>
 
             <IconButton onClick={closeModalFunc}>
               <CancelIcon />
