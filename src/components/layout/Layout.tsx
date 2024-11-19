@@ -29,7 +29,7 @@ export const Layout = ({
             <div>
               {/* <img className="max-w-[150px]" src={logo} /> */}
               <nav>
-                <div className="logo-container mb-[70px]">
+                <div className="logo-container ">
                   <div className="cover-logo">
                     <p
                       onClick={() => navigate("/")}

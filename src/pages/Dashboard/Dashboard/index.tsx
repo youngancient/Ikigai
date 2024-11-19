@@ -157,8 +157,8 @@ export const Dashboard = () => {
 
           {true ? (
             <div className={`notification-list`}>
-              {[1, 2, 3, 4, 5].map((item, i) => (
-                <div className="notification-item" key={i}>
+              {[1, 2, 3, 4, 5].map((item) => (
+                <div className="notification-item" key={item}>
                   <div className={`icon-box ${true ? "success" : "error"} `}>
                     {true ? <SuccessArrowIcon /> : <ErrorArrowIcon />}
                   </div>
