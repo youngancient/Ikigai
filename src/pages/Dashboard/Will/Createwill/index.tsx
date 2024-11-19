@@ -71,7 +71,7 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
     }));
   };
 
-  const {registerWill, isRegisterLoading} = useRegisterWill();
+  const {registerWill, isRegisterLoading} = useRegisterWill(formData.asset);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();

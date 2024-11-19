@@ -4,14 +4,19 @@ import { useAppKitAccount, useAppKitNetwork } from "@reown/appkit/react";
 import { liskSepoliaNetwork } from "../../connection";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { useTokenApproval } from "./useERC20";
+// import { ethers } from "ethers";
 
-export const useRegisterWill = () => {
+export const useRegisterWill = (tokenAddress: string) => {
   const { address } = useAppKitAccount();
   const { chainId } = useAppKitNetwork();
 
   const [isRegisterLoading, setIsLoading] = useState(false);
 
   const willContract = useWillContract(true);
+
+  const { approve } = useTokenApproval(tokenAddress);
+
   const navigate = useNavigate();
   // const errorDecoder = ErrorDecoder.create()
   const registerWill = useCallback(
@@ -34,8 +39,17 @@ export const useRegisterWill = () => {
         return;
       }
       try {
+        const totalAmount = tokenAllocations[0].amounts
+          .reduce(
+            (acc: bigint, amount: string) => acc + BigInt(amount),
+            BigInt(0)
+          )
+          .toString();
+  
+        await approve(totalAmount); // Wait for the approval to complete
+  
         setIsLoading(true);
-
+  
         const estimatedGas = await willContract.createWill.estimateGas(
           name,
           tokenAllocations,
@@ -53,10 +67,9 @@ export const useRegisterWill = () => {
             gasLimit: (estimatedGas * BigInt(120)) / BigInt(100),
           }
         );
-        const reciept = await tx.wait();
-        if (reciept.status === 1) {
+        const receipt = await tx.wait();
+        if (receipt.status === 1) {
           toast.success("User Registration successful");
-
           return;
         }
       } catch (error) {
@@ -105,7 +118,7 @@ export const useWill = () => {
     } catch (error) {
       setWill(null);
       console.log(error);
-    }finally{
+    } finally {
       setIsLoading(false);
     }
   }, [readOnlyWillRegistry, address]);

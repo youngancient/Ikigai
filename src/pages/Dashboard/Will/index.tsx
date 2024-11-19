@@ -14,6 +14,8 @@ import { EditIcon } from "../../../assets/icons/EditIcon";
 import ViewWill from "./ViewWill";
 import AddBeneficiaryToWill from "./AddBeneficiary";
 import { useWill } from "../../../hooks/specific/useCreateWill";
+import { useTokenBalance } from "../../../hooks/specific/useERC20";
+import { ethers } from "ethers";
 
 const userToken = [
   { symbol: "CWT", address: "0xaFcA068ECDb7576720f480B6868120a13e7c7461" },
@@ -37,12 +39,19 @@ const WillPage = () => {
     sent: 0,
   });
   const [selectedWill, setSelectedWill] = useState<any>(null);
-  const {will} = useWill();
+  const { will } = useWill();
   const changeUserToken = (token: { symbol: string; address: string }) => {
     setUserSelectedToken(token);
   };
   console.log(will);
-  
+
+  const { tokenBalance, isLoadingBalance } = useTokenBalance(
+    userSelectedToken.address
+  );
+  if (tokenBalance !== null) {
+    console.log(ethers.formatUnits(tokenBalance, 18));
+  }
+
   useEffect(() => {
     setBalancePercentage({
       wallet: (walletBalance / balance) * 100,
@@ -112,7 +121,12 @@ const WillPage = () => {
               <div className="total-balance">
                 <p>Total Balance</p>
                 <h3>
-                  {balance} {userSelectedToken?.symbol}
+                  {isLoadingBalance
+                    ? "Loading..."
+                    : tokenBalance != null
+                    ? ethers.formatUnits(tokenBalance, 18)
+                    : 0}{" "}
+                  {isLoadingBalance ? "" : userSelectedToken?.symbol}
                 </h3>
               </div>
 
