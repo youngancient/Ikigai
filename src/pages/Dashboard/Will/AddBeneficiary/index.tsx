@@ -89,7 +89,6 @@ const AddBeneficiaryToWill = ({
     console.log({ Name, tokenAllocations });
     if (step === TOTALSTEP) {
       setIsLoading(true);
-      // sign function goes here
     } else {
       if (step === 1) {
         if (ethers.isAddress(formData.beneficiary_address)) {
