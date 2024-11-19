@@ -82,7 +82,7 @@ const AddBeneficiaryToWill = ({
         tokenAddress: formData.asset,
         tokenType: 1,
         tokenIds: [],
-        amounts: [BigInt(formData.amount)],
+        amounts: [formData.amount],
         beneficiaries: [formData.beneficiary_address],
       },
     ];
