@@ -82,7 +82,7 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
         tokenAddress: formData.asset,
         tokenType: 1,
         tokenIds: [],
-        amounts: [formData.amount],
+        amounts: [BigInt(formData.amount)],
         beneficiaries: [formData.beneficiary_address],
       },
     ];
