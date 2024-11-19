@@ -86,7 +86,7 @@ const AddBeneficiaryToWill = ({
         beneficiaries: [formData.beneficiary_address],
       },
     ];
-
+    console.log(selectedWill);
     console.log({ Name, tokenAllocations });
     if (step === TOTALSTEP) {
       setIsLoading(true);
