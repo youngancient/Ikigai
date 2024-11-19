@@ -1,15 +1,15 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useWillContract } from "../useContracts";
 import { useAppKitAccount, useAppKitNetwork } from "@reown/appkit/react";
 import { liskSepoliaNetwork } from "../../connection";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
-export const useRegister = () => {
+export const useRegisterWill = () => {
   const { address } = useAppKitAccount();
   const { chainId } = useAppKitNetwork();
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [isRegisterLoading, setIsLoading] = useState(false);
 
   const willContract = useWillContract(true);
   const navigate = useNavigate();
@@ -67,5 +67,52 @@ export const useRegister = () => {
     },
     [willContract, address, chainId, navigate]
   );
-  return { registerWill, isLoading };
+  return { registerWill, isRegisterLoading };
+};
+
+interface IWill {
+  id: BigInt;
+  owner: string;
+  name: string;
+  lastActivity: BigInt;
+  isActive: boolean;
+  etherAllocation: BigInt;
+  gracePeriod: BigInt;
+  activityThreshold: BigInt;
+  deadManSwitchTriggered: boolean;
+  deadManSwitchTimestamp: BigInt;
+}
+export const useWill = () => {
+  const [will, setWill] = useState<IWill | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { address } = useAppKitAccount();
+  const readOnlyWillRegistry = useWillContract();
+  const fetchWill = useCallback(async () => {
+    if (!readOnlyWillRegistry) {
+      setWill(null);
+      return;
+    }
+    if (!address) {
+      setWill(null);
+      return;
+    }
+    try {
+      setIsLoading(true);
+      const _will = await readOnlyWillRegistry.wills(address);
+      console.log(_will);
+      setWill(_will);
+    } catch (error) {
+      setWill(null);
+      console.log(error);
+    }finally{
+      setIsLoading(false);
+    }
+  }, [readOnlyWillRegistry, address]);
+
+  useEffect(() => {
+    fetchWill();
+  }, [fetchWill]);
+
+  return { will, isLoading };
 };
