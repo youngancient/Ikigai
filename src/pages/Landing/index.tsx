@@ -36,7 +36,7 @@ const Landing = () => {
       </div>
       <div className="gradient-box"></div>
 
-      <div className="hero">
+      <div className="hero" id="hero">
         <img src={eth1} className="eth-coin one" alt="eth" />
         <img src={eth2} className="eth-coin two" alt="eth" />
         <img src={eth3} className="eth-coin three" alt="eth" />
@@ -100,7 +100,7 @@ const Landing = () => {
 
               <p className="title">Will Lock</p>
               <p className="desc">
-                Our crypto will ensures your assets reach loved ones as per your
+                LegacyX ensures your assets reach loved ones as per your
                 exact instructions. No intermediaries, no delays.
               </p>
             </div>
@@ -125,14 +125,14 @@ const Landing = () => {
               take control of your legacy.
             </p>
 
-            <button>Get Started</button>
+            <a href="#hero"><button>Get Started</button></a>
           </div>
 
           <img src={iphone} alt="iphone" />
         </div>
 
         <div className="connect-wallet-flex">
-          <p>Crypto will</p>
+          <p>LegacyX</p>
           <button className="get-started-btn" onClick={handleConnectWallet}>
             {isConnected ? formatAddress(address ?? "") : "Connect Wallet"}
           </button>

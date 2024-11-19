@@ -13,6 +13,7 @@ import { EyeIcon } from "../../../assets/icons/EyeIcon";
 import { EditIcon } from "../../../assets/icons/EditIcon";
 import ViewWill from "./ViewWill";
 import AddBeneficiaryToWill from "./AddBeneficiary";
+import { useWill } from "../../../hooks/specific/useCreateWill";
 
 const userToken = [
   { symbol: "CWT", address: "0xaFcA068ECDb7576720f480B6868120a13e7c7461" },
@@ -36,11 +37,12 @@ const WillPage = () => {
     sent: 0,
   });
   const [selectedWill, setSelectedWill] = useState<any>(null);
-
+  const {will} = useWill();
   const changeUserToken = (token: { symbol: string; address: string }) => {
     setUserSelectedToken(token);
   };
-
+  console.log(will);
+  
   useEffect(() => {
     setBalancePercentage({
       wallet: (walletBalance / balance) * 100,
@@ -170,7 +172,7 @@ const WillPage = () => {
 
                     <div className="name-and-view">
                       <div className="name">
-                        <h5>Name of Beneficiary</h5>
+                        <h5>Donald</h5>
                         <p>Asset willed: 2 ETH</p>
                       </div>
 
@@ -277,7 +279,7 @@ const WillPage = () => {
                   </table>
                 </div>
               ) : (
-                <EmptyState text="You have no fund yet" />
+                <EmptyState text="You have no activity yet" />
               )}
             </div>
           </div>
