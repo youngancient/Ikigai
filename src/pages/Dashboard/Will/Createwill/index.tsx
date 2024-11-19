@@ -42,6 +42,7 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
     amount: "",
     activity_period: "",
     grace_period: "",
+    assetDecimals: "",
   });
 
   // fetch tokens
@@ -71,7 +72,9 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
     }));
   };
 
-  const {registerWill, isRegisterLoading, isDone} = useRegisterWill(formData.asset);
+  const { registerWill, isRegisterLoading, isDone } = useRegisterWill(
+    formData.asset
+  );
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -87,7 +90,7 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
         tokenAddress: formData.asset,
         tokenType: 1,
         tokenIds: [],
-        amounts: [formData.amount + "0".repeat(18)],
+        amounts: [formData.amount + "0".repeat(Number(formData.assetDecimals))],
         beneficiaries: [formData.beneficiary_address],
       },
     ];
@@ -123,6 +126,7 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
       activity_period: "",
       grace_period: "",
       assetSymbol: "",
+      assetDecimals: "",
     });
   };
 
@@ -144,14 +148,17 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
 
   useEffect(() => {
     if (formData.asset) {
-      let filtered: { token: { address: string; symbol: string } }[] =
-        tokenList?.filter(
-          (item: { token: { address: string; symbol: string } }) =>
-            item?.token?.address === formData.asset
-        );
+      let filtered: {
+        token: { address: string; symbol: string; decimals: string };
+      }[] = tokenList?.filter(
+        (item: {
+          token: { address: string; symbol: string; decimals: string };
+        }) => item?.token?.address === formData.asset
+      );
       setFormData((prev) => ({
         ...prev,
         assetSymbol: filtered[0]?.token?.symbol,
+        assetDecimals: filtered[0]?.token?.decimals,
       }));
     }
   }, [formData.asset]);

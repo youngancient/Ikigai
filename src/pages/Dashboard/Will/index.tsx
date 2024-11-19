@@ -217,12 +217,7 @@ const WillPage = () => {
                         >
                           Beneficiaries
                         </th>
-                        <th
-                          scope="col"
-                          className="px-6 py-8 text-[#ffffff] text-center"
-                        >
-                          Asset
-                        </th>
+
                         <th
                           scope="col"
                           className="px-6 py-8 text-[#ffffff] text-center "
@@ -258,9 +253,7 @@ const WillPage = () => {
                           >
                             7
                           </td>
-                          <td className="text-center px-6 py-4 text-[#ffffff]">
-                            CTF
-                          </td>
+
                           <td className="text-center px-6 py-4 text-[#ffffff]">
                             1,000
                           </td>
