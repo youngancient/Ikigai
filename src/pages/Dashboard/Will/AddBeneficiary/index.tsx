@@ -65,7 +65,6 @@ const AddBeneficiaryToWill = ({
   ) => {
     const { name, value } = e.target;
 
-    // Update state for the specific field
     setFormData((prev) => ({
       ...prev,
       [name]: value,
