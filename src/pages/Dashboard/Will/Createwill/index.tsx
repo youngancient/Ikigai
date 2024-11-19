@@ -247,6 +247,7 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
                     name="asset"
                     handleCustomChange={handleChange}
                     value={formData.asset}
+                    required
                     selectOption={
                       tokenList?.length
                         ? tokenList?.map(

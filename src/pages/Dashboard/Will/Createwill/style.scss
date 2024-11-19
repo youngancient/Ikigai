@@ -7,9 +7,9 @@
   max-width: 540px;
   border-radius: 20px;
   background: var(--gradient960);
-
+  @include webkitnone;
+  overflow-y: auto;
   .modal-contents {
-    @include webkitscrollbar;
     padding: 30px 32px;
     overflow-y: auto;
     position: relative;
