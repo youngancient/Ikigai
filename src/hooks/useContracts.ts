@@ -4,8 +4,8 @@ import { Contract } from "ethers";
 import { TRUSTFUND_ABI, TRUSTFUND_CONTRACT_ADDRESS } from '../constants/contracts';
 import FACTORY_ABI from "../ABI/factory.json";
 import AIRDROP_ABI from "../ABI/airdrop.json";
-import type { TrustFundContract } from '../types/contracts';
 import WILL_ABI from "../ABI/will.json";
+import type { TrustFundContract } from '../types/contracts';
 
 
 export function useTrustFundContract(withSigner = false) {
