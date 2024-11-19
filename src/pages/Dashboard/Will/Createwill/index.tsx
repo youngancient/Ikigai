@@ -347,26 +347,6 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
 
                     <div className="form-preview">
                       <div className="d-flex">
-                        <p>Beneficiary name</p>
-                        <p>{formData.name}</p>
-                      </div>
-
-                      <div className="d-flex">
-                        <p>Email</p>
-                        <p>{formData.email}</p>
-                      </div>
-
-                      <div className="d-flex">
-                        <p>Phone</p>
-                        <p>{formData.phone}</p>
-                      </div>
-                      <div className="d-flex">
-                        <p>Beneficiary address</p>
-                        <p className=" truncate ">
-                          {formData.beneficiary_address}
-                        </p>
-                      </div>
-                      <div className="d-flex">
                         <p>Activity Period</p>
                         <p>{formData.activity_period}</p>
                       </div>
