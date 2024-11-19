@@ -12,6 +12,7 @@ export const useRegisterWill = (tokenAddress: string) => {
   const { chainId } = useAppKitNetwork();
 
   const [isRegisterLoading, setIsLoading] = useState(false);
+  const [isDone, setIsDone] = useState(false);
 
   const willContract = useWillContract(true);
 
@@ -40,36 +41,40 @@ export const useRegisterWill = (tokenAddress: string) => {
       }
       try {
         const totalAmount = tokenAllocations[0].amounts
-          .reduce(
-            (acc: bigint, amount: string) => acc + BigInt(amount),
-            BigInt(0)
-          )
-          .toString();
-  
+          .reduce((acc: bigint, amount: bigint) => acc + amount, BigInt(0));
+        
         await approve(totalAmount); // Wait for the approval to complete
-  
+
         setIsLoading(true);
-  
+
+        console.log("Estimating gas for createWill...");
+        console.log("Parameters:", {
+          name,
+          tokenAllocations,
+          gracePeriodInSeconds: gracePeriod * 86400,
+          activityThresholdInSeconds: activityThreshold * 30 * 24 * 60 * 60,
+        });
         const estimatedGas = await willContract.createWill.estimateGas(
           name,
           tokenAllocations,
-          gracePeriod,
-          activityThreshold
+          gracePeriod * 86400,
+          activityThreshold * 24 * 60 * 60 // convert to seconds
         );
         console.log({ estimatedGas });
         // construct transaction
         const tx = await willContract.createWill(
           name,
           tokenAllocations,
-          gracePeriod,
-          activityThreshold,
+          gracePeriod * 86400,
+          activityThreshold * 24 * 60 * 60, // convert to seconds
           {
             gasLimit: (estimatedGas * BigInt(120)) / BigInt(100),
           }
         );
         const receipt = await tx.wait();
         if (receipt.status === 1) {
-          toast.success("User Registration successful");
+          toast.success("Will creation successful");
+          setIsDone(true);  
           return;
         }
       } catch (error) {
@@ -80,7 +85,7 @@ export const useRegisterWill = (tokenAddress: string) => {
     },
     [willContract, address, chainId, navigate]
   );
-  return { registerWill, isRegisterLoading };
+  return { registerWill, isRegisterLoading, isDone };
 };
 
 interface IWill {

@@ -16,10 +16,11 @@ import AddBeneficiaryToWill from "./AddBeneficiary";
 import { useWill } from "../../../hooks/specific/useCreateWill";
 import { useTokenBalance } from "../../../hooks/specific/useERC20";
 import { ethers } from "ethers";
+import { floorToDecimals } from "../../../utils/helpers";
 
 const userToken = [
   { symbol: "CWT", address: "0xaFcA068ECDb7576720f480B6868120a13e7c7461" },
-  { symbol: "WTK", address: "0xaFcA068ECDb7576720f480B6868120a13e7c7461" },
+  { symbol: "WT", address: "0xf373b5fbF1F4075E240Ea2EB76bdE01f54bf75f6" },
   { symbol: "CPGT", address: "0xaFcA068ECDb7576720f480B6868120a13e7c7461" },
 ];
 
@@ -124,8 +125,11 @@ const WillPage = () => {
                   {isLoadingBalance
                     ? "Loading..."
                     : tokenBalance != null
-                    ? ethers.formatUnits(tokenBalance, 18)
-                    : 0}{" "}
+                    ? floorToDecimals(
+                        parseFloat(ethers.formatUnits(tokenBalance, 18)),
+                        2
+                      )
+                    : 0.0}{" "}
                   {isLoadingBalance ? "" : userSelectedToken?.symbol}
                 </h3>
               </div>
