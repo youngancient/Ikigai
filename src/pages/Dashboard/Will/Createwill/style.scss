@@ -8,6 +8,11 @@
   border-radius: 20px;
   background: var(--gradient960);
 
+  input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 30px #141414 inset !important;
+    -webkit-text-fill-color: #fff !important;
+  }
+
   .modal-contents {
     @include webkitscrollbar;
     padding: 30px 32px;
