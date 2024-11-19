@@ -75,13 +75,14 @@ const AddBeneficiaryToWill = ({
     e.preventDefault();
 
     const Name = formData.name;
-
+    const num = ethers.parseUnits(formData.amount, 18);
+    
     const tokenAllocations = [
       {
         tokenAddress: formData.asset,
         tokenType: 1,
         tokenIds: [],
-        amounts: [formData.amount],
+        amounts: [num],
         beneficiaries: [formData.beneficiary_address],
       },
     ];

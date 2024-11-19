@@ -4,7 +4,8 @@ import { useAppKitAccount, useAppKitNetwork } from "@reown/appkit/react";
 import { liskSepoliaNetwork } from "../../connection";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { ethers } from "ethers";
+// import { ethers } from "ethers";
+//import { ethers } from "ethers";
 
 export const useTokenApproval = (tokenAddress : string) => {
     const { address } = useAppKitAccount();
@@ -33,8 +34,12 @@ export const useTokenApproval = (tokenAddress : string) => {
         }
         try {
           setisLoadingBalance(true);
-            console.log("here", amount);
-            const _amount = ethers.parseUnits(amount,18);
+            // console.log("here", amount);
+
+          const _amount = BigInt(amount);
+
+          console.log("approve: ", _amount);
+
           const estimatedGas = await erc20Contract.approve.estimateGas(
             import.meta.env.VITE_WILL_CONTRACT_ADDRESS,_amount
           );
@@ -43,7 +48,6 @@ export const useTokenApproval = (tokenAddress : string) => {
           console.log("allowance: ",allowance);
 
           if (BigInt(allowance) >= BigInt(amount)) {
-            toast.success("Approval successful");
             return;
           }
           // construct transaction
