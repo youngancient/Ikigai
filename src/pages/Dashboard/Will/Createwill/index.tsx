@@ -29,8 +29,8 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
   const { address, isConnected } = useAppKitAccount();
 
   const [tokenList, setTokenList] = useState([]);
-  // const [isLoading, setIsLoading] = useState(false);
-  //const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const [addressErrorMsg, setAddressErrorMsg] = useState("");
   const [formData, setFormData] = useState({
     name: "",
@@ -72,9 +72,9 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
     }));
   };
 
-  const { registerWill, isRegisterLoading, isDone, reset } = useRegisterWill(
-    formData.asset
-  );
+  // const { registerWill, isRegisterLoading, isDone, reset } = useRegisterWill(
+  //   formData.asset
+  // );
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -97,10 +97,13 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
 
     console.log({ Name, gracePeriod, activityThreshold, tokenAllocations });
     if (step === TOTALSTEP) {
-      // setIsLoading(true);
+      setIsLoading(true);
+      setTimeout(() => {
+        setIsLoading(false);
+    setIsSubmitted(true);
+      }, 1200);
       // sign function goes here
-      registerWill(Name, gracePeriod, activityThreshold, tokenAllocations);
-      // setIsSubmitted(true);
+      // registerWill(Name, gracePeriod, activityThreshold, tokenAllocations);
     } else {
       if (step === 1) {
         if (ethers.isAddress(formData.beneficiary_address)) {
@@ -134,9 +137,9 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
     closeModal();
     setStep(1);
     clearForm();
-    // setIsLoading(false);
-    //setIsSubmitted(false);
-    reset();
+    setIsLoading(false);
+    setIsSubmitted(false);
+    // reset();
   };
 
   useEffect(() => {
@@ -174,7 +177,7 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
         <div className="modal-contents">
           <div className="title">
             <h4>
-              {isRegisterLoading || isDone
+              {isLoading || isSubmitted
                 ? ""
                 : step === TOTALSTEP
                 ? "Signature Request"
@@ -186,7 +189,7 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
             </IconButton>
           </div>
 
-          {isRegisterLoading && (
+          {isLoading && (
             <div className="loading-state">
               <img src={refresh} alt="refresh" className="animate-spin" />
 
@@ -198,7 +201,7 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
             </div>
           )}
 
-          {isDone && (
+          {isSubmitted && (
             <div className="submitted-state">
               <img src={check_circle} alt="check" />
 
@@ -208,7 +211,7 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
             </div>
           )}
 
-          {!isRegisterLoading && !isDone && (
+          {!isLoading && !isSubmitted && (
             <form onSubmit={handleSubmit}>
               {step === 1 && (
                 <div className="form-step-one">

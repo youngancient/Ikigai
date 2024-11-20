@@ -230,10 +230,10 @@ export const AddTrustFundModal = ({
                           y2="9.0761"
                           gradientUnits="userSpaceOnUse"
                         >
-                          <stop stop-color="#8AD4EC" />
-                          <stop offset="0.217372" stop-color="#EF96FF" />
-                          <stop offset="0.540308" stop-color="#FF56A9" />
-                          <stop offset="0.852826" stop-color="#FFAA6C" />
+                          <stop stopColor="#8AD4EC" />
+                          <stop offset="0.217372" stopColor="#EF96FF" />
+                          <stop offset="0.540308" stopColor="#FF56A9" />
+                          <stop offset="0.852826" stopColor="#FFAA6C" />
                         </linearGradient>
                         <linearGradient
                           id="paint1_linear_115_6564"
@@ -243,10 +243,10 @@ export const AddTrustFundModal = ({
                           y2="9.0761"
                           gradientUnits="userSpaceOnUse"
                         >
-                          <stop stop-color="#8AD4EC" />
-                          <stop offset="0.217372" stop-color="#EF96FF" />
-                          <stop offset="0.540308" stop-color="#FF56A9" />
-                          <stop offset="0.852826" stop-color="#FFAA6C" />
+                          <stop stopColor="#8AD4EC" />
+                          <stop offset="0.217372" stopColor="#EF96FF" />
+                          <stop offset="0.540308" stopColor="#FF56A9" />
+                          <stop offset="0.852826" stopColor="#FFAA6C" />
                         </linearGradient>
                       </defs>
                     </svg>
@@ -303,10 +303,10 @@ export const AddTrustFundModal = ({
                           y2="6.52868"
                           gradientUnits="userSpaceOnUse"
                         >
-                          <stop stop-color="#8AD4EC" />
-                          <stop offset="0.217372" stop-color="#EF96FF" />
-                          <stop offset="0.540308" stop-color="#FF56A9" />
-                          <stop offset="0.852826" stop-color="#FFAA6C" />
+                          <stop stopColor="#8AD4EC" />
+                          <stop offset="0.217372" stopColor="#EF96FF" />
+                          <stop offset="0.540308" stopColor="#FF56A9" />
+                          <stop offset="0.852826" stopColor="#FFAA6C" />
                         </linearGradient>
                         <linearGradient
                           id="paint1_linear_115_6699"
@@ -316,10 +316,10 @@ export const AddTrustFundModal = ({
                           y2="6.52868"
                           gradientUnits="userSpaceOnUse"
                         >
-                          <stop stop-color="#8AD4EC" />
-                          <stop offset="0.217372" stop-color="#EF96FF" />
-                          <stop offset="0.540308" stop-color="#FF56A9" />
-                          <stop offset="0.852826" stop-color="#FFAA6C" />
+                          <stop stopColor="#8AD4EC" />
+                          <stop offset="0.217372" stopColor="#EF96FF" />
+                          <stop offset="0.540308" stopColor="#FF56A9" />
+                          <stop offset="0.852826" stopColor="#FFAA6C" />
                         </linearGradient>
                       </defs>
                     </svg>
