@@ -92,7 +92,7 @@ export const Dashboard = () => {
             className="navbar_dropdown location_picker"
             action={
               <Button
-                className="grey_btn"
+                className="radiant-btn"
                 endIcon={<PrimaryFillIcon stroke={"#ffff"} />}
               >
                 {userSelectedToken.address
