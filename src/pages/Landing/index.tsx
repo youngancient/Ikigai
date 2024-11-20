@@ -37,7 +37,7 @@ const Landing = () => {
       </div>
       <div className="gradient-box"></div>
 
-      <div className="hero" id="hero">
+      <div className="hero">
         <img src={eth1} className="eth-coin one" alt="eth" />
         <img src={eth2} className="eth-coin two" alt="eth" />
         <img src={eth3} className="eth-coin three" alt="eth" />
@@ -132,7 +132,7 @@ const Landing = () => {
         </div>
 
         <div className="connect-wallet-flex">
-          <p>LegacyX</p>
+          <p>Crypto will</p>
           <button className="get-started-btn" onClick={handleConnectWallet}>
             {isConnected ? formatAddress(address ?? "") : "Connect Wallet"}
           </button>

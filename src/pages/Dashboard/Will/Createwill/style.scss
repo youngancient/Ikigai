@@ -7,15 +7,9 @@
   max-width: 540px;
   border-radius: 20px;
   background: var(--gradient960);
-  @include webkitnone;
-  overflow-y: auto;
-
-  input:-webkit-autofill {
-    -webkit-box-shadow: 0 0 0 30px #141414 inset !important;
-    -webkit-text-fill-color: #fff !important;
-  }
 
   .modal-contents {
+    @include webkitscrollbar;
     padding: 30px 32px;
     overflow-y: auto;
     position: relative;
@@ -79,7 +73,7 @@
         color: var(--white);
         outline: none;
         text-align: center;
-        font-size: 3em;
+        font-size: 1em;
       }
 
       .quick-select-amount {
@@ -98,7 +92,6 @@
           font-weight: 400;
           line-height: 20px;
           color: #f9fbff;
-          min-width: 40px;
         }
       }
     }
@@ -133,7 +126,6 @@
           display: flex;
           align-items: center;
           justify-content: space-between;
-          gap: 8px;
           &:last-child {
             margin-bottom: 0;
           }

@@ -39,7 +39,7 @@ export default function SelectField({
   extraLabel,
   noOptionMsg,
   variant = "condensed",
-  bg = "",
+  bg = "white",
   displayEmpty = true,
   defaultValue,
   onChange,

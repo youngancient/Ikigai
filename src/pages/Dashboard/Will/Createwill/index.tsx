@@ -45,6 +45,8 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
     assetDecimals: "",
   });
 
+  console.log("Hello World");
+
   // fetch tokens
 
   const fetchTokens = async (address: string) => {

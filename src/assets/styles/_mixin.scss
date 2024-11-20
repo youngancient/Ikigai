@@ -19,20 +19,12 @@
   &::-webkit-scrollbar {
     height: 4px;
     width: 4px;
-    background: #8ad4ec;
+    background: var(--primary);
   }
 
   &::-webkit-scrollbar-thumb {
     border-radius: 10px;
     box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-    background: #8ad4ec;
+    background: var(--primary);
   }
-}
-
-@mixin webkitnone {
-  &::-webkit-scrollbar {
-    display: none;
-  }
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
 }
