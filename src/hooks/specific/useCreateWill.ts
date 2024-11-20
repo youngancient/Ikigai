@@ -134,7 +134,7 @@ export const useRegisterWill = (tokenAddress: string) => {
         setIsLoading(false);
       }
     },
-    [willContract, address, chainId, navigate]
+    [willContract, address, chainId, navigate, tokenAddress, erc20Contract]
   );
   const reset = () => {
     setIsDone(false);
