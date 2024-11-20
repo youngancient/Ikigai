@@ -16,6 +16,15 @@ import "./style.scss";
 import { ethers } from "ethers";
 import { useAppKitAccount } from "@reown/appkit/react";
 import { useRegisterWill } from "../../../../hooks/specific/useCreateWill";
+import { toast } from "react-toastify";
+
+interface IBeneficiary {
+  name: string;
+  email: string;
+  beneficiary_address: string;
+  percentage: string;
+  beneficiary_amount: string;
+}
 
 type propType = {
   openModal: boolean;
@@ -28,15 +37,20 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
   const [step, setStep] = useState(1);
   const { address, isConnected } = useAppKitAccount();
 
+  const [beneficiaries, setBeneficiaries] = useState<IBeneficiary[]>([
+    {
+      name: "",
+      email: "",
+      beneficiary_address: "",
+      percentage: "",
+      beneficiary_amount: "",
+    },
+  ]);
   const [tokenList, setTokenList] = useState([]);
   // const [isLoading, setIsLoading] = useState(false);
   //const [isSubmitted, setIsSubmitted] = useState(false);
   const [addressErrorMsg, setAddressErrorMsg] = useState("");
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    beneficiary_address: "",
     asset: "",
     assetSymbol: "",
     amount: "",
@@ -59,6 +73,90 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
     } catch (err) {}
   };
 
+  const handleBeneficiaryInputChange = (
+    index: number,
+    field: keyof IBeneficiary,
+    value: string
+  ) => {
+    const updatedBeneficiaries = [...beneficiaries];
+    updatedBeneficiaries[index][field] = value;
+
+    // Recalculate `userAmount` if `percentage` is updated
+    if (field === "percentage") {
+      const percentageValue = parseFloat(value);
+      if (!isNaN(percentageValue)) {
+        updatedBeneficiaries[index].beneficiary_amount = (
+          (percentageValue / 100) *
+          Number(formData.amount)
+        ).toFixed(2);
+      } else {
+        updatedBeneficiaries[index].beneficiary_amount = "";
+      }
+    }
+
+    setBeneficiaries(updatedBeneficiaries);
+  };
+
+  const addBeneficiary = () => {
+    setBeneficiaries([
+      ...beneficiaries,
+      {
+        name: "",
+        email: "",
+        beneficiary_address: "",
+        percentage: "",
+        beneficiary_amount: "",
+      },
+    ]);
+  };
+
+  const removeBeneficiary = (index: number) => {
+    if (beneficiaries.length > 1) {
+      const updatedBeneficiaries = beneficiaries.filter((_, i) => i !== index);
+      setBeneficiaries(updatedBeneficiaries);
+    }
+  };
+
+  const isFormValid = (): boolean => {
+    let totalPercentage = 0;
+
+    for (const beneficiary of beneficiaries) {
+      if (
+        !beneficiary.name ||
+        !beneficiary.email ||
+        !beneficiary.beneficiary_address ||
+        !beneficiary.percentage ||
+        !beneficiary.beneficiary_amount
+      ) {
+        toast.error("Input valid fields");
+
+        return false;
+      }
+
+      if (!ethers.isAddress(beneficiary.beneficiary_address)) {
+        toast.error(
+          `Input valid wallet address: ${beneficiary.beneficiary_address}`
+        );
+
+        return false;
+      }
+
+      const percentageValue = parseFloat(beneficiary.percentage);
+      if (isNaN(percentageValue) || percentageValue < 0) {
+        toast.error("Percentage must be a valid positive number.");
+        return false;
+      }
+      totalPercentage += percentageValue;
+    }
+
+    if (totalPercentage > 100) {
+      toast.error(
+        "Total percentage across all beneficiaries cannot exceed 100%."
+      );
+      return false;
+    }
+    return true;
+  };
   // Handler for form field changes
   const handleChange = (
     e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>
@@ -79,7 +177,7 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const Name = formData.name;
+    // const Name = formData.name;
     const gracePeriod = parseInt(formData.grace_period);
     const activityThreshold = parseInt(formData.activity_period);
 
@@ -91,23 +189,23 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
         tokenType: 1,
         tokenIds: [],
         amounts: [formData.amount + "0".repeat(Number(formData.assetDecimals))],
-        beneficiaries: [formData.beneficiary_address],
+        beneficiaries: beneficiaries?.map((item) => item.beneficiary_address),
       },
     ];
 
-    console.log({ Name, gracePeriod, activityThreshold, tokenAllocations });
+    console.log({ Name: "", gracePeriod, activityThreshold, tokenAllocations });
     if (step === TOTALSTEP) {
       // setIsLoading(true);
       // sign function goes here
-      registerWill(Name, gracePeriod, activityThreshold, tokenAllocations);
+      registerWill("", gracePeriod, activityThreshold, tokenAllocations);
       // setIsSubmitted(true);
     } else {
-      if (step === 1) {
-        if (ethers.isAddress(formData.beneficiary_address)) {
+      if (step === 2) {
+        if (isFormValid()) {
           setStep(step + 1);
           setAddressErrorMsg("");
         } else {
-          setAddressErrorMsg("Enter a valid wallet address");
+          // setAddressErrorMsg("Enter a valid wallet address");
         }
       } else {
         setStep(step + 1);
@@ -117,10 +215,6 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
 
   const clearForm = () => {
     setFormData({
-      name: "",
-      email: "",
-      phone: "",
-      beneficiary_address: "",
       asset: "",
       amount: "",
       activity_period: "",
@@ -128,6 +222,15 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
       assetSymbol: "",
       assetDecimals: "",
     });
+    setBeneficiaries([
+      {
+        name: "",
+        email: "",
+        beneficiary_address: "",
+        percentage: "",
+        beneficiary_amount: "",
+      },
+    ]);
   };
 
   const closeModalFunc = () => {
@@ -212,51 +315,6 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
             <form onSubmit={handleSubmit}>
               {step === 1 && (
                 <div className="form-step-one">
-                  <InputField
-                    name="name"
-                    label="Name of Will"
-                    required={true}
-                    value={formData.name}
-                    type={"text"}
-                    onChange={handleChange}
-                  />
-                  <InputField
-                    name="email"
-                    label="E-mail address of beneficiary"
-                    required={true}
-                    value={formData.email}
-                    type={"email"}
-                    onChange={handleChange}
-                  />{" "}
-                  <InputField
-                    name="phone"
-                    label="Phone number of beneficiary"
-                    required={true}
-                    value={formData.phone}
-                    type={"text"}
-                    onChange={handleChange}
-                  />{" "}
-                  <InputField
-                    name="beneficiary_address"
-                    label="Beneficiary Wallet address"
-                    required={true}
-                    value={formData.beneficiary_address}
-                    type={"text"}
-                    onChange={handleChange}
-                    errMsg={
-                      formData.beneficiary_address && addressErrorMsg
-                        ? addressErrorMsg
-                        : ""
-                    }
-                  />
-                  <Button className="submit-button" type="submit">
-                    Next
-                  </Button>
-                </div>
-              )}
-
-              {step === 2 && (
-                <div className="form-step-two">
                   <SelectField
                     label={"Asset to transfer"}
                     name="asset"
@@ -309,6 +367,104 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
                 </div>
               )}
 
+              {step === 2 && (
+                <div className="form-step-two">
+                  {beneficiaries.map((beneficiary, index) => (
+                    <div className="beneficiary-item">
+                      {beneficiaries.length > 1 && index > 0 && (
+                        <IconButton
+                          className="remove-icon"
+                          onClick={() => removeBeneficiary(index)}
+                        >
+                          <CancelIcon stroke="red" />
+                        </IconButton>
+                      )}
+                      <InputField
+                        name="name"
+                        label="Beneficiary Name"
+                        required
+                        value={beneficiary.name}
+                        type="text"
+                        onChange={(e) =>
+                          handleBeneficiaryInputChange(
+                            index,
+                            "name",
+                            e.target.value
+                          )
+                        }
+                      />
+                      <InputField
+                        name="email"
+                        label="E-mail address of beneficiary"
+                        required
+                        value={beneficiary.email}
+                        type="email"
+                        onChange={(e) =>
+                          handleBeneficiaryInputChange(
+                            index,
+                            "email",
+                            e.target.value
+                          )
+                        }
+                      />
+                      <InputField
+                        name="beneficiary_address"
+                        label="Beneficiary Wallet address"
+                        required
+                        value={beneficiary.beneficiary_address}
+                        type="text"
+                        onChange={(e) =>
+                          handleBeneficiaryInputChange(
+                            index,
+                            "beneficiary_address",
+                            e.target.value
+                          )
+                        }
+                      />
+                      <div className="form-group-flex">
+                        <InputField
+                          name="percentage"
+                          label="Enter Percentage"
+                          required
+                          value={beneficiary.percentage}
+                          type="text"
+                          onChange={(e) =>
+                            handleBeneficiaryInputChange(
+                              index,
+                              "percentage",
+                              e.target.value
+                            )
+                          }
+                        />
+                        <InputField
+                          name="userAmount"
+                          label="Amount"
+                          required
+                          disabled
+                          value={beneficiary.beneficiary_amount}
+                          type="text"
+                          // onChange={(e) =>
+                          //   handleBeneficiaryInputChange(
+                          //     index,
+                          //     "beneficiary_amount",
+                          //     e.target.value
+                          //   )
+                          // }
+                        />
+                      </div>
+                    </div>
+                  ))}
+
+                  <div className="btn-flex">
+                    <Button onClick={addBeneficiary} className="cancel">
+                      Add Beneficiary
+                    </Button>
+                    <Button className="submit-button" type="submit">
+                      Next
+                    </Button>
+                  </div>
+                </div>
+              )}
               {step === 3 && (
                 <div className="form-step-three">
                   <InputField
@@ -347,7 +503,7 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
                     <h6>Summary;</h6>
 
                     <div className="form-preview">
-                      <div className="d-flex">
+                      {/* <div className="d-flex">
                         <p>Beneficiary name</p>
                         <p>{formData.name}</p>
                       </div>
@@ -366,7 +522,8 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
                         <p className=" truncate ">
                           {formData.beneficiary_address}
                         </p>
-                      </div>
+                      </div> */}
+
                       <div className="d-flex">
                         <p>Activity Period</p>
                         <p>{formData.activity_period}</p>
