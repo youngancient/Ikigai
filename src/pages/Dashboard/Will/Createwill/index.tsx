@@ -15,7 +15,7 @@ import axios from "axios";
 import "./style.scss";
 import { ethers } from "ethers";
 import { useAppKitAccount } from "@reown/appkit/react";
-import { useRegisterWill } from "../../../../hooks/specific/useCreateWill";
+// import { useRegisterWill } from "../../../../hooks/specific/useCreateWill";
 
 type propType = {
   openModal: boolean;

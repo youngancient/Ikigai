@@ -20,7 +20,7 @@ export const useRegisterWill = (tokenAddress: string) => {
   console.log("Will Contract Address:", import.meta.env.VITE_WILL_CONTRACT_ADDRESS);
 
   // const { approve } = useTokenApproval(tokenAddress);
-  const [isApprovalLoading, setisLoadingBalance] = useState(false);
+  // const [isApprovalLoading, setisLoadingBalance] = useState(false);
 
   const erc20Contract = useERC20Contract(true, tokenAddress);
 
