@@ -135,18 +135,18 @@ export const Dashboard = () => {
           <div className="quick-flex">
             <QuickActionItem
               text="Create will in 1 mins"
-              link=""
+              link="/vault"
               icon={willicon}
             />
             <QuickActionItem
               text="Create Trust Fund"
-              link=""
+              link="/trustfund"
               icon={trusticon}
             />
             <QuickActionItem
               text="Add pair to liquidity"
               isComingSoon
-              link=""
+              link="/liquidity"
               icon={liquidicon}
             />
           </div>
