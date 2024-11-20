@@ -190,7 +190,7 @@ const AddBeneficiaryToWill = ({
                 <div className="form-step-one">
                   <InputField
                     name="name"
-                    label="Name of Beneficiary"
+                    label="Name of Will"
                     required={true}
                     value={formData.name}
                     type={"text"}
