@@ -9,6 +9,7 @@ function App() {
       <div className={`theme w-full`}>
         <ToastContainer />
         <AllRoutes />
+        <ToastContainer />
       </div>
     </>
   );

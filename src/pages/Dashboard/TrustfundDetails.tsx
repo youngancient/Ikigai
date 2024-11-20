@@ -121,6 +121,8 @@ export const TrustFundDetails = () => {
     }
   };
 
+  console.log(userAddress);
+
   if (!fund) return null;
 
   const targetAmount = ethers.formatEther(fund.targetAmount);

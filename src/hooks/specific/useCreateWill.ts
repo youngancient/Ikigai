@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { useWillContract } from "../useContracts";
 import { useAppKitAccount, useAppKitNetwork } from "@reown/appkit/react";
 import { liskSepoliaNetwork } from "../../connection";
@@ -47,20 +47,22 @@ export const useRegisterWill = (tokenAddress: string) => {
 
         setIsLoading(true);
 
-        console.log("Estimating gas for createWill...");
+        // console.log("Estimating gas for createWill...");
         console.log("Parameters:", {
           name,
           tokenAllocations,
           gracePeriodInSeconds: gracePeriod * 86400,
           activityThresholdInSeconds: activityThreshold * 30 * 24 * 60 * 60,
         });
-        const estimatedGas = await willContract.createWill.estimateGas(
-          name,
-          tokenAllocations,
-          gracePeriod * 86400,
-          activityThreshold * 24 * 60 * 60 // convert to seconds
-        );
-        console.log({ estimatedGas });
+
+        // const estimatedGas = await willContract.createWill.estimateGas(
+        //   name,
+        //   tokenAllocations,
+        //   gracePeriod * 86400,
+        //   activityThreshold * 24 * 60 * 60 // convert to seconds
+        // );
+
+        // console.log({ estimatedGas });
         // construct transaction
         const tx = await willContract.createWill(
           name,
@@ -68,11 +70,12 @@ export const useRegisterWill = (tokenAddress: string) => {
           gracePeriod * 86400,
           activityThreshold * 24 * 60 * 60, // convert to seconds
           {
-            gasLimit: (estimatedGas * BigInt(120)) / BigInt(100),
+            gasLimit: 1000000,
           }
         );
         const receipt = await tx.wait();
         if (receipt.status === 1) {
+          console.log(receipt);
           toast.success("Will creation successful");
           setIsDone(true);  
           return;
@@ -85,52 +88,10 @@ export const useRegisterWill = (tokenAddress: string) => {
     },
     [willContract, address, chainId, navigate]
   );
-  return { registerWill, isRegisterLoading, isDone };
+  const reset = () => {
+    setIsDone(false);
+  }
+  return { registerWill, isRegisterLoading, isDone, reset };
 };
 
-interface IWill {
-  id: BigInt;
-  owner: string;
-  name: string;
-  lastActivity: BigInt;
-  isActive: boolean;
-  etherAllocation: BigInt;
-  gracePeriod: BigInt;
-  activityThreshold: BigInt;
-  deadManSwitchTriggered: boolean;
-  deadManSwitchTimestamp: BigInt;
-}
-export const useWill = () => {
-  const [will, setWill] = useState<IWill | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
 
-  const { address } = useAppKitAccount();
-  const readOnlyWillRegistry = useWillContract();
-  const fetchWill = useCallback(async () => {
-    if (!readOnlyWillRegistry) {
-      setWill(null);
-      return;
-    }
-    if (!address) {
-      setWill(null);
-      return;
-    }
-    try {
-      setIsLoading(true);
-      const _will = await readOnlyWillRegistry.wills(address);
-      console.log(_will);
-      setWill(_will);
-    } catch (error) {
-      setWill(null);
-      console.log(error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [readOnlyWillRegistry, address]);
-
-  useEffect(() => {
-    fetchWill();
-  }, [fetchWill]);
-
-  return { will, isLoading };
-};

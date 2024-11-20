@@ -2,10 +2,12 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import ScrollToTop from "./components/scrollToTop";
 import Landing from "./pages/Landing";
-import { Dashboard } from "./pages/Dashboard/Dashboard";
+// import { Dashboard } from "./pages/Dashboard/Dashboard";
 import WillPage from "./pages/Dashboard/Will";
 import { Trustfund } from "./pages/Dashboard/Trustfund";
 import { TrustFundDetails } from "./pages/Dashboard/TrustfundDetails";
+import Liquidity from "./pages/Dashboard/Liquidity";
+import { Dashboard } from "./pages/Dashboard/Dashboard";
 
 export const AllRoutes = () => {
   return (
@@ -16,6 +18,8 @@ export const AllRoutes = () => {
           <Route path="/" element={<Landing />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/vault" element={<WillPage />} />
+          <Route path="/liquidity" element={<Liquidity />} />
+          
           <Route path="/trustfund" element={<Trustfund />} />
           <Route path="/trustfund/details" element={<TrustFundDetails />} />
           <Route

@@ -5,7 +5,7 @@ interface FundStatusProps {
     currentBalance: bigint;
     targetAmount: bigint;
   }
-
+  
   export const FundStatus = ({
     isActive,
     isWithdrawn,
@@ -16,10 +16,10 @@ interface FundStatusProps {
     const now = Math.floor(Date.now() / 1000);
     const targetReached = currentBalance >= targetAmount;
     const dateReached = now >= Number(targetDate);
-
+  
     let status = "In Progress";
     let statusColor = "text-blue-500";
-
+  
     if (isWithdrawn) {
       status = "Withdrawn";
       statusColor = "text-gray-500";
@@ -33,7 +33,7 @@ interface FundStatusProps {
       status = "Target Reached";
       statusColor = "text-green-500";
     }
-
+  
     return (
       <div className={`inline-flex items-center gap-2 ${statusColor}`}>
         <span className="w-2 h-2 rounded-full bg-current" />

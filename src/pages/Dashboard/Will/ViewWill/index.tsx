@@ -34,24 +34,6 @@ const ViewWill = ({ closeModal, openModal, selectedWill }: propType) => {
 
                 <div className="form-preview">
                   <div className="d-flex">
-                    <p>Beneficiary name</p>
-                    <p>{selectedWill?.name}</p>
-                  </div>
-
-                  <div className="d-flex">
-                    <p>Email</p>
-                    <p>{selectedWill?.email}</p>
-                  </div>
-
-                  <div className="d-flex">
-                    <p>Phone</p>
-                    <p>{selectedWill?.phone}</p>
-                  </div>
-                  <div className="d-flex">
-                    <p>Beneficiary address</p>
-                    <p className=" truncate ">{selectedWill?.wallet_address}</p>
-                  </div>
-                  <div className="d-flex">
                     <p>Activity Period</p>
                     <p>{selectedWill?.activity_period}</p>
                   </div>

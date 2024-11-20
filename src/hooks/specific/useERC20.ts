@@ -40,21 +40,23 @@ export const useTokenApproval = (tokenAddress : string) => {
 
           console.log("approve: ", _amount);
 
-          const estimatedGas = await erc20Contract.approve.estimateGas(
-            import.meta.env.VITE_WILL_CONTRACT_ADDRESS,_amount
-          );
-          console.log({ estimatedGas });
+          // const estimatedGas = await erc20Contract.approve.estimateGas(
+          //   import.meta.env.VITE_WILL_CONTRACT_ADDRESS,_amount
+          // );
+          // console.log({ estimatedGas });
           const allowance = await erc20Contract.allowance(address,import.meta.env.VITE_WILL_CONTRACT_ADDRESS);
           console.log("allowance: ",allowance);
 
-          if (BigInt(allowance) >= BigInt(amount)) {
-            return;
-          }
+          // if (BigInt(allowance) >= BigInt(amount)) {
+          //   return;
+          // }
           // construct transaction
+          console.log("approvin in process...");
+          
           const tx = await erc20Contract.approve(
             import.meta.env.VITE_WILL_CONTRACT_ADDRESS,_amount,
             {
-              gasLimit: (estimatedGas * BigInt(120)) / BigInt(100),
+              gasLimit: 1000000,
             }
           );
           const reciept = await tx.wait();

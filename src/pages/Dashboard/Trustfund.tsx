@@ -33,6 +33,7 @@ export const Trustfund = () => {
 
       if (!fundIds || fundIds.length === 0) {
         const totalFunds = await getTotalFunds();
+        console.log(totalFunds)
       }
 
       const fundDetails = await Promise.all(

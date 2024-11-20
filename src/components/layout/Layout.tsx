@@ -30,7 +30,16 @@ export const Layout = ({
             <div>
               {/* <img className="max-w-[150px]" src={logo} /> */}
               <nav>
-                <p onClick={() => navigate("/")} className="cursor-pointer">LegacyX</p>
+                <div className="logo-container ">
+                  <div className="cover-logo">
+                    <p
+                      onClick={() => navigate("/")}
+                      className=" logo-text cursor-pointer"
+                    >
+                      LegacyX
+                    </p>
+                  </div>
+                </div>
               </nav>
             </div>
 

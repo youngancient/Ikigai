@@ -2,8 +2,7 @@ import { useCallback, useMemo } from "react";
 import useRunners from "./useRunners";
 import { Contract } from "ethers";
 import { TRUSTFUND_ABI, TRUSTFUND_CONTRACT_ADDRESS } from '../constants/contracts';
-import FACTORY_ABI from "../ABI/factory.json";
-import AIRDROP_ABI from "../ABI/airdrop.json";
+import WILL_ABI from "../ABI/will.json";
 import type { TrustFundContract } from '../types/contracts';
 
 
@@ -80,41 +79,21 @@ export function useTrustFundContract(withSigner = false) {
     }, []);
   }
 
-export const useFactoryContract = (withSigner = false) => {
+  export const useWillContract = (withSigner = false) => {
     const { readOnlyProvider, signer } = useRunners();
 
     return useMemo(() => {
         if (withSigner) {
             if (!signer) return null;
             return new Contract(
-                import.meta.env.VITE_FACTORY_CONTRACT_ADDRESS,
-                FACTORY_ABI,
+                import.meta.env.VITE_WILL_CONTRACT_ADDRESS,
+                WILL_ABI,
                 signer
             );
         }
         return new Contract(
-            import.meta.env.VITE_FACTORY_CONTRACT_ADDRESS,
-            FACTORY_ABI,
-            readOnlyProvider
-        );
-    }, [readOnlyProvider, signer, withSigner]);
-};
-
-export const useAidropContract = (withSigner = false, airdropContractAddress : string) => {
-    const { readOnlyProvider, signer } = useRunners();
-
-    return useMemo(() => {
-        if (withSigner) {
-            if (!signer) return null;
-            return new Contract(
-                airdropContractAddress,
-                AIRDROP_ABI,
-                signer
-            );
-        }
-        return new Contract(
-            airdropContractAddress,
-            AIRDROP_ABI,
+            import.meta.env.VITE_WILL_CONTRACT_ADDRESS,
+            WILL_ABI,
             readOnlyProvider
         );
     }, [readOnlyProvider, signer, withSigner]);

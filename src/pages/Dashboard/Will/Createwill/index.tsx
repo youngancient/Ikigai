@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 
 import { Button, IconButton } from "@mui/material";
 
@@ -10,7 +10,12 @@ import Modal from "../../../../components/Modal/modal";
 import InputField from "../../../../components/form/InputField";
 import SelectField from "../../../../components/form/SelectField";
 
+import axios from "axios";
+
 import "./style.scss";
+import { ethers } from "ethers";
+import { useAppKitAccount } from "@reown/appkit/react";
+// import { useRegisterWill } from "../../../../hooks/specific/useCreateWill";
 
 type propType = {
   openModal: boolean;
@@ -18,26 +23,41 @@ type propType = {
 };
 
 const TOTALSTEP = 4;
-const assetList = [
-  { value: "ETH", key: "ETH" },
-  { value: "SOL", key: "SOL" },
-];
 
 const CreateWill = ({ closeModal, openModal }: propType) => {
   const [step, setStep] = useState(1);
+  const { address, isConnected } = useAppKitAccount();
+
+  const [tokenList, setTokenList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-
+  const [addressErrorMsg, setAddressErrorMsg] = useState("");
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
-    address: "",
-    asset: "ETH",
+    beneficiary_address: "",
+    asset: "",
+    assetSymbol: "",
     amount: "",
-    deadline: "",
+    activity_period: "",
     grace_period: "",
+    assetDecimals: "",
   });
+
+  // fetch tokens
+
+  const fetchTokens = async (address: string) => {
+    if (!address) {
+      return;
+    }
+    try {
+      const response = await axios.get(
+        `https://sepolia-blockscout.lisk.com/api/v2/addresses/${address}/tokens`
+      );
+      setTokenList(response?.data?.items || []);
+    } catch (err) {}
+  };
 
   // Handler for form field changes
   const handleChange = (
@@ -52,14 +72,49 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
     }));
   };
 
+  // const { registerWill, isRegisterLoading, isDone, reset } = useRegisterWill(
+  //   formData.asset
+  // );
+
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    const Name = formData.name;
+    const gracePeriod = parseInt(formData.grace_period);
+    const activityThreshold = parseInt(formData.activity_period);
+
+    // const amount = ethers.parseUnits(formData.amount,18);
+
+    const tokenAllocations = [
+      {
+        tokenAddress: formData.asset,
+        tokenType: 1,
+        tokenIds: [],
+        amounts: [formData.amount + "0".repeat(Number(formData.assetDecimals))],
+        beneficiaries: [formData.beneficiary_address],
+      },
+    ];
+
+    console.log({ Name, gracePeriod, activityThreshold, tokenAllocations });
     if (step === TOTALSTEP) {
-      console.log(formData, "formdata");
       setIsLoading(true);
+      setTimeout(() => {
+        setIsLoading(false);
+    setIsSubmitted(true);
+      }, 1200);
       // sign function goes here
+      // registerWill(Name, gracePeriod, activityThreshold, tokenAllocations);
     } else {
-      setStep(step + 1);
+      if (step === 1) {
+        if (ethers.isAddress(formData.beneficiary_address)) {
+          setStep(step + 1);
+          setAddressErrorMsg("");
+        } else {
+          setAddressErrorMsg("Enter a valid wallet address");
+        }
+      } else {
+        setStep(step + 1);
+      }
     }
   };
 
@@ -68,11 +123,13 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
       name: "",
       email: "",
       phone: "",
-      address: "",
-      asset: "ETH",
+      beneficiary_address: "",
+      asset: "",
       amount: "",
-      deadline: "",
+      activity_period: "",
       grace_period: "",
+      assetSymbol: "",
+      assetDecimals: "",
     });
   };
 
@@ -82,9 +139,33 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
     clearForm();
     setIsLoading(false);
     setIsSubmitted(false);
+    // reset();
   };
 
-  
+  useEffect(() => {
+    if (isConnected && address) {
+      fetchTokens(address);
+    } else {
+      setTokenList([]);
+    }
+  }, [address, isConnected]);
+
+  useEffect(() => {
+    if (formData.asset) {
+      let filtered: {
+        token: { address: string; symbol: string; decimals: string };
+      }[] = tokenList?.filter(
+        (item: {
+          token: { address: string; symbol: string; decimals: string };
+        }) => item?.token?.address === formData.asset
+      );
+      setFormData((prev) => ({
+        ...prev,
+        assetSymbol: filtered[0]?.token?.symbol,
+        assetDecimals: filtered[0]?.token?.decimals,
+      }));
+    }
+  }, [formData.asset]);
 
   return (
     <Modal
@@ -126,7 +207,7 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
 
               <h5>Action Completed!</h5>
 
-              <a href="http://localhost:5176/vault">Confirm on Ethereum</a>
+              <a href="">Confirm on Ethereum</a>
             </div>
           )}
 
@@ -136,7 +217,7 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
                 <div className="form-step-one">
                   <InputField
                     name="name"
-                    label="Name of Beneficiary"
+                    label="Name of Will"
                     required={true}
                     value={formData.name}
                     type={"text"}
@@ -159,15 +240,15 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
                     onChange={handleChange}
                   />{" "}
                   <InputField
-                    name="address"
+                    name="beneficiary_address"
                     label="Beneficiary Wallet address"
                     required={true}
-                    value={formData.address}
+                    value={formData.beneficiary_address}
                     type={"text"}
                     onChange={handleChange}
                     errMsg={
-                      formData.address
-                        ? "Please confirm correctly that this is the right address for the beneficiary"
+                      formData.beneficiary_address && addressErrorMsg
+                        ? addressErrorMsg
                         : ""
                     }
                   />
@@ -184,7 +265,21 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
                     name="asset"
                     handleCustomChange={handleChange}
                     value={formData.asset}
-                    selectOption={assetList}
+                    required
+                    selectOption={
+                      tokenList?.length
+                        ? tokenList?.map(
+                            (item: {
+                              token: { address: string; symbol: string };
+                            }) => {
+                              return {
+                                value: item?.token?.address,
+                                key: item?.token?.symbol,
+                              };
+                            }
+                          )
+                        : []
+                    }
                   />
 
                   <div className="amount-container">
@@ -192,13 +287,21 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
 
                     <textarea
                       name="amount"
+                      value={formData.amount}
                       required
                       onChange={handleChange}
                     ></textarea>
 
                     <div className="quick-select-amount">
                       {[1, 2, 3].map((item) => (
-                        <IconButton>{`${item} ${formData.asset}`}</IconButton>
+                        <IconButton
+                          onClick={() =>
+                            setFormData((prev) => ({
+                              ...prev,
+                              amount: `${item}`,
+                            }))
+                          }
+                        >{`${item} ${formData?.assetSymbol || ""}`}</IconButton>
                       ))}
                     </div>
                   </div>
@@ -211,24 +314,25 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
 
               {step === 3 && (
                 <div className="form-step-three">
-                  <SelectField
-                    label={"Set will duration"}
-                    name="deadline"
-                    handleCustomChange={handleChange}
-                    value={formData.deadline}
-                    selectOption={assetList}
-                    required
-                  />
-
-                  <SelectField
-                    label={"Set grace period trigger"}
+                  <InputField
+                    label={"Set activity Period"}
+                    name="activity_period"
+                    required={true}
+                    value={formData.activity_period}
+                    type={"number"}
+                    onChange={handleChange}
+                    min={30}
+                  />{" "}
+                  <InputField
+                    label={"Set grace Period"}
                     name="grace_period"
-                    handleCustomChange={handleChange}
+                    required={true}
                     value={formData.grace_period}
-                    selectOption={assetList}
-                    required
-                  />
-
+                    type={"number"}
+                    onChange={handleChange}
+                    min={1}
+                    max={31}
+                  />{" "}
                   <Button className="submit-button" type="submit">
                     Continue
                   </Button>
@@ -262,11 +366,17 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
                       </div>
                       <div className="d-flex">
                         <p>Beneficiary address</p>
-                        <p className="  ">{formData.address}</p>
+                        <p className=" truncate ">
+                          {formData.beneficiary_address}
+                        </p>
                       </div>
                       <div className="d-flex">
-                        <p>Deadline</p>
-                        <p>{formData.deadline}</p>
+                        <p>Activity Period</p>
+                        <p>{formData.activity_period}</p>
+                      </div>
+                      <div className="d-flex">
+                        <p>Grace Period</p>
+                        <p>{formData.grace_period}</p>
                       </div>
                     </div>
                   </div>
