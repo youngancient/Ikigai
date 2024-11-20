@@ -7,18 +7,30 @@ export const useERC20Contract = (withSigner = false, tokenContractAddress : stri
     const { readOnlyProvider, signer } = useRunners();
 
     return useMemo(() => {
-        if (withSigner) {
-            if (!signer) return null;
-            return new Contract(
-                tokenContractAddress,
-                ERC20_ABI,
-                signer
-            );
+
+        if (!tokenContractAddress) {
+            console.log("Token address not yet available");
+            return null;
         }
-        return new Contract(
-            tokenContractAddress,
-            ERC20_ABI,
-            readOnlyProvider
-        );
-    }, [readOnlyProvider, signer, withSigner]);
+
+        try {
+            if (withSigner) {
+                if (!signer) return null;
+                return new Contract(
+                    tokenContractAddress,
+                    ERC20_ABI,
+                    signer
+                );
+            }
+        } catch (error) {
+            console.error("Error creating ERC20 contract:", error);
+            return null;
+        }
+
+        // return new Contract(
+        //     tokenContractAddress,
+        //     ERC20_ABI,
+        //     readOnlyProvider
+        // );
+    }, [readOnlyProvider, signer, withSigner, tokenContractAddress]);
 };
