@@ -33,6 +33,18 @@ export const useRegisterWill = (tokenAddress: string) => {
       activityThreshold: number,
       tokenAllocations: any
     ) => {
+
+      console.log("Debug - Contract Address:", import.meta.env.VITE_WILL_CONTRACT_ADDRESS);
+      console.log("Debug - Will Contract Instance:", willContract);
+      console.log("Debug - Token Address:", tokenAddress);
+      console.log("Debug - ERC20 Contract:", erc20Contract);
+
+      if (!erc20Contract?.target) {
+        console.log("Waiting for ERC20 contract initialization...");
+        toast.error("Please try again in a moment");
+        return;
+      }
+
       if (!willContract) {
         toast.error("Will Contract not found");
         return;
