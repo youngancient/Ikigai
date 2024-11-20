@@ -51,6 +51,8 @@ export const useTokenApproval = (tokenAddress : string) => {
           //   return;
           // }
           // construct transaction
+          console.log("approvin in process...");
+          
           const tx = await erc20Contract.approve(
             import.meta.env.VITE_WILL_CONTRACT_ADDRESS,_amount,
             {

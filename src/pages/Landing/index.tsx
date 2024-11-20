@@ -14,6 +14,7 @@ import { useAppKit, useAppKitAccount } from "@reown/appkit/react";
 import { formatAddress } from "../../utils/helpers";
 import { useNavigate } from "react-router-dom";
 
+
 const Landing = () => {
   const { open } = useAppKit();
   const { address, isConnected } = useAppKitAccount();
@@ -22,10 +23,10 @@ const Landing = () => {
   const handleConnectWallet = () => {
     open();
   };
-  const goToApp = () => {
+  const goToApp = async () => {
     if (!isConnected) {
       open();
-    } else {
+    }else {
       navigate("/dashboard");
     }
   };
@@ -43,10 +44,7 @@ const Landing = () => {
         <img src={eth4} className="eth-coin four" alt="eth" />
 
         <nav>
-          <p
-          >
-            LegacyX
-          </p>
+          <p>LegacyX</p>
           <button className="get-started-btn" onClick={goToApp}>
             {isConnected ? "Open App" : "Connect Wallet"}
           </button>
@@ -100,8 +98,8 @@ const Landing = () => {
 
               <p className="title">Will Lock</p>
               <p className="desc">
-                LegacyX ensures your assets reach loved ones as per your
-                exact instructions. No intermediaries, no delays.
+                LegacyX ensures your assets reach loved ones as per your exact
+                instructions. No intermediaries, no delays.
               </p>
             </div>
 
@@ -125,7 +123,9 @@ const Landing = () => {
               take control of your legacy.
             </p>
 
-            <a href="#hero"><button>Get Started</button></a>
+            <a href="#hero">
+              <button>Get Started</button>
+            </a>
           </div>
 
           <img src={iphone} alt="iphone" />
