@@ -73,7 +73,7 @@
         color: var(--white);
         outline: none;
         text-align: center;
-        font-size: 1em;
+        font-size: 3em;
       }
 
       .quick-select-amount {
@@ -86,7 +86,7 @@
           padding: 10px;
           border-radius: 8px;
           background: #39393c;
-
+          min-width: 30px;
           font-size: 0.875em;
           font-style: normal;
           font-weight: 400;

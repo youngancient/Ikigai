@@ -55,7 +55,7 @@ const WillPage = () => {
     console.log(ethers.formatUnits(tokenBalance, 18));
   }
 
-  const {address} = useAppKitAccount();
+  const { address } = useAppKitAccount();
 
   useEffect(() => {
     setBalancePercentage({
@@ -71,23 +71,20 @@ const WillPage = () => {
     setSentBalance(0);
   }, []);
 
-  const handleOpenModal =()=>{
-    if(!address){
+  const handleOpenModal = () => {
+    if (!address) {
       toast.error("Connect your wallet!");
       return;
     }
     setOpenModal(true);
-  }
+  };
 
   return (
     <>
       <Layout
         title="Vault"
         titleChild={
-          <Button
-            onClick={handleOpenModal}
-            className="create-will-button"
-          >
+          <Button onClick={handleOpenModal} className="create-will-button">
             <div className="button-cover-bg">Create Will</div>
           </Button>
         }
@@ -104,7 +101,7 @@ const WillPage = () => {
                   className="navbar_dropdown location_picker"
                   action={
                     <Button
-                      className="grey_btn"
+                      className="radiant-btn"
                       endIcon={<PrimaryFillIcon stroke={"#ffff"} />}
                     >
                       {userSelectedToken.address

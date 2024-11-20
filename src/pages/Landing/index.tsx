@@ -14,7 +14,6 @@ import { useAppKit, useAppKitAccount } from "@reown/appkit/react";
 import { formatAddress } from "../../utils/helpers";
 import { useNavigate } from "react-router-dom";
 
-
 const Landing = () => {
   const { open } = useAppKit();
   const { address, isConnected } = useAppKitAccount();
@@ -26,7 +25,7 @@ const Landing = () => {
   const goToApp = async () => {
     if (!isConnected) {
       open();
-    }else {
+    } else {
       navigate("/dashboard");
     }
   };
@@ -132,7 +131,7 @@ const Landing = () => {
         </div>
 
         <div className="connect-wallet-flex">
-          <p>Crypto will</p>
+          <p>LegacyX</p>
           <button className="get-started-btn" onClick={handleConnectWallet}>
             {isConnected ? formatAddress(address ?? "") : "Connect Wallet"}
           </button>
