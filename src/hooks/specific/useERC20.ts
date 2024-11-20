@@ -50,7 +50,9 @@ export const useTokenApproval = (tokenAddress : string) => {
           // if (BigInt(allowance) >= BigInt(amount)) {
           //   return;
           // }
+          
           // construct transaction
+
           console.log("approvin in process...");
           
           const tx = await erc20Contract.approve(
