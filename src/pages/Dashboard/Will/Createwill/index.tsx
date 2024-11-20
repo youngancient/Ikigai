@@ -49,7 +49,6 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
   const [tokenList, setTokenList] = useState([]);
   // const [isLoading, setIsLoading] = useState(false);
   //const [isSubmitted, setIsSubmitted] = useState(false);
-  const [addressErrorMsg, setAddressErrorMsg] = useState("");
   const [formData, setFormData] = useState({
     asset: "",
     assetSymbol: "",
@@ -203,9 +202,6 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
       if (step === 2) {
         if (isFormValid()) {
           setStep(step + 1);
-          setAddressErrorMsg("");
-        } else {
-          // setAddressErrorMsg("Enter a valid wallet address");
         }
       } else {
         setStep(step + 1);
