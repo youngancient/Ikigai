@@ -168,6 +168,28 @@ export function useTrustFund() {
       setTxState({ loading: true, error: null, success: false });
 
       try {
+      const address = await signer.getAddress();
+      const fund = await contract.getFundDetails(fundId);
+      
+      if (address.toLowerCase() !== fund.beneficiary.toLowerCase()) {
+        throw new Error('Only the beneficiary can withdraw funds');
+      }
+
+      if (!fund.isActive) {
+        throw new Error('Fund is not active');
+      }
+
+      if (fund.isWithdrawn) {
+        throw new Error('Fund has already been withdrawn');
+      }
+
+      if (Number(fund.targetDate) > Math.floor(Date.now() / 1000)) {
+        throw new Error('Cannot withdraw before target date');
+      }
+
+      if (Number(fund.currentBalance) === 0) {
+        throw new Error('No balance to withdraw');
+      }
         const tx = await contract.withdrawFund(fundId);
 
         showTxToast("pending", "Withdrawing from fund...", tx.hash);
@@ -287,14 +309,26 @@ export function useTrustFund() {
     async (address: string): Promise<string[]> => {
       if (!readOnlyContract) return [];
       try {
-        const funds: bigint[] = await readOnlyContract.getTrusteeFunds(address);
-        return funds.map((fund: bigint) => fund.toString());
-      } catch {
+        const funds = await readOnlyContract.getTrusteeFunds(address);
+        return funds.map(fund => fund.toString());
+      } catch (error) {
+        console.error("Error getting trustee funds:", error);
         return [];
       }
     },
     [readOnlyContract]
   );
+
+  const getTotalFunds = useCallback(async (): Promise<number> => {
+    if (!readOnlyContract) return 0;
+    try {
+      const total = await readOnlyContract.getTotalFunds();
+      return Number(total);
+    } catch (error) {
+      console.error("Error getting total funds:", error);
+      return 0;
+    }
+  }, [readOnlyContract]);
 
   return {
     createFund,
@@ -306,6 +340,7 @@ export function useTrustFund() {
     isWithdrawable,
     getTimeRemaining,
     getTrusteeFunds,
+    getTotalFunds,
     txState,
   };
 }

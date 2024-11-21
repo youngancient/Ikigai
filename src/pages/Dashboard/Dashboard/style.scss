@@ -1,13 +1,6 @@
 @use "../../../assets/styles/index" as *;
 
 .dashboard-page {
-  .grey_btn {
-    background: var(--gradient10) !important;
-    color: var(--white);
-    border-radius: 200px;
-    padding: 4px 18px;
-  }
-
   .summary-flex {
     display: flex;
     justify-content: space-between;
@@ -65,7 +58,7 @@
     .quick-flex {
       display: -webkit-box;
       gap: 16px;
-      overflow-x: scroll;
+      overflow-x: auto;
       @include webkitnone;
 
       .quick-action-item {

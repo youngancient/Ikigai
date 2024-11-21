@@ -21,12 +21,31 @@ export interface Fund {
   }
   
   export interface FundDepositEvent {
-    fundId: bigint;
-    depositor: string;
     amount: bigint;
+    depositor: string;
+    fundId: bigint;
     newBalance: bigint;
+    timestamp?: bigint;
+    transactionHash?: string;
+  }
+
+  export interface FundWithdrawalEvent {
+    log: any;
+    amount: bigint;
+    beneficiary: string;
+    fundId: bigint;
+    withdrawalTime: bigint;
+    transactionHash?: string;
   }
   
+  export interface FundHistory {
+    type: "Deposit" | "Withdrawal";
+    title: string;
+    amount: string;
+    timestamp: number;
+    txHash: string;
+  }
+
   export interface FundStatusChangedEvent {
     fundId: bigint;
     isActive: boolean;

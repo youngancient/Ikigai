@@ -4,6 +4,7 @@ import { Contract } from "ethers";
 import { TRUSTFUND_ABI, TRUSTFUND_CONTRACT_ADDRESS } from '../constants/contracts';
 import WILL_ABI from "../ABI/will.json";
 import type { TrustFundContract } from '../types/contracts';
+import { getContractAddress } from '../env';
 
 
 export function useTrustFundContract(withSigner = false) {
@@ -81,20 +82,43 @@ export function useTrustFundContract(withSigner = false) {
 
   export const useWillContract = (withSigner = false) => {
     const { readOnlyProvider, signer } = useRunners();
-
+    
     return useMemo(() => {
-        if (withSigner) {
-            if (!signer) return null;
-            return new Contract(
-                import.meta.env.VITE_WILL_CONTRACT_ADDRESS,
-                WILL_ABI,
-                signer
-            );
+        const contractAddress = getContractAddress();
+        
+        console.log("Debug - Environment Contract Address:", contractAddress);
+        console.log("Debug - Environment Variables:", import.meta.env);
+
+        if (!contractAddress || contractAddress === "") {
+            console.error("Contract address is empty or undefined");
+            return null;
         }
-        return new Contract(
-            import.meta.env.VITE_WILL_CONTRACT_ADDRESS,
-            WILL_ABI,
-            readOnlyProvider
-        );
+
+        const formattedAddress = contractAddress.toLowerCase();
+        if (!formattedAddress.startsWith('0x') || formattedAddress.length !== 42) {
+            console.error("Invalid contract address format:", contractAddress);
+            return null;
+        }
+
+        try {
+            if (withSigner) {
+                if (!signer) {
+                    console.error("Signer not available");
+                    return null;
+                }
+                const contract = new Contract(formattedAddress, WILL_ABI, signer);
+                console.log("Debug - Created Contract Instance:", contract);
+                return contract;
+            }
+            
+            if (!readOnlyProvider) {
+                console.error("Provider not available");
+                return null;
+            }
+            return new Contract(formattedAddress, WILL_ABI, readOnlyProvider);
+        } catch (error) {
+            console.error("Contract initialization error:", error);
+            return null;
+        }
     }, [readOnlyProvider, signer, withSigner]);
 };

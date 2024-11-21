@@ -52,4 +52,7 @@ export interface TrustFundContract extends BaseContract {
   getTrusteeFunds: (
     address: string
   ) => Promise<bigint[]>;
+
+  getTotalFunds: (
+  ) => Promise<bigint[]>;
 }

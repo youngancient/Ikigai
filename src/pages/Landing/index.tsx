@@ -14,7 +14,6 @@ import { useAppKit, useAppKitAccount } from "@reown/appkit/react";
 import { formatAddress } from "../../utils/helpers";
 import { useNavigate } from "react-router-dom";
 
-
 const Landing = () => {
   const { open } = useAppKit();
   const { address, isConnected } = useAppKitAccount();
@@ -26,7 +25,7 @@ const Landing = () => {
   const goToApp = async () => {
     if (!isConnected) {
       open();
-    }else {
+    } else {
       navigate("/dashboard");
     }
   };
@@ -37,7 +36,7 @@ const Landing = () => {
       </div>
       <div className="gradient-box"></div>
 
-      <div className="hero" id="hero">
+      <div className="hero">
         <img src={eth1} className="eth-coin one" alt="eth" />
         <img src={eth2} className="eth-coin two" alt="eth" />
         <img src={eth3} className="eth-coin three" alt="eth" />
