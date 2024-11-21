@@ -1,4 +1,4 @@
-export const CancelIcon = () => (
+export const CancelIcon = ({ stroke }: { stroke?: string }) => (
   <svg
     width="24"
     height="25"
@@ -8,14 +8,14 @@ export const CancelIcon = () => (
   >
     <path
       d="M7 7.5L17 17.5"
-      stroke="white"
+      stroke={stroke || "white"}
       stroke-width="1.5"
       stroke-linecap="round"
       stroke-linejoin="round"
     />
     <path
       d="M7 17.5L17 7.5"
-      stroke="white"
+      stroke={stroke || "white"}
       stroke-width="1.5"
       stroke-linecap="round"
       stroke-linejoin="round"
