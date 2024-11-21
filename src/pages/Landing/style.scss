@@ -380,7 +380,8 @@
       background: var(--gradient9);
       width: 90%;
       max-width: 1920px;
-
+      overflow: hidden;
+      
       @include mq(768px) {
         padding: 40px 20px 0;
         flex-direction: column;
