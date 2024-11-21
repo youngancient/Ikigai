@@ -1,5 +1,27 @@
 @use "../../assets/styles/index" as *;
 
+@keyframes moveTopLeft {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(-15px, -5px); }
+  50% { transform: translate(-30px, -10px); }
+  75% { transform: translate(-15px, -5px); }
+}
+
+@keyframes moveTopRight {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(10px, -10px); }
+}
+
+@keyframes moveBottomLeft {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(-10px, 10px); }
+}
+
+@keyframes moveBottomRight {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(10px, 10px); }
+}
+
 .landing-page {
   background-color: #101419;
   position: relative;
@@ -56,6 +78,10 @@
     }
     .eth-coin {
       position: absolute;
+      cursor: pointer;
+      z-index: 1;
+      scale: 0.8;
+      transition: filter 0.3s ease, scale 0.3s ease; /* Add transition for filter and scale */
 
       @include mq(800px) {
         display: none;
@@ -66,24 +92,28 @@
         height: 160px;
         top: 184px;
         left: 137px;
+        animation: moveTopLeft 5s infinite;
       }
       &.two {
         width: 90px;
         height: 90px;
         left: 104px;
         bottom: 65px;
+        animation: moveBottomLeft 5s infinite;
       }
       &.three {
         width: 90px;
         height: 90px;
         top: 292px;
         right: 84px;
+        animation: moveTopRight 5s infinite;
       }
       &.four {
         width: 150px;
         height: 150px;
         bottom: 55px;
         right: 84px;
+        animation: moveBottomRight 5s infinite;
       }
     }
   }
@@ -350,7 +380,8 @@
       background: var(--gradient9);
       width: 90%;
       max-width: 1920px;
-
+      overflow: hidden;
+      
       @include mq(768px) {
         padding: 40px 20px 0;
         flex-direction: column;

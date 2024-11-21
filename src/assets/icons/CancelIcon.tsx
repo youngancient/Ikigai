@@ -9,16 +9,16 @@ export const CancelIcon = ({ stroke }: { stroke?: string }) => (
     <path
       d="M7 7.5L17 17.5"
       stroke={stroke || "white"}
-      stroke-width="1.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
     <path
       d="M7 17.5L17 7.5"
       stroke={stroke || "white"}
-      stroke-width="1.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
   </svg>
 );
