@@ -160,9 +160,15 @@ const Landing = () => {
               whileInView="final3"
               variants={leftVariant}
             >
-              <a href="#hero">
-                <button>Get Started</button>
-              </a>
+              <div className="flex gap-2">
+                <a href="#hero">
+                  <button>Get Started</button>
+                </a>
+
+                <a href="/claim">
+                  <button>Claim will</button>
+                </a>
+              </div>
             </motion.div>
           </div>
 
