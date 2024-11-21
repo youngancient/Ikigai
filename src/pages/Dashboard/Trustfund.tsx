@@ -108,7 +108,7 @@ export const Trustfund = () => {
         </div>
 
         <div className="mt-5 w-full">
-        <TrustFundActivityContainer funds={funds}/>
+        <TrustFundActivityContainer/>
       </div>
       </div>
     </Layout>
