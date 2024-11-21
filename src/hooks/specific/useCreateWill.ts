@@ -29,6 +29,7 @@ export const useRegisterWill = (tokenAddress: string) => {
   const registerWill = useCallback(
     async (
       name: string,
+      totalAmount : string,
       gracePeriod: number,
       activityThreshold: number,
       tokenAllocations: any
@@ -67,10 +68,6 @@ export const useRegisterWill = (tokenAddress: string) => {
       }
       
       try {
-        const totalAmount = tokenAllocations[0].amounts.reduce(
-          (acc: bigint, amount: bigint) => acc + amount,
-          BigInt(0)
-        );
 
         const _amount = BigInt(totalAmount);
 

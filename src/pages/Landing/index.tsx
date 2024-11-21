@@ -13,6 +13,8 @@ import "./style.scss";
 import { useAppKit, useAppKitAccount } from "@reown/appkit/react";
 import { formatAddress } from "../../utils/helpers";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import { textVariant } from "../../animations/landing";
 
 const Landing = () => {
   const { open } = useAppKit();
@@ -55,16 +57,26 @@ const Landing = () => {
             <p>Create, Innovate, and Automate</p>
           </div>
 
-          <h1>
+          <motion.h1 
+          initial="initial"
+          whileInView="final"
+          viewport={{ once: true }}
+          variants={textVariant}
+          >
             <span>Redefining Legacy Planning and</span>
             <span> Trust Fund Management</span>
-          </h1>
+          </motion.h1>
 
-          <p className="desc">
+          <motion.p className="desc"
+          initial="initial"
+          whileInView="final2"
+          viewport={{ once: true }}
+          variants={textVariant}
+          >
             Create, grow, and protect your assets with a decentralised crypto
             will and trust fund solution that ensures your wishes are always
             fulfilled.
-          </p>
+          </motion.p>
 
           <button className="get-started-btn" onClick={goToApp}>
             Get Started

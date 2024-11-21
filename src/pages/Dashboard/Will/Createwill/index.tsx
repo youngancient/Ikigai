@@ -18,6 +18,7 @@ import { useAppKitAccount } from "@reown/appkit/react";
 import { useRegisterWill } from "../../../../hooks/specific/useCreateWill";
 import { toast } from "react-toastify";
 
+
 interface IBeneficiary {
   name: string;
   email: string;
@@ -183,7 +184,7 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
     // const amounts = beneficiaries?.map((item) => 
     //   item.beneficiary_amount + "0".repeat(Number(formData.assetDecimals))
     // );
-  
+    const totalAmount = formData.amount + "0".repeat(Number(formData.assetDecimals));
 
     const tokenAllocations = [
       {
@@ -195,11 +196,11 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
       },
     ];
 
-    console.log({ Name: "", gracePeriod, activityThreshold, tokenAllocations });
+    console.log({ Name: "", totalAmount, gracePeriod, activityThreshold, tokenAllocations });
     if (step === TOTALSTEP) {
       // setIsLoading(true);
       // sign function goes here
-      registerWill("", gracePeriod, activityThreshold, tokenAllocations);
+      registerWill("", totalAmount, gracePeriod, activityThreshold, tokenAllocations);
       // setIsSubmitted(true);
     } else {
       if (step === 2) {
