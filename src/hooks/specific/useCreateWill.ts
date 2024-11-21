@@ -17,7 +17,7 @@ export const useRegisterWill = (tokenAddress: string) => {
 
   const willContract = useWillContract(true);
   console.log(tokenAddress);
-  console.log("Will Contract Address:", import.meta.env.VITE_WILL_CONTRACT_ADDRESS);
+  console.log("Will Contract Address1:", import.meta.env.VITE_WILL_CONTRACT_ADDRESS);
 
   // const { approve } = useTokenApproval(tokenAddress);
   // const [isApprovalLoading, setisLoadingBalance] = useState(false);

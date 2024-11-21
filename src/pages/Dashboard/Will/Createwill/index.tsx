@@ -174,7 +174,7 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
   const { registerWill, isRegisterLoading, isDone, reset } = useRegisterWill(
     formData.asset
   );
-
+  
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -182,7 +182,10 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
     const gracePeriod = parseInt(formData.grace_period);
     const activityThreshold = parseInt(formData.activity_period);
 
-    // const amount = ethers.parseUnits(formData.amount,18);
+    // const amounts = beneficiaries?.map((item) => 
+    //   item.beneficiary_amount + "0".repeat(Number(formData.assetDecimals))
+    // );
+  
 
     const tokenAllocations = [
       {
