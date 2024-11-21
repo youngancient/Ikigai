@@ -13,6 +13,12 @@ import "./style.scss";
 import { useAppKit, useAppKitAccount } from "@reown/appkit/react";
 import { formatAddress } from "../../utils/helpers";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import {
+  textVariant,
+  leftVariant,
+  contVariant,
+} from "../../animations/landing";
 
 const Landing = () => {
   const { open } = useAppKit();
@@ -55,20 +61,38 @@ const Landing = () => {
             <p>Create, Innovate, and Automate</p>
           </div>
 
-          <h1>
+          <motion.h1
+            initial="initial"
+            whileInView="final"
+            // viewport={{ once: true }}
+            variants={textVariant}
+          >
             <span>Redefining Legacy Planning and</span>
             <span> Trust Fund Management</span>
-          </h1>
+          </motion.h1>
 
-          <p className="desc">
+          <motion.p
+            className="desc"
+            initial="initial"
+            whileInView="final2"
+            // viewport={{ once: true }}
+            variants={textVariant}
+          >
             Create, grow, and protect your assets with a decentralised crypto
             will and trust fund solution that ensures your wishes are always
             fulfilled.
-          </p>
+          </motion.p>
 
-          <button className="get-started-btn" onClick={goToApp}>
+          <motion.button
+            className="get-started-btn"
+            onClick={goToApp}
+            initial="initial"
+            whileInView="final"
+            viewport={{ once: true }}
+            variants={leftVariant}
+          >
             Get Started
-          </button>
+          </motion.button>
 
           <div className="supported-chain">
             <p>Powered By:</p>
@@ -116,18 +140,40 @@ const Landing = () => {
 
         <div className="secure-container">
           <div className="text-container">
-            <h3>Secure Your Future Today</h3>
-            <p>
+            <motion.h3
+              initial="initial"
+              whileInView="final"
+              variants={leftVariant}
+            >
+              Secure Your Future Today
+            </motion.h3>
+            <motion.p
+              initial="initial"
+              whileInView="final2"
+              variants={leftVariant}
+            >
               Get started with our decentralized trust and will platform and
               take control of your legacy.
-            </p>
-
-            <a href="#hero">
-              <button>Get Started</button>
-            </a>
+            </motion.p>
+            <motion.div
+              initial="initial"
+              whileInView="final3"
+              variants={leftVariant}
+            >
+              <a href="#hero">
+                <button>Get Started</button>
+              </a>
+            </motion.div>
           </div>
 
-          <img src={iphone} alt="iphone" />
+          <motion.div
+            initial="initial"
+            whileInView="final"
+            // viewport={{ once: true }}
+            variants={contVariant}
+          >
+            <img src={iphone} alt="iphone" />
+          </motion.div>
         </div>
 
         <div className="connect-wallet-flex">

@@ -18,6 +18,7 @@ import { useAppKitAccount } from "@reown/appkit/react";
 import { useRegisterWill } from "../../../../hooks/specific/useCreateWill";
 import { toast } from "react-toastify";
 
+
 interface IBeneficiary {
   name: string;
   email: string;
@@ -177,13 +178,14 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // const Name = formData.name;
+    const Name = formData.will_name;
     const gracePeriod = parseInt(formData.grace_period);
     const activityThreshold = parseInt(formData.activity_period);
 
     // const amounts = beneficiaries?.map((item) =>
     //   item.beneficiary_amount + "0".repeat(Number(formData.assetDecimals))
     // );
+    const totalAmount = formData.amount + "0".repeat(Number(formData.assetDecimals));
 
     const tokenAllocations = [
       {
@@ -199,17 +201,14 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
       },
     ];
 
-    console.log({
-      Name: formData.will_name,
-      gracePeriod,
-      activityThreshold,
-      tokenAllocations,
-    });
+    console.log({ Name, totalAmount, gracePeriod, activityThreshold, tokenAllocations });
+    
     if (step === TOTALSTEP) {
       // setIsLoading(true);
       // sign function goes here
       registerWill(
-        formData.will_name,
+        Name,
+        totalAmount,
         gracePeriod,
         activityThreshold,
         tokenAllocations
@@ -322,7 +321,7 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
 
               <h5>Action Completed!</h5>
 
-              <a href="">Confirm on Ethereum</a>
+              <a href="">Confirm on Explorer</a>
             </div>
           )}
 

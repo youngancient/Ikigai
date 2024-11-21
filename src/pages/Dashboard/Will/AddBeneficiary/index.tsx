@@ -180,7 +180,7 @@ const AddBeneficiaryToWill = ({
 
               <h5>Action Completed!</h5>
 
-              <a href="">Confirm on Ethereum</a>
+              <a href="#">Confirm on Explorer</a>
             </div>
           )}
 
