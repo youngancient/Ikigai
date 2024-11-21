@@ -211,7 +211,7 @@ export const AddTrustFundModal = ({
                   rel="noopener noreferrer"
                   className="mt-2 text-blue-500 underline"
                 >
-                  View on Etherscan
+                  View on Blockscout
                 </a>
               )}
               {txState.error && (

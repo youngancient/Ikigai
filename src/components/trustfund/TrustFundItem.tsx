@@ -194,7 +194,7 @@ export const TrustFundItem = ({ fund, fundId }: TrustFundItemProps) => {
                   rel="noopener noreferrer"
                   className="mt-2 text-blue-500 underline block text-center"
                 >
-                  View transaction on Etherscan
+                  View transaction on Blockscout
                 </a>
               )}
             </form>
