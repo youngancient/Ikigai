@@ -123,7 +123,6 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
 
     for (const beneficiary of beneficiaries) {
       if (
-        !beneficiary.name ||
         !beneficiary.email ||
         !beneficiary.beneficiary_address ||
         !beneficiary.percentage ||
@@ -174,7 +173,7 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
   const { registerWill, isRegisterLoading, isDone, reset } = useRegisterWill(
     formData.asset
   );
-  
+
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -182,10 +181,9 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
     const gracePeriod = parseInt(formData.grace_period);
     const activityThreshold = parseInt(formData.activity_period);
 
-    // const amounts = beneficiaries?.map((item) => 
+    // const amounts = beneficiaries?.map((item) =>
     //   item.beneficiary_amount + "0".repeat(Number(formData.assetDecimals))
     // );
-  
 
     const tokenAllocations = [
       {
@@ -194,7 +192,8 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
         tokenIds: [],
         amounts: beneficiaries?.map(
           (item) =>
-            item.beneficiary_amount + "0".repeat(Number(formData.assetDecimals))
+            Number(item.beneficiary_amount) +
+            "0".repeat(Number(formData.assetDecimals))
         ),
         beneficiaries: beneficiaries?.map((item) => item.beneficiary_address),
       },
@@ -412,6 +411,21 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
                           <CancelIcon stroke="red" />
                         </IconButton>
                       )}
+
+                      <InputField
+                        name="name"
+                        label="Beneficiary Name"
+                        required
+                        value={beneficiary.name}
+                        type="txt"
+                        onChange={(e) =>
+                          handleBeneficiaryInputChange(
+                            index,
+                            "name",
+                            e.target.value
+                          )
+                        }
+                      />
 
                       <InputField
                         name="email"
