@@ -106,11 +106,11 @@ export const useTokenApproval = (tokenAddress : string) => {
       }finally{
         setisLoadingBalance(false);
       }
-    }, [readOnlyERC20Contract, address]);
+    }, [readOnlyERC20Contract, address, tokenAddress]);
   
     useEffect(() => {
         fetchBalance();
-    }, [fetchBalance]);
+    }, [fetchBalance, tokenAddress]);
   
     return { tokenBalance, isLoadingBalance };
   };
