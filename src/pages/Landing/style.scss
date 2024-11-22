@@ -1,25 +1,49 @@
 @use "../../assets/styles/index" as *;
 
 @keyframes moveTopLeft {
-  0%, 100% { transform: translate(0, 0); }
-  25% { transform: translate(-15px, -5px); }
-  50% { transform: translate(-30px, -10px); }
-  75% { transform: translate(-15px, -5px); }
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(-15px, -5px);
+  }
+  50% {
+    transform: translate(-30px, -10px);
+  }
+  75% {
+    transform: translate(-15px, -5px);
+  }
 }
 
 @keyframes moveTopRight {
-  0%, 100% { transform: translate(0, 0); }
-  50% { transform: translate(10px, -10px); }
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(10px, -10px);
+  }
 }
 
 @keyframes moveBottomLeft {
-  0%, 100% { transform: translate(0, 0); }
-  50% { transform: translate(-10px, 10px); }
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(-10px, 10px);
+  }
 }
 
 @keyframes moveBottomRight {
-  0%, 100% { transform: translate(0, 0); }
-  50% { transform: translate(10px, 10px); }
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(10px, 10px);
+  }
 }
 
 .landing-page {
@@ -381,7 +405,7 @@
       width: 90%;
       max-width: 1920px;
       overflow: hidden;
-      
+
       @include mq(768px) {
         padding: 40px 20px 0;
         flex-direction: column;
@@ -413,6 +437,11 @@
           font-weight: 500;
           line-height: 24px;
           color: var(--white);
+          width: 90%;
+
+          @include mq(768px) {
+            width: 100%;
+          }
         }
 
         button {

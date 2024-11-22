@@ -6,7 +6,7 @@ import slantrings from "../../../assets/icons/slantrings.svg";
 import folder from "../../../assets/icons/avatar.svg";
 
 import "./style.scss";
-import { Button } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import { useState } from "react";
 import ClaimWillModal, { ISelectedItem } from "./ClaimWillModal";
 import { useNavigate } from "react-router-dom";
@@ -17,8 +17,8 @@ import {
 import { multiplyByPrice } from "../../../utils/getPrice";
 import { ethers } from "ethers";
 import { claimContVariants } from "../../../animations/claim";
-import {motion} from "framer-motion";
-
+import { motion } from "framer-motion";
+import { EmptyState } from "../../../components/EmptyState";
 
 enum TokenType {
   ERC20 = 1,
@@ -75,22 +75,19 @@ const Claim = () => {
 
             <div className="will-trust-flex">
               {!address ? (
-                <h3 className="text-white text-2xl font-bold mt-4">
-                  Connect wallet to see Eligible claims
-                </h3>
+                <EmptyState text="Connect wallet to see Eligible claims" />
               ) : isLoading ? (
-                <h3 className="text-white text-2xl font-bold mt-4">
-                  Loading...
-                </h3>
+                <CircularProgress size="1.5rem" sx={{ color: "#ffffff" }} />
               ) : wills != null ? (
                 <>
                   <>
                     {wills.map((will: IBeneficiaryWill) => (
-                      <motion.div className="item"
-                      variants={claimContVariants}
-                      viewport={{ once: true }}
-                      initial="initial"
-                      whileInView="final"
+                      <motion.div
+                        className="item"
+                        variants={claimContVariants}
+                        viewport={{ once: true }}
+                        initial="initial"
+                        whileInView="final"
                       >
                         <p className="total">Total Amount Willed</p>
                         <p className="amount logo-text">
@@ -126,9 +123,10 @@ const Claim = () => {
                               type: "will",
                               name: will.willName,
                               address: address,
-                              amount: Number(
-                                ethers.formatUnits(will.amount.toString(), 18)
-                              ).toLocaleString() + "CWT",
+                              amount:
+                                Number(
+                                  ethers.formatUnits(will.amount.toString(), 18)
+                                ).toLocaleString() + "CWT",
                               sender_address: will.willOwner,
                             });
                           }}
