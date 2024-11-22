@@ -185,7 +185,7 @@ const Landing = () => {
         </div>
 
         <div className="connect-wallet-flex">
-          <p>LegacyX</p>
+        <img src={logo} className="w-[114px]" alt="logo" />
           <button className="get-started-btn" onClick={handleConnectWallet}>
             {isConnected ? formatAddress(address ?? "") : "Connect Wallet"}
           </button>
