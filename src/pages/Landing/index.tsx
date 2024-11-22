@@ -21,7 +21,6 @@ import {
 } from "../../animations/landing";
 import logo from "../../assets/images/logo.png";
 
-
 const Landing = () => {
   const { open } = useAppKit();
   const { address, isConnected } = useAppKitAccount();
