@@ -536,21 +536,21 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
                     <h6>Summary;</h6>
 
                     <div className="form-preview">
+                      <div className="d-flex">
+                        <p>Will Title</p>
+                        <p>{formData.will_name}</p>
+                      </div>
+
+                      <div className="d-flex">
+                        <p>Token Willed</p>
+                        <p>{formData.assetSymbol}</p>
+                      </div>
+
+                      <div className="d-flex">
+                        <p>Total Amount</p>
+                        <p>{Number(formData.amount).toLocaleString()}</p>
+                      </div>
                       {/* <div className="d-flex">
-                        <p>Beneficiary name</p>
-                        <p>{formData.name}</p>
-                      </div>
-
-                      <div className="d-flex">
-                        <p>Email</p>
-                        <p>{formData.email}</p>
-                      </div>
-
-                      <div className="d-flex">
-                        <p>Phone</p>
-                        <p>{formData.phone}</p>
-                      </div>
-                      <div className="d-flex">
                         <p>Beneficiary address</p>
                         <p className=" truncate ">
                           {formData.beneficiary_address}

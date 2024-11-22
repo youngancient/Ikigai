@@ -1,10 +1,11 @@
 import { ReactNode, useState } from "react";
-import logo from "../../assets/images/cryptowillLogo.png";
+// import logo from "../../assets/images/cryptowillLogo.png";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoClose } from "react-icons/io5";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAppKit, useAppKitAccount } from "@reown/appkit/react";
 import { formatAddress } from "../../utils/helpers";
+import logo from "../../assets/images/logo.png";
 
 export const Layout = ({
   title,
@@ -32,12 +33,13 @@ export const Layout = ({
               <nav>
                 <div className="logo-container ">
                   <div className="cover-logo">
-                    <p
-                      onClick={() => navigate("/")}
+                    {/* <p
+                      
                       className=" logo-text cursor-pointer"
-                    >
-                      LegacyX
-                    </p>
+                    > */}
+                      {/* LegacyX
+                    </p> */}
+                    <img src={logo} className="w-[114px] cursor-pointer" alt="logo" onClick={() => navigate("/")} />
                   </div>
                 </div>
               </nav>
