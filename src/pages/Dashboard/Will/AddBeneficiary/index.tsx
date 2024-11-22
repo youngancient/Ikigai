@@ -1,19 +1,22 @@
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
-
+import { FormEvent, useState } from "react";
+import { ethers } from "ethers";
 import { Button, IconButton } from "@mui/material";
 
 import { CancelIcon } from "../../../../assets/icons/CancelIcon";
-import refresh from "../../../../assets/icons/refresh.svg";
-import check_circle from "../../../../assets/icons/check-circle.svg";
 
 import Modal from "../../../../components/Modal/modal";
 import InputField from "../../../../components/form/InputField";
-import SelectField from "../../../../components/form/SelectField";
 
-import axios from "axios";
+// import { useAppKitAccount } from "@reown/appkit/react";
+import { toast } from "react-toastify";
 
-import { ethers } from "ethers";
-import { useAppKitAccount } from "@reown/appkit/react";
+interface IBeneficiary {
+  name: string;
+  email: string;
+  beneficiary_address: string;
+  percentage: string;
+  beneficiary_amount: string;
+}
 
 type propType = {
   openModal: boolean;
@@ -21,130 +24,137 @@ type propType = {
   selectedWill: any;
 };
 
-const TOTALSTEP = 2;
+const AddBeneficiary = ({ closeModal, openModal, selectedWill }: propType) => {
+  // const { address, isConnected } = useAppKitAccount();
 
-const AddBeneficiaryToWill = ({
-  closeModal,
-  openModal,
-  selectedWill,
-}: propType) => {
-  const [step, setStep] = useState(1);
-  const { address, isConnected } = useAppKitAccount();
+  const [beneficiaries, setBeneficiaries] = useState<IBeneficiary[]>([
+    {
+      name: "",
+      email: "",
+      beneficiary_address: "",
+      percentage: "",
+      beneficiary_amount: "",
+    },
+  ]);
 
-  const [tokenList, setTokenList] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [addressErrorMsg, setAddressErrorMsg] = useState("");
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    beneficiary_address: "",
-    asset: "",
-    assetSymbol: "",
-    amount: "",
-  });
+  const handleBeneficiaryInputChange = (
+    index: number,
+    field: keyof IBeneficiary,
+    value: string
+  ) => {
+    const updatedBeneficiaries = [...beneficiaries];
+    updatedBeneficiaries[index][field] = value;
 
-  // fetch tokens
-
-  const fetchTokens = async (address: string) => {
-    if (!address) {
-      return;
+    // Recalculate `userAmount` if `percentage` is updated
+    if (field === "percentage") {
+      const percentageValue = parseFloat(value);
+      if (!isNaN(percentageValue)) {
+        updatedBeneficiaries[index].beneficiary_amount = (
+          (percentageValue / 100) *
+          Number(selectedWill?.amount || 0)
+        ).toFixed(2);
+      } else {
+        updatedBeneficiaries[index].beneficiary_amount = "";
+      }
     }
-    try {
-      const response = await axios.get(
-        `https://sepolia-blockscout.lisk.com/api/v2/addresses/${address}/tokens`
-      );
-      setTokenList(response?.data?.items || []);
-    } catch (err) {}
+
+    setBeneficiaries(updatedBeneficiaries);
   };
 
-  // Handler for form field changes
-  const handleChange = (
-    e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
+  const addBeneficiary = () => {
+    setBeneficiaries([
+      ...beneficiaries,
+      {
+        name: "",
+        email: "",
+        beneficiary_address: "",
+        percentage: "",
+        beneficiary_amount: "",
+      },
+    ]);
+  };
 
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+  const removeBeneficiary = (index: number) => {
+    if (beneficiaries.length > 1) {
+      const updatedBeneficiaries = beneficiaries.filter((_, i) => i !== index);
+      setBeneficiaries(updatedBeneficiaries);
+    }
+  };
+
+  const isFormValid = (): boolean => {
+    let totalPercentage = 0;
+
+    for (const beneficiary of beneficiaries) {
+      if (
+        !beneficiary.email ||
+        !beneficiary.beneficiary_address ||
+        !beneficiary.percentage ||
+        !beneficiary.beneficiary_amount
+      ) {
+        toast.error("Input valid fields");
+
+        return false;
+      }
+
+      if (!ethers.isAddress(beneficiary.beneficiary_address)) {
+        toast.error(
+          `Input valid wallet address: ${beneficiary.beneficiary_address}`
+        );
+
+        return false;
+      }
+
+      const percentageValue = parseFloat(beneficiary.percentage);
+      if (isNaN(percentageValue) || percentageValue < 0) {
+        toast.error("Percentage must be a valid positive number.");
+        return false;
+      }
+      totalPercentage += percentageValue;
+    }
+
+    if (totalPercentage > 100) {
+      toast.error(
+        "Total percentage across all beneficiaries cannot exceed 100%."
+      );
+      return false;
+    }
+    return true;
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const Name = formData.name;
-    const num = ethers.parseUnits(formData.amount, 18);
-    
     const tokenAllocations = [
       {
-        tokenAddress: formData.asset,
-        tokenType: 1,
-        tokenIds: [],
-        amounts: [num],
-        beneficiaries: [formData.beneficiary_address],
+        beneficiaries: beneficiaries?.map((item) => item.beneficiary_address),
       },
     ];
-    console.log(selectedWill);
-    console.log({ Name, tokenAllocations });
-    if (step === TOTALSTEP) {
-      setIsLoading(true);
-    } else {
-      if (step === 1) {
-        if (ethers.isAddress(formData.beneficiary_address)) {
-          setStep(step + 1);
-          setAddressErrorMsg("");
-        } else {
-          setAddressErrorMsg("Enter a valid wallet address");
-        }
-      } else {
-        setStep(step + 1);
-      }
+
+    console.log({
+      tokenAllocations,
+    });
+
+    if (isFormValid()) {
+      // registerWill(tokenAllocations);
     }
   };
 
   const clearForm = () => {
-    setFormData({
-      name: "",
-      email: "",
-      phone: "",
-      beneficiary_address: "",
-      asset: "",
-      amount: "",
-      assetSymbol: "",
-    });
+    setBeneficiaries([
+      {
+        name: "",
+        email: "",
+        beneficiary_address: "",
+        percentage: "",
+        beneficiary_amount: "",
+      },
+    ]);
   };
 
   const closeModalFunc = () => {
     closeModal();
-    setStep(1);
     clearForm();
-    setIsLoading(false);
-    setIsSubmitted(false);
   };
-
-  useEffect(() => {
-    if (isConnected && address) {
-      fetchTokens(address);
-    } else {
-      setTokenList([]);
-    }
-  }, [address, isConnected]);
-
-  useEffect(() => {
-    if (formData.asset) {
-      let filtered: { token: { address: string; symbol: string } }[] =
-        tokenList?.filter(
-          (item: { token: { address: string; symbol: string } }) =>
-            item?.token?.address === formData.asset
-        );
-      setFormData((prev) => ({
-        ...prev,
-        assetSymbol: filtered[0]?.token?.symbol,
-      }));
-    }
-  }, [formData.asset]);
 
   return (
     <Modal
@@ -155,141 +165,110 @@ const AddBeneficiaryToWill = ({
       <div className="create-will-modal">
         <div className="modal-contents">
           <div className="title">
-            <h4>{isLoading || isSubmitted ? "" : "Add Beneficiary"}</h4>
+            <h4>Add Beneficiary</h4>
 
             <IconButton onClick={closeModalFunc}>
               <CancelIcon />
             </IconButton>
           </div>
 
-          {isLoading && (
-            <div className="loading-state">
-              <img src={refresh} alt="refresh" className="animate-spin" />
+          <form onSubmit={handleSubmit}>
+            <div className="form-step-two">
+              {beneficiaries.map((beneficiary, index) => (
+                <div className="beneficiary-item">
+                  {beneficiaries.length > 1 && index > 0 && (
+                    <IconButton
+                      className="remove-icon"
+                      onClick={() => removeBeneficiary(index)}
+                    >
+                      <CancelIcon stroke="red" />
+                    </IconButton>
+                  )}
 
-              <h5>Loading confirmation</h5>
-              <p>
-                Editing a trust fund category here Confirm this action in your
-                dashboard
-              </p>
-            </div>
-          )}
-
-          {isSubmitted && (
-            <div className="submitted-state">
-              <img src={check_circle} alt="check" />
-
-              <h5>Action Completed!</h5>
-
-              <a href="#">Confirm on Explorer</a>
-            </div>
-          )}
-
-          {!isLoading && !isSubmitted && (
-            <form onSubmit={handleSubmit}>
-              {step === 1 && (
-                <div className="form-step-one">
                   <InputField
                     name="name"
-                    label="Name of Will"
-                    required={true}
-                    value={formData.name}
-                    type={"text"}
-                    onChange={handleChange}
+                    label="Beneficiary Name"
+                    required
+                    value={beneficiary.name}
+                    type="txt"
+                    onChange={(e) =>
+                      handleBeneficiaryInputChange(
+                        index,
+                        "name",
+                        e.target.value
+                      )
+                    }
                   />
+
                   <InputField
                     name="email"
                     label="E-mail address of beneficiary"
-                    required={true}
-                    value={formData.email}
-                    type={"email"}
-                    onChange={handleChange}
-                  />{" "}
-                  <InputField
-                    name="phone"
-                    label="Phone number of beneficiary"
-                    required={true}
-                    value={formData.phone}
-                    type={"text"}
-                    onChange={handleChange}
-                  />{" "}
+                    required
+                    value={beneficiary.email}
+                    type="email"
+                    onChange={(e) =>
+                      handleBeneficiaryInputChange(
+                        index,
+                        "email",
+                        e.target.value
+                      )
+                    }
+                  />
                   <InputField
                     name="beneficiary_address"
                     label="Beneficiary Wallet address"
-                    required={true}
-                    value={formData.beneficiary_address}
-                    type={"text"}
-                    onChange={handleChange}
-                    errMsg={
-                      formData.beneficiary_address && addressErrorMsg
-                        ? addressErrorMsg
-                        : ""
-                    }
-                  />
-                  <Button className="submit-button" type="submit">
-                    Next
-                  </Button>
-                </div>
-              )}
-
-              {step === 2 && (
-                <div className="form-step-two">
-                  <SelectField
-                    label={"Asset to transfer"}
-                    name="asset"
-                    handleCustomChange={handleChange}
-                    value={formData.asset}
                     required
-                    selectOption={
-                      tokenList?.length
-                        ? tokenList?.map(
-                            (item: {
-                              token: { address: string; symbol: string };
-                            }) => {
-                              return {
-                                value: item?.token?.address,
-                                key: item?.token?.symbol,
-                              };
-                            }
-                          )
-                        : []
+                    value={beneficiary.beneficiary_address}
+                    type="text"
+                    onChange={(e) =>
+                      handleBeneficiaryInputChange(
+                        index,
+                        "beneficiary_address",
+                        e.target.value
+                      )
                     }
                   />
-
-                  <div className="amount-container">
-                    <label>Enter Amount</label>
-
-                    <textarea
-                      name="amount"
-                      value={formData.amount}
+                  <div className="form-group-flex">
+                    <InputField
+                      name="percentage"
+                      label="Enter Percentage"
                       required
-                      onChange={handleChange}
-                    ></textarea>
-
-                    <div className="quick-select-amount">
-                      {[1, 2, 3].map((item) => (
-                        <IconButton
-                          onClick={() =>
-                            setFormData((prev) => ({
-                              ...prev,
-                              amount: `${item}`,
-                            }))
-                          }
-                        >{`${item} ${formData?.assetSymbol || ""}`}</IconButton>
-                      ))}
-                    </div>
+                      value={beneficiary.percentage}
+                      type="text"
+                      onChange={(e) =>
+                        handleBeneficiaryInputChange(
+                          index,
+                          "percentage",
+                          e.target.value
+                        )
+                      }
+                    />
+                    <InputField
+                      name="userAmount"
+                      label="Amount"
+                      required
+                      disabled
+                      value={beneficiary.beneficiary_amount}
+                      type="text"
+                    />
                   </div>
-
-                  <Button className="submit-button" type="submit">
-                    Continue
-                  </Button>
                 </div>
-              )}
-            </form>
-          )}
+              ))}
+
+              <div className="btn-flex">
+                <Button onClick={addBeneficiary} className="cancel">
+                  Add Beneficiary
+                </Button>
+                <Button className="submit-button" type="submit">
+                  Next
+                </Button>
+              </div>
+            </div>
+          </form>
         </div>
       </div>
     </Modal>
   );
 };
 
-export default AddBeneficiaryToWill;
+export default AddBeneficiary;
