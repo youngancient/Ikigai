@@ -19,6 +19,8 @@ import {
   leftVariant,
   contVariant,
 } from "../../animations/landing";
+import logo from "../../assets/images/logo.png";
+
 
 const Landing = () => {
   const { open } = useAppKit();
@@ -49,7 +51,8 @@ const Landing = () => {
         <img src={eth4} className="eth-coin four" alt="eth" />
 
         <nav>
-          <p>LegacyX</p>
+          {/* <p>LegacyX</p> */}
+          <img src={logo} className="w-[114px]" alt="logo" />
           <button className="get-started-btn" onClick={goToApp}>
             {isConnected ? "Open App" : "Connect Wallet"}
           </button>

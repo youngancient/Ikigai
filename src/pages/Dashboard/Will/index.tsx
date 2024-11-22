@@ -199,8 +199,8 @@ const WillPage = () => {
 
                     <div className="name-and-view">
                       <div className="name">
-                        <h5>Donald</h5>
-                        <p>Asset willed: 2 ETH</p>
+                        <h5>Family Will</h5>
+                        <p>Total Asset willed: 2 ETH</p>
                       </div>
 
                       <button>View</button>

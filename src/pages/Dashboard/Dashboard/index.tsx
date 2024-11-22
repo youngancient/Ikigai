@@ -12,6 +12,9 @@ import { useNavigate } from "react-router-dom";
 import { EmptyState } from "../../../components/EmptyState";
 import { SuccessArrowIcon } from "../../../assets/icons/successArrow";
 import { ErrorArrowIcon } from "../../../assets/icons/errorArrow";
+import { useWillStat } from "../../../hooks/specific/useAllWills";
+import { ethers } from "ethers";
+import { multiplyByPrice } from "../../../utils/getPrice";
 
 const userToken = [
   { symbol: "CWT", address: "0xaFcA068ECDb7576720f480B6868120a13e7c7461" },
@@ -61,9 +64,9 @@ const QuickActionItem = ({
 };
 
 export const Dashboard = () => {
-  const [totalAmountWilled, setTotalAmountWilled] = useState(4);
-  const [totalBeneficiary, setTotalBeneficiary] = useState(4);
-  const [totalWill, setTotalWill] = useState(2);
+  // const [totalAmountWilled, setTotalAmountWilled] = useState(4);
+  // const [totalBeneficiary, setTotalBeneficiary] = useState(4);
+  // const [totalWill, setTotalWill] = useState(2);
   const [totalTrustFund, setTotalTrustFund] = useState(5);
 
   const [userSelectedToken, setUserSelectedToken] = useState({
@@ -75,10 +78,11 @@ export const Dashboard = () => {
     setUserSelectedToken(token);
   };
 
+  const { totalWills, totalBeneficiaries, totalTokensWilled, isLoading } =
+    useWillStat();
+
+  // console.log({ totalWills, totalBeneficiaries, totalTokensWilled });
   useEffect(() => {
-    setTotalAmountWilled(4);
-    setTotalBeneficiary(4);
-    setTotalWill(4);
     setTotalTrustFund(4);
   }, []);
 
@@ -120,12 +124,35 @@ export const Dashboard = () => {
         </div>
 
         <div className="summary-flex">
+          {/* assume each token is $100 */}
           <SummaryItem
-            title="Total Amount Willed"
-            text={`${4}${totalAmountWilled}`}
+            title="Total Tokens Willed"
+            text={`${"$"}${
+              isLoading
+                ? "Loading..."
+                : totalTokensWilled != null
+                ? multiplyByPrice(
+                    Number(ethers.formatUnits(totalTokensWilled, 18))
+                  ).toLocaleString()
+                : 0
+            }`}
           />
-          <SummaryItem title="Total Beneficiary" text={`${totalBeneficiary}`} />
-          <SummaryItem title="Wills Created" text={totalWill} />
+          <SummaryItem
+            title="Total Beneficiary"
+            text={`${
+              isLoading
+                ? "Loading"
+                : totalBeneficiaries != null
+                ? totalBeneficiaries
+                : 0
+            }`}
+          />
+          <SummaryItem
+            title="Wills Created"
+            text={`${
+              isLoading ? "Loading" : totalWills != null ? totalWills : 0
+            }`}
+          />
           <SummaryItem title="Trust fund Created" text={totalTrustFund} />
         </div>
 

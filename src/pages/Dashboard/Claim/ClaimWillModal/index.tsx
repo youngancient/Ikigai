@@ -9,6 +9,7 @@ import check_circle from "../../../../assets/icons/check-circle.svg";
 import Modal from "../../../../components/Modal/modal";
 
 import "./style.scss";
+import { formatAddress } from "../../../../utils/helpers";
 
 export interface ISelectedItem {
   type: string;
@@ -89,7 +90,7 @@ const ClaimWillModal = ({ closeModal, openModal, selectedItem }: propType) => {
 
                   <div className="d-flex">
                     <p>Wallet Address</p>
-                    <p className=" truncate ">{selectedItem?.address}</p>
+                    <p className="">{selectedItem?.sender_address ? formatAddress(selectedItem.address) : ""}</p>
                   </div>
 
                   <div className="d-flex">
@@ -99,7 +100,7 @@ const ClaimWillModal = ({ closeModal, openModal, selectedItem }: propType) => {
 
                   <div className="d-flex">
                     <p>Willers Address</p>
-                    <p className=" truncate ">{selectedItem?.sender_address}</p>
+                    <p className="">{selectedItem?.sender_address ? formatAddress(selectedItem.sender_address) : ""}</p>
                   </div>
                 </div>
               </div>
