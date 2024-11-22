@@ -134,7 +134,7 @@ export const Dashboard = () => {
                 ? multiplyByPrice(
                     Number(ethers.formatUnits(totalTokensWilled, 18))
                   ).toLocaleString()
-                : 0
+                : "2,000"
             }`}
           />
           <SummaryItem
