@@ -193,7 +193,8 @@
 
     fieldset {
       border-radius: 8px;
-      border: 1.5px solid var(--grey50) !important;
+      border: 1.5px solid rgba(249, 250, 251, 0.2) !important;
+
       &:focus {
         color: var(--primary);
       }
