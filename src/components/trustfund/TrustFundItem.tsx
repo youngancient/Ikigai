@@ -50,7 +50,7 @@ export const TrustFundItem = ({ fund, fundId }: TrustFundItemProps) => {
 
   return (
     <>
-      <div className="w-fit relative">
+      <div className="relative">
         <Link to={`/trustfund/details/${fundId}`} className="block">
           <div className="bg-gradient-to-r from-[#8AD4EC99] via-[#EF96FF99] to-[#FF56A999] p-[1px] h-[280px] rounded-xl cursor-pointer">
             <div className="w-full h-full bg-black rounded-inherit p-5 flex flex-col justify-center">
