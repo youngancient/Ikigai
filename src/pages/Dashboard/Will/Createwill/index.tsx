@@ -171,7 +171,7 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
     }));
   };
 
-  const { registerWill, isRegisterLoading, isDone, reset } = useRegisterWill(
+  const { registerWill, isRegisterLoading, isDone, reset, isLoadingApproval } = useRegisterWill(
     formData.asset
   );
 
@@ -291,7 +291,7 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
         <div className="modal-contents">
           <div className="title">
             <h4>
-              {isRegisterLoading || isDone
+              {isRegisterLoading || isDone || isLoadingApproval
                 ? ""
                 : step === TOTALSTEP
                 ? "Signature Request"
@@ -307,10 +307,22 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
             <div className="loading-state">
               <img src={refresh} alt="refresh" className="animate-spin" />
 
-              <h5>Loading confirmation</h5>
+              <h5>Loading Confirmation</h5>
               <p>
-                Creating a trust fund category here Confirm this action in your
-                dashboard
+                Creating a Will fund category here Confirm this action in your
+                wallet
+              </p>
+            </div>
+          )}
+
+           {isLoadingApproval && (
+            <div className="loading-state">
+              <img src={refresh} alt="refresh" className="animate-spin" />
+
+              <h5>Loading Approval</h5>
+              <p>
+                To create a Will fund category, Confirm this action in your
+                wallet
               </p>
             </div>
           )}
@@ -325,7 +337,7 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
             </div>
           )}
 
-          {!isRegisterLoading && !isDone && (
+          {!isRegisterLoading && !isDone &&  !isLoadingApproval && (
             <form onSubmit={handleSubmit}>
               {step === 1 && (
                 <div className="form-step-one">

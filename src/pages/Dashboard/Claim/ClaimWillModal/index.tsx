@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 import { Button, IconButton } from "@mui/material";
 
 import { CancelIcon } from "../../../../assets/icons/CancelIcon";
@@ -10,9 +8,12 @@ import Modal from "../../../../components/Modal/modal";
 
 import "./style.scss";
 import { formatAddress } from "../../../../utils/helpers";
+import { useBeneficiaryWills } from "../../../../hooks/specific/useBeneficiary";
+import { toast } from "react-toastify";
 
 export interface ISelectedItem {
   type: string;
+  id: string;
   name: string;
   address: string;
   amount: string;
@@ -26,12 +27,20 @@ type propType = {
 };
 
 const ClaimWillModal = ({ closeModal, openModal, selectedItem }: propType) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
+  // const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const { claimCompleted, isClaiming, claimWill } = useBeneficiaryWills();
 
   const handleSubmit = () => {
-    setIsLoading(true);
-    setIsSubmitted(false);
+    console.log(selectedItem?.id);
+    if (!selectedItem?.id) {
+      toast.error("Invalid will selected");
+      return;
+    }
+    claimWill(Number(selectedItem.id));
+    // setIsLoading(true);
+    // setIsSubmitted(false);
   };
 
   return (
@@ -43,26 +52,28 @@ const ClaimWillModal = ({ closeModal, openModal, selectedItem }: propType) => {
       <div className="claim-will-modal">
         <div className="modal-contents">
           <div className="title">
-            <h4>{isLoading || isSubmitted ? "" : "Signature Request"}</h4>
+            <h4>{isClaiming || claimCompleted ? "" : "Signature Request"}</h4>
 
             <IconButton onClick={closeModal}>
               <CancelIcon />
             </IconButton>
           </div>
 
-          {isLoading && (
+          {isClaiming && (
             <div className="loading-state">
               <img src={refresh} alt="refresh" className="animate-spin" />
 
               <h5>Loading confirmation</h5>
               <p>
-                Creating a trust fund category here Confirm this action in your
-                dashboard
+                <p>
+                  Claiming the willed tokens. Please confirm this action in your
+                  wallet.
+                </p>
               </p>
             </div>
           )}
 
-          {isSubmitted && (
+          {claimCompleted && (
             <div className="submitted-state">
               <img src={check_circle} alt="check" />
 
@@ -72,7 +83,7 @@ const ClaimWillModal = ({ closeModal, openModal, selectedItem }: propType) => {
             </div>
           )}
 
-          {!isLoading && !isSubmitted && (
+          {!isClaiming && !claimCompleted && (
             <div className="form-step-four">
               <p className="desc">
                 Output is estimated.If the price changes by more than 0.5% your
@@ -90,7 +101,11 @@ const ClaimWillModal = ({ closeModal, openModal, selectedItem }: propType) => {
 
                   <div className="d-flex">
                     <p>Wallet Address</p>
-                    <p className="">{selectedItem?.sender_address ? formatAddress(selectedItem.address) : ""}</p>
+                    <p className="">
+                      {selectedItem?.sender_address
+                        ? formatAddress(selectedItem.address)
+                        : ""}
+                    </p>
                   </div>
 
                   <div className="d-flex">
@@ -100,7 +115,11 @@ const ClaimWillModal = ({ closeModal, openModal, selectedItem }: propType) => {
 
                   <div className="d-flex">
                     <p>Willers Address</p>
-                    <p className="">{selectedItem?.sender_address ? formatAddress(selectedItem.sender_address) : ""}</p>
+                    <p className="">
+                      {selectedItem?.sender_address
+                        ? formatAddress(selectedItem.sender_address)
+                        : ""}
+                    </p>
                   </div>
                 </div>
               </div>
