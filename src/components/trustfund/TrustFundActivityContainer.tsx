@@ -7,6 +7,7 @@ import { Activity, FilterOptions } from "../../types/activity";
 import { shortenAddress, getBlockExplorerUrl, formatAmount } from '../../utils/format';
 import { ethers } from 'ethers';
 import { formatTimestamp } from '../../utils/formatters';
+import useRunners from '../../hooks/useRunners';
 
 export const TrustFundActivityContainer = () => {
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
@@ -19,13 +20,29 @@ export const TrustFundActivityContainer = () => {
 
   const events = useAllTrustFundEvents();
   const [activities, setActivities] = useState<Activity[]>([]);
+  const { signer } = useRunners();
+  const [userAddress, setUserAddress] = useState<string>();
+
 
   useEffect(() => {
-    if (!events) return;
+    const getUserAddress = async () => {
+      if (signer) {
+        const address = await signer.getAddress();
+        setUserAddress(address);
+      }
+    };
+    getUserAddress();
+  }, [signer]);
+
+  useEffect(() => {
+    if (!events || !userAddress) return;
   
     const transformedActivities: Activity[] = [
       // Transform created events
-      ...events.created.map((event): Activity => ({
+      ...events.created.filter(event => 
+        event.trustee.toLowerCase() === userAddress.toLowerCase() ||
+        event.beneficiary.toLowerCase() === userAddress.toLowerCase()
+      ).map((event): Activity => ({
         type: 'created',
         timestamp: event.blockTimestamp,
         transactionHash: event.transactionHash,
@@ -41,7 +58,9 @@ export const TrustFundActivityContainer = () => {
       })),
   
       // Transform deposit events
-      ...events.deposits.map((event): Activity => ({
+      ...events.deposits.filter(event => 
+        event.depositor.toLowerCase() === userAddress.toLowerCase()
+      ).map((event): Activity => ({
         type: 'deposit',
         timestamp: event.blockTimestamp,
         transactionHash: event.transactionHash,
@@ -56,7 +75,9 @@ export const TrustFundActivityContainer = () => {
       })),
   
       // Transform withdrawal events
-      ...events.withdrawals.map((event): Activity => ({
+      ...events.withdrawals.filter(event => 
+        event.beneficiary.toLowerCase() === userAddress.toLowerCase()
+      ).map((event): Activity => ({
         type: 'withdrawal',
         timestamp: event.blockTimestamp,
         transactionHash: event.transactionHash,
@@ -70,7 +91,17 @@ export const TrustFundActivityContainer = () => {
       })),
   
       // Transform status change events
-      ...events.statusChanges.map((event): Activity => ({
+      ...events.statusChanges.filter(statusEvent => {
+        const relatedFund = events.created.find(
+          createEvent => createEvent.fundId === statusEvent.fundId
+        );
+        if (!relatedFund) return false;
+        return (
+          relatedFund.trustee.toLowerCase() === userAddress.toLowerCase() ||
+          relatedFund.beneficiary.toLowerCase() === userAddress.toLowerCase()
+        );
+      })
+      .map((event): Activity => ({
         type: 'status',
         timestamp: event.blockTimestamp,
         transactionHash: event.transactionHash,
