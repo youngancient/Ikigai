@@ -1,6 +1,5 @@
 interface FundStatusProps {
     isActive: boolean;
-    isWithdrawn: boolean;
     targetDate: bigint;
     currentBalance: bigint;
     targetAmount: bigint;
@@ -8,7 +7,6 @@ interface FundStatusProps {
   
   export const FundStatus = ({
     isActive,
-    isWithdrawn,
     targetDate,
     currentBalance,
     targetAmount,
@@ -20,10 +18,7 @@ interface FundStatusProps {
     let status = "In Progress";
     let statusColor = "text-blue-500";
   
-    if (isWithdrawn) {
-      status = "Withdrawn";
-      statusColor = "text-gray-500";
-    } else if (!isActive) {
+    if (!isActive) {
       status = "Inactive";
       statusColor = "text-red-500";
     } else if (targetReached && dateReached) {

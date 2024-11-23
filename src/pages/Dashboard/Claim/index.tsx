@@ -1,13 +1,17 @@
+import { useEffect, useState } from "react";
+import { useTrustFund } from "../../../hooks/useTrustFund";
+import useRunners from "../../../hooks/useRunners";
+import { Fund } from "../../../types/trustfund";
+import { WithdrawModal } from "../../../components/trustfund/WithdrawModal";
+
 import { useAppKit, useAppKitAccount } from "@reown/appkit/react";
 import { formatAddress } from "../../../utils/helpers";
 import logo from "../../../assets/images/logo.png";
 import hexagon from "../../../assets/images/hexagon.png";
 import slantrings from "../../../assets/icons/slantrings.svg";
-import folder from "../../../assets/icons/avatar.svg";
 
 import "./style.scss";
 import { Button, CircularProgress } from "@mui/material";
-import { useState } from "react";
 import ClaimWillModal, { ISelectedItem } from "./ClaimWillModal";
 import { useNavigate } from "react-router-dom";
 import {
@@ -19,6 +23,11 @@ import { ethers } from "ethers";
 import { claimContVariants } from "../../../animations/claim";
 import { motion } from "framer-motion";
 import { EmptyState } from "../../../components/EmptyState";
+
+interface WithdrawableFund {
+  fund: Fund;
+  id: string;
+}
 
 enum TokenType {
   ERC20 = 1,
@@ -35,6 +44,71 @@ const Claim = () => {
   };
   const navigate = useNavigate();
   const { wills, isLoading } = useBeneficiaryWills();
+
+  const { signer } = useRunners();
+  const { getFundDetails, getTotalFunds, isWithdrawable } = useTrustFund();
+  const [withdrawableFunds, setWithdrawableFunds] = useState<
+    WithdrawableFund[]
+  >([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedFund, setSelectedFund] = useState<WithdrawableFund | null>(
+    null
+  );
+  const [showWithdrawModal, setShowWithdrawModal] = useState(false);
+
+  useEffect(() => {
+    const fetchWithdrawableFunds = async () => {
+      if (!signer) return;
+
+      try {
+        setLoading(true);
+        const userAddress = await signer.getAddress();
+
+        const totalFunds = await getTotalFunds();
+
+        const fundIndices = Array.from(
+          { length: Number(totalFunds) },
+          (_, i) => i
+        );
+
+        const withdrawableFundsPromises = fundIndices.map(
+          async (index: number) => {
+            try {
+              const fund = await getFundDetails(index.toString());
+              const canWithdraw = await isWithdrawable(index.toString());
+
+              if (
+                fund &&
+                canWithdraw &&
+                fund.beneficiary.toLowerCase() === userAddress.toLowerCase()
+              ) {
+                return {
+                  fund,
+                  id: index.toString(),
+                };
+              }
+            } catch (error) {
+              console.error(`Error checking fund ${index}:`, error);
+            }
+            return null;
+          }
+        );
+
+        const results = await Promise.all(withdrawableFundsPromises);
+        const validFunds = results.filter(
+          (fund): fund is WithdrawableFund => fund !== null
+        );
+
+        setWithdrawableFunds(validFunds);
+      } catch (error) {
+        console.error("Error fetching withdrawable funds:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchWithdrawableFunds();
+  }, [signer, getFundDetails, getTotalFunds, isWithdrawable]);
 
   return (
     <>
@@ -139,50 +213,84 @@ const Claim = () => {
                       </motion.div>
                     ))}
                   </>
-
-                  <div className="item">
-                    <div className="name-flex">
-                      <img src={folder} alt="folder" />
-                      <div>
-                        <p className="bold">Tam’s Azeibe School Fees</p>
-                        <p className="category">Category here</p>
-                      </div>
-                    </div>
-
-                    <p className="amount logo-text">$2,000</p>
-                    <p className="will-name">Tam’s Azeibe Will</p>
-                    <div className="d-flex">
-                      <p className="type">Token Type</p>
-                      <p>Ethereum ETH</p>
-                    </div>
-                    <div className="d-flex">
-                      <p>Value</p>
-                      <p>20 ETH</p>
-                    </div>
-
-                    <Button
-                      onClick={() => {
-                        setOpenSignatureModal(true);
-                        setSelectedItem({
-                          type: "trust",
-                          id : "0",
-                          name: "London will",
-                          address: "0x2A95B9242EA682DF14FB4d0bf6cba42D2ED63E18",
-                          amount: "234WCXT",
-                          sender_address:
-                            "0x2A95B9242EA682DF14FB4d0bf6cba42D2ED63E18",
-                        });
-                      }}
-                      className="radiant-btn"
-                    >
-                      Claim Trust Fund
-                    </Button>
-                  </div>
                 </>
               ) : (
                 <h3 className="text-white text-2xl font-bold mt-4">
                   No wills found
                 </h3>
+              )}
+            </div>
+            {/* MEOW MEOW NIGGAAAA */}
+            <div className="">
+              <h1 className="text-2xl font-bold text-white mb-6">
+                Withdrawable Funds
+              </h1>
+
+              {loading ? (
+                <div className="text-white">Loading available funds...</div>
+              ) : withdrawableFunds.length === 0 ? (
+                <div className="text-gray-400">
+                  No funds available for withdrawal
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {withdrawableFunds.map(({ fund, id }) => (
+                    <div
+                      key={id}
+                      className="bg-gradient-to-r from-[#8AD4EC99] via-[#EF96FF99] to-[#FF56A999] p-[1px] rounded-xl"
+                    >
+                      <div className="bg-black rounded-xl p-5">
+                        <h3 className="text-xl text-white mb-2">
+                          {fund.fundName}
+                        </h3>
+                        <p className="text-gray-400 mb-4">{fund.purpose}</p>
+                        <div className="mb-4">
+                          <p className="text-white text-2xl font-bold">
+                            {ethers.formatEther(fund.currentBalance)} ETH
+                          </p>
+                          <p className="text-gray-400">
+                            Available for withdrawal
+                          </p>
+                        </div>
+                        <div className="text-sm text-gray-400 mb-4">
+                          <p>
+                            Target Date:{" "}
+                            {new Date(
+                              Number(fund.targetDate) * 1000
+                            ).toLocaleDateString()}
+                          </p>
+                          <p>Category: {fund.category}</p>
+                        </div>
+                        <button
+                          onClick={() => {
+                            setSelectedFund({ fund, id });
+                            setShowWithdrawModal(true);
+                          }}
+                          className="w-full py-3 bg-gradient-to-r from-[#8AD4EC99] via-[#EF96FF99] to-[#FF56A999] rounded-xl text-white"
+                        >
+                          Withdraw Funds
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {selectedFund && (
+                <WithdrawModal
+                  isOpen={showWithdrawModal}
+                  onClose={() => {
+                    setShowWithdrawModal(false);
+                    setSelectedFund(null);
+                  }}
+                  fund={selectedFund.fund}
+                  fundId={selectedFund.id}
+                  onWithdrawSuccess={() => {
+                    setWithdrawableFunds((prev) =>
+                      prev.filter((f) => f.id !== selectedFund.id)
+                    );
+                  }}
+                />
               )}
             </div>
           </div>
