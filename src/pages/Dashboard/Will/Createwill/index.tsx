@@ -18,7 +18,6 @@ import { useAppKitAccount } from "@reown/appkit/react";
 import { useRegisterWill } from "../../../../hooks/specific/useCreateWill";
 import { toast } from "react-toastify";
 
-
 interface IBeneficiary {
   name: string;
   email: string;
@@ -171,9 +170,14 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
     }));
   };
 
-  const { registerWill, isRegisterLoading, isDone, reset, isLoadingApproval } = useRegisterWill(
-    formData.asset
-  );
+  const {
+    registerWill,
+    isRegisterLoading,
+    isDone,
+    reset,
+    isLoadingApproval,
+    transactionHash,
+  } = useRegisterWill(formData.asset);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -185,7 +189,8 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
     // const amounts = beneficiaries?.map((item) =>
     //   item.beneficiary_amount + "0".repeat(Number(formData.assetDecimals))
     // );
-    const totalAmount = formData.amount + "0".repeat(Number(formData.assetDecimals));
+    const totalAmount =
+      formData.amount + "0".repeat(Number(formData.assetDecimals));
 
     const tokenAllocations = [
       {
@@ -201,8 +206,14 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
       },
     ];
 
-    console.log({ Name, totalAmount, gracePeriod, activityThreshold, tokenAllocations });
-    
+    console.log({
+      Name,
+      totalAmount,
+      gracePeriod,
+      activityThreshold,
+      tokenAllocations,
+    });
+
     if (step === TOTALSTEP) {
       // setIsLoading(true);
       // sign function goes here
@@ -315,7 +326,7 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
             </div>
           )}
 
-           {isLoadingApproval && (
+          {isLoadingApproval && (
             <div className="loading-state">
               <img src={refresh} alt="refresh" className="animate-spin" />
 
@@ -332,12 +343,21 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
               <img src={check_circle} alt="check" />
 
               <h5>Action Completed!</h5>
-
-              <a href="">Confirm on Explorer</a>
+              {transactionHash ? (
+                <a
+                  href={`https://sepolia-blockscout.lisk.com/tx/${transactionHash}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Confirm on Blockscout
+                </a>
+              ) : (
+                <p>Transaction completed but hash not available</p>
+              )}
             </div>
           )}
 
-          {!isRegisterLoading && !isDone &&  !isLoadingApproval && (
+          {!isRegisterLoading && !isDone && !isLoadingApproval && (
             <form onSubmit={handleSubmit}>
               {step === 1 && (
                 <div className="form-step-one">
