@@ -121,6 +121,7 @@ const Claim = () => {
                             setOpenSignatureModal(true);
                             setSelectedItem({
                               type: "will",
+                              id: will.willId.toString(),
                               name: will.willName,
                               address: address,
                               amount:
@@ -164,6 +165,7 @@ const Claim = () => {
                         setOpenSignatureModal(true);
                         setSelectedItem({
                           type: "trust",
+                          id : "0",
                           name: "London will",
                           address: "0x2A95B9242EA682DF14FB4d0bf6cba42D2ED63E18",
                           amount: "234WCXT",

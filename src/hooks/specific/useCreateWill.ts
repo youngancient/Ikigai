@@ -13,6 +13,7 @@ export const useRegisterWill = (tokenAddress: string) => {
   const { chainId } = useAppKitNetwork();
 
   const [isRegisterLoading, setIsLoading] = useState(false);
+  const [isLoadingApproval, setIsLoadingApproval] = useState(false);
   const [isDone, setIsDone] = useState(false);
 
   const willContract = useWillContract(true);
@@ -94,6 +95,7 @@ export const useRegisterWill = (tokenAddress: string) => {
 
         if (BigInt(allowance) < _amount) {
           console.log("approvin in process...");
+          setIsLoadingApproval(true);
 
           const approveTx = await erc20Contract.approve(
             import.meta.env.VITE_WILL_CONTRACT_ADDRESS,
@@ -105,6 +107,7 @@ export const useRegisterWill = (tokenAddress: string) => {
           const approveReciept = await approveTx.wait();
           if (approveReciept.status === 1) {
             toast.success("Token Approved");
+            setIsLoadingApproval(false);
           }
         }
 
@@ -140,6 +143,7 @@ export const useRegisterWill = (tokenAddress: string) => {
       } catch (error) {
         console.log(error);
       } finally {
+        setIsLoadingApproval(false);
         setIsLoading(false);
       }
     },
@@ -148,5 +152,5 @@ export const useRegisterWill = (tokenAddress: string) => {
   const reset = () => {
     setIsDone(false);
   };
-  return { registerWill, isRegisterLoading, isDone, reset };
+  return { registerWill, isRegisterLoading, isDone, reset, isLoadingApproval };
 };
