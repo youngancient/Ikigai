@@ -145,13 +145,15 @@ const Claim = () => {
           </div>
 
           <div className="will-and-trust">
-            <h4 className="title">Will & Trust Fund</h4>
+          <h1 className="text-2xl font-bold text-white mb-6">Will Claims</h1>
 
             <div className="will-trust-flex">
               {!address ? (
                 <EmptyState text="Connect wallet to see Eligible claims" />
               ) : isLoading ? (
-                <CircularProgress size="1.5rem" sx={{ color: "#ffffff" }} />
+                <div className="flex justify-center items-center h-32 w-full">
+                  <CircularProgress size="2rem" sx={{ color: "#ffffff" }} />
+                </div>
               ) : wills != null ? (
                 <>
                   <>
@@ -215,23 +217,20 @@ const Claim = () => {
                   </>
                 </>
               ) : (
-                <h3 className="text-white text-2xl font-bold mt-4">
-                  No wills found
-                </h3>
+                <EmptyState text="No will claims found" />
               )}
             </div>
             {/* MEOW MEOW NIGGAAAA */}
             <div className="">
-              <h1 className="text-2xl font-bold text-white mb-6">
-                Withdrawable Funds
-              </h1>
-
-              {loading ? (
-                <div className="text-white">Loading available funds...</div>
-              ) : withdrawableFunds.length === 0 ? (
-                <div className="text-gray-400">
-                  No funds available for withdrawal
+            <h1 className="text-2xl font-bold text-white mb-6">Trust Funds</h1>
+              {!address ? (
+                <EmptyState text="Connect wallet to see Eligible claims" />
+              ) : loading ? (
+                <div className="flex justify-center items-center h-32 w-full">
+                  <CircularProgress size="2rem" sx={{ color: "#ffffff" }} />
                 </div>
+              ) : withdrawableFunds.length === 0 ? (
+                <EmptyState text="No trust fund found" />
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {withdrawableFunds.map(({ fund, id }) => (
