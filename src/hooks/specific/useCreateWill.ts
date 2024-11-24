@@ -17,6 +17,7 @@ export const useRegisterWill = (tokenAddress: string) => {
   const [isDone, setIsDone] = useState(false);
   const [transactionHash, setTransactionHash] = useState<string>("");
 
+
   const willContract = useWillContract(true);
   console.log(tokenAddress);
   console.log("Will Contract Address1:", import.meta.env.VITE_WILL_CONTRACT_ADDRESS);

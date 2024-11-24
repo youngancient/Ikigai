@@ -15,3 +15,11 @@ export const shortenAddress = (address: string) => {
     }
     return `${numAmount.toFixed(4)} ETH`;
   };
+
+  export const formatGracePeriod = (seconds: number) => {
+    return seconds / 86400;
+  }
+
+  export const formatActivityPeriod = (seconds: number) => {
+    return seconds / (24 * 60 * 60);
+  }
