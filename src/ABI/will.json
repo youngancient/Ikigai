@@ -671,25 +671,6 @@
     {
         "inputs": [
             {
-                "internalType": "uint256",
-                "name": "willId",
-                "type": "uint256"
-            }
-        ],
-        "name": "getActivityThreshold",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
                 "internalType": "address",
                 "name": "owner",
                 "type": "address"
@@ -796,7 +777,13 @@
         "type": "function"
     },
     {
-        "inputs": [],
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "owner",
+                "type": "address"
+            }
+        ],
         "name": "getTotalTokensWilled",
         "outputs": [
             {
@@ -809,7 +796,13 @@
         "type": "function"
     },
     {
-        "inputs": [],
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "owner",
+                "type": "address"
+            }
+        ],
         "name": "getTotalUniqueBeneficiaries",
         "outputs": [
             {
@@ -944,9 +937,51 @@
         "name": "getWillsByOwner",
         "outputs": [
             {
-                "internalType": "uint256[]",
+                "components": [
+                    {
+                        "internalType": "uint256",
+                        "name": "willId",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "willName",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "tokenAddress",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "uint8",
+                        "name": "tokenType",
+                        "type": "uint8"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "totalAmount",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "beneficiaryCount",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "activityPeriod",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "gracePeriod",
+                        "type": "uint256"
+                    }
+                ],
+                "internalType": "struct WillRegistry.WillDetails[]",
                 "name": "",
-                "type": "uint256[]"
+                "type": "tuple[]"
             }
         ],
         "stateMutability": "view",

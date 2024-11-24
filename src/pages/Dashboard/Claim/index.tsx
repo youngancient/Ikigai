@@ -145,7 +145,7 @@ const Claim = () => {
           </div>
 
           <div className="will-and-trust">
-          <h1 className="text-2xl font-bold text-white mb-6">Will Claims</h1>
+            <h1 className="text-2xl font-bold text-white mb-6">Will Claims</h1>
 
             <div className="will-trust-flex">
               {!address ? (
@@ -154,10 +154,12 @@ const Claim = () => {
                 <div className="flex justify-center items-center h-32 w-full">
                   <CircularProgress size="2rem" sx={{ color: "#ffffff" }} />
                 </div>
-              ) : wills != null ? (
+              ) : wills?.length == 0 ? (
+                <EmptyState text="No will claims found" />
+              ) : (
                 <>
                   <>
-                    {wills.map((will: IBeneficiaryWill) => (
+                    {wills && wills.map((will: IBeneficiaryWill) => (
                       <motion.div
                         className="item"
                         variants={claimContVariants}
@@ -216,13 +218,13 @@ const Claim = () => {
                     ))}
                   </>
                 </>
-              ) : (
-                <EmptyState text="No will claims found" />
               )}
             </div>
             {/* MEOW MEOW NIGGAAAA */}
             <div className="">
-            <h1 className="text-2xl font-bold text-white mb-6">Trust Funds</h1>
+              <h1 className="text-2xl font-bold text-white mb-6">
+                Trust Funds
+              </h1>
               {!address ? (
                 <EmptyState text="Connect wallet to see Eligible claims" />
               ) : loading ? (
