@@ -69,7 +69,7 @@ export const useRegisterWill = (tokenAddress: string) => {
       }
       
       try {
-
+        
         const _amount = BigInt(totalAmount);
 
         console.log("approve: ", _amount);
