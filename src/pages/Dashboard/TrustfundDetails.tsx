@@ -9,9 +9,7 @@ import useRunners from "../../hooks/useRunners";
 import type {
   Fund,
   FundDepositEvent,
-  FundWithdrawalEvent,
 } from "../../types/trustfund";
-import { WithdrawModal } from "../../components/trustfund/WithdrawModal";
 import { DepositModal } from "../../components/trustfund/DepositModal";
 import {
   formatTimeRemaining,
@@ -33,21 +31,16 @@ export const TrustFundDetails = () => {
   const { signer } = useRunners();
   const {
     getFundDetails,
-    withdrawFund,
     depositToFund,
-    isWithdrawable,
     txState,
   } = useTrustFund();
-  const { deposits: depositEvents, withdrawals: withdrawalEvents } =
+  const { deposits: depositEvents} =
     useTrustFundEvents(fundId ? BigInt(fundId) : undefined);
 
   const [showHistory, setShowHistory] = useState(false);
   const [showDepositModal, setShowDepositModal] = useState(false);
-  const [showWithdrawModal, setShowWithdrawModal] = useState(false);
   const [fund, setFund] = useState<Fund | null>(null);
-  const [canWithdraw, setCanWithdraw] = useState(false);
   const [userAddress, setUserAddress] = useState<string | null>(null);
-  const [isBeneficiary, setIsBeneficiary] = useState(false);
 
   // Fetch fund details and user address
   useEffect(() => {
@@ -64,12 +57,6 @@ export const TrustFundDetails = () => {
 
         const address = await signer.getAddress();
         setUserAddress(address);
-        setIsBeneficiary(
-          address.toLowerCase() === fundData.beneficiary.toLowerCase()
-        );
-
-        const withdrawable = await isWithdrawable(fundId);
-        setCanWithdraw(withdrawable);
       } catch (error) {
         console.error("Error fetching fund details:", error);
         navigate("/trustfund");
@@ -77,7 +64,7 @@ export const TrustFundDetails = () => {
     };
 
     fetchData();
-  }, [fundId, signer, getFundDetails, navigate, isWithdrawable]);
+  }, [fundId, signer, getFundDetails, navigate]);
 
   // Combine and sort history
   const history: FundHistory[] = [
@@ -90,13 +77,6 @@ export const TrustFundDetails = () => {
         : Math.floor(Date.now() / 1000),
       txHash: event.transactionHash || "",
     })),
-    ...(withdrawalEvents as FundWithdrawalEvent[]).map((event) => ({
-      type: "Withdrawal" as const,
-      title: `Withdrawal from ${fund?.fundName || "Trust Fund"}`,
-      amount: ethers.formatEther(event.amount),
-      timestamp: Number(event.withdrawalTime),
-      txHash: event.transactionHash || "",
-    })),
   ].sort((a, b) => b.timestamp - a.timestamp);
 
   const handleDeposit = async (amount: string) => {
@@ -104,17 +84,6 @@ export const TrustFundDetails = () => {
     const success = await depositToFund(fundId, amount);
     if (success) {
       setShowDepositModal(false);
-      // Refresh fund details
-      const updatedFund = await getFundDetails(fundId);
-      setFund(updatedFund);
-    }
-  };
-
-  const handleWithdraw = async () => {
-    if (!fundId) return;
-    const success = await withdrawFund(fundId);
-    if (success) {
-      setShowWithdrawModal(false);
       // Refresh fund details
       const updatedFund = await getFundDetails(fundId);
       setFund(updatedFund);
@@ -230,42 +199,6 @@ export const TrustFundDetails = () => {
                   >
                     Deposit
                   </button>
-
-                  {isBeneficiary ? (
-                    <div className="flex flex-col items-center gap-2">
-                      <button
-                        onClick={() => setShowWithdrawModal(true)}
-                        disabled={!canWithdraw}
-                        className={`px-5 py-3 ${
-                          canWithdraw
-                            ? "bg-gradient-to-r from-[#FF56A999] to-[#FFAA6C] cursor-pointer"
-                            : "bg-gray-600 cursor-not-allowed"
-                        } text-white rounded-2xl w-[200px]`}
-                      >
-                        Withdraw
-                      </button>
-                      {!canWithdraw && (
-                        <p className="text-sm text-gray-400">
-                          {!fund.isActive
-                            ? "Fund is inactive"
-                            : Number(fund.targetDate) * 1000 > Date.now()
-                            ? `Available for withdrawal after ${new Date(
-                                Number(fund.targetDate) * 1000
-                              ).toLocaleDateString()}`
-                            : fund.isWithdrawn
-                            ? "Fund has already been withdrawn"
-                            : Number(fund.currentBalance) === 0
-                            ? "No balance to withdraw"
-                            : "Fund is not yet withdrawable"}
-                        </p>
-                      )}
-                    </div>
-                  ) : (
-                    <p className="text-sm text-gray-400">
-                      Only the beneficiary ({fund.beneficiary}) can withdraw
-                      from this fund
-                    </p>
-                  )}
                 </div>
 
                 <div className="w-full p-3">
@@ -273,7 +206,6 @@ export const TrustFundDetails = () => {
                     <h3>Fund Status</h3>
                     <FundStatus
                       isActive={fund.isActive}
-                      isWithdrawn={fund.isWithdrawn}
                       targetDate={fund.targetDate}
                       currentBalance={fund.currentBalance}
                       targetAmount={fund.targetAmount}
@@ -304,66 +236,6 @@ export const TrustFundDetails = () => {
                     <h3>{fund.category}</h3>
                   </div>
                 </div>
-              </div>
-
-              <div className="w-full p-3 mt-4 border border-gray-500 rounded-lg">
-                <h4 className="text-white mb-2">Withdrawal Requirements</h4>
-                <ul className="text-sm text-gray-400 space-y-1">
-                  <li className="flex items-center gap-2">
-                    <span
-                      className={
-                        isBeneficiary ? "text-green-500" : "text-red-500"
-                      }
-                    >
-                      {isBeneficiary ? "✓" : "✗"}
-                    </span>
-                    Connected wallet must be the beneficiary
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <span
-                      className={
-                        fund.isActive ? "text-green-500" : "text-red-500"
-                      }
-                    >
-                      {fund.isActive ? "✓" : "✗"}
-                    </span>
-                    Fund must be active
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <span
-                      className={
-                        Number(fund.targetDate) * 1000 <= Date.now()
-                          ? "text-green-500"
-                          : "text-red-500"
-                      }
-                    >
-                      {Number(fund.targetDate) * 1000 <= Date.now() ? "✓" : "✗"}
-                    </span>
-                    Target date must be reached
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <span
-                      className={
-                        !fund.isWithdrawn ? "text-green-500" : "text-red-500"
-                      }
-                    >
-                      {!fund.isWithdrawn ? "✓" : "✗"}
-                    </span>
-                    Fund must not be already withdrawn
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <span
-                      className={
-                        Number(fund.currentBalance) > 0
-                          ? "text-green-500"
-                          : "text-red-500"
-                      }
-                    >
-                      {Number(fund.currentBalance) > 0 ? "✓" : "✗"}
-                    </span>
-                    Fund must have a balance
-                  </li>
-                </ul>
               </div>
 
               <div className="w-full mt-10 p-2">
@@ -476,14 +348,6 @@ export const TrustFundDetails = () => {
         loading={txState.loading}
       />
 
-      {/* Withdraw Modal */}
-      <WithdrawModal
-        isOpen={showWithdrawModal}
-        onClose={() => setShowWithdrawModal(false)}
-        onWithdraw={handleWithdraw}
-        fund={fund}
-        loading={txState.loading}
-      />
     </Layout>
   );
 };
