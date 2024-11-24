@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { Layout } from "../../components/layout/Layout";
-import { AddTrustFundButton } from "../../components/trustfund/AddTrustFundButton";
 import { AddTrustFundModal } from "../../components/trustfund/AddTrustFundModal";
 import { TrustFundActivityContainer } from "../../components/trustfund/TrustFundActivityContainer";
 import { TrustFundItem } from "../../components/trustfund/TrustFundItem";
@@ -154,33 +153,73 @@ export const Trustfund = () => {
         </div>
 
         <div className="bg-gray-900/50 rounded-xl p-6 mb-8">
-  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 
-                  auto-rows-fr">
-    {loading ? (
-      <div className="col-span-full">{renderLoadingState()}</div>
-    ) : error ? (
-      <div className="col-span-full">{renderErrorState()}</div>
-    ) : funds.length > 0 ? (
-      <>
-        {funds.map((fund) => (
-          <CardContainer key={fund.id}>
-            <TrustFundItem
-              fund={fund.data}
-              fundId={fund.id}
-            />
-          </CardContainer>
-        ))}
-        <CardContainer>
-          <div className="flex items-center justify-center h-full">
-            <AddTrustFundButton onClick={() => setIsOpen(true)} />
+          {/* Add Trust Fund Section */}
+          <div className="mb-8 bg-gradient-to-r from-blue-500/10 to-purple-500/10 
+                          rounded-xl p-6 border border-blue-500/20">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div>
+                <h3 className="text-xl font-semibold text-white mb-2">
+                  Create a New Trust Fund
+                </h3>
+                <p className="text-gray-400 text-sm">
+                  Set up a new trust fund to secure and manage assets for your beneficiaries
+                </p>
+              </div>
+              <div className="flex-shrink-0">
+                <button
+                  onClick={() => setIsOpen(true)}
+                  className="px-6 py-3 bg-gradient-to-r from-[#8AD4EC99] via-[#EF96FF99] to-[#FF56A999] text-white rounded-lg
+                            transition-all duration-200
+                            flex items-center gap-2 font-medium
+                            shadow-lg"
+                >
+                  <span>Create Trust Fund</span>
+                  <svg 
+                    className="w-5 h-5" 
+                    fill="none" 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    strokeWidth="2" 
+                    viewBox="0 0 24 24" 
+                    stroke="currentColor"
+                  >
+                    <path d="M12 4v16m8-8H4"></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
           </div>
-        </CardContainer>
-      </>
-    ) : (
-      <div className="col-span-full">{renderEmptyState()}</div>
-    )}
-  </div>
-</div>
+
+          {/* Trust Fund Cards Section */}
+          {loading ? (
+            renderLoadingState()
+          ) : error ? (
+            renderErrorState()
+          ) : funds.length > 0 ? (
+            <>
+              <div className="mb-4">
+                <h3 className="text-xl font-semibold text-white">
+                  Your Trust Funds
+                </h3>
+                <p className="text-gray-400 text-sm">
+                  Showing {funds.length} active trust fund{funds.length !== 1 ? 's' : ''}
+                </p>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr">
+                {funds.map((fund) => (
+                  <CardContainer key={fund.id}>
+                    <TrustFundItem
+                      fund={fund.data}
+                      fundId={fund.id}
+                    />
+                  </CardContainer>
+                ))}
+              </div>
+            </>
+          ) : (
+            renderEmptyState()
+          )}
+        </div>
 
         <div className="bg-gray-900/50 rounded-xl p-6">
           <h2 className="text-xl font-semibold text-white mb-6">Recent Activity</h2>
