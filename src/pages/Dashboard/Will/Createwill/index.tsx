@@ -186,9 +186,6 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
     const gracePeriod = parseInt(formData.grace_period);
     const activityThreshold = parseInt(formData.activity_period);
 
-    // const amounts = beneficiaries?.map((item) =>
-    //   item.beneficiary_amount + "0".repeat(Number(formData.assetDecimals))
-    // );
     const totalAmount =
       Number(formData.amount) * 10 ** Number(formData.assetDecimals);
     const tokenAllocations = [
