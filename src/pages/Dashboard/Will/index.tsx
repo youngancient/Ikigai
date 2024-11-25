@@ -6,7 +6,7 @@ import folder from "../../../assets/icons/avatar.svg";
 import "./style.scss";
 import { EmptyState } from "../../../components/EmptyState";
 import CreateWill from "./Createwill";
-import { Button, IconButton } from "@mui/material";
+import { Button, CircularProgress, IconButton } from "@mui/material";
 import DropDownWrapper from "../../../components/DropDownWrapper";
 import { PrimaryFillIcon } from "../../../assets/icons/PrimaryFillIcon";
 
@@ -19,6 +19,9 @@ import { ethers } from "ethers";
 import { floorToDecimals } from "../../../utils/helpers";
 import { useAppKitAccount } from "@reown/appkit/react";
 import { toast } from "react-toastify";
+import { useWills } from "../../../hooks/specific/useWills";
+import { multiplyByPrice } from "../../../utils/getPrice";
+import { formatActivityPeriod, formatGracePeriod } from "../../../utils/format";
 
 const userToken = [
   { symbol: "CWT", address: "0xaFcA068ECDb7576720f480B6868120a13e7c7461" },
@@ -78,6 +81,9 @@ const WillPage = () => {
     }
     setOpenModal(true);
   };
+
+  const { wills, isFetching } = useWills();
+  
 
   return (
     <>
@@ -216,140 +222,69 @@ const WillPage = () => {
 
             <div className={`activity-table `}>
               {address ? (
-                <div className="will-list-flex">
-                  {[1, 2, 3, 4].map((item) => (
-                    <div className="will-list-item" key={item}>
-                      <img src={trustfund} alt="trustfund" />
+                isFetching ? (
+                  <div className="flex justify-center items-center h-32 w-full">
+                    <CircularProgress size="2rem" sx={{ color: "#ffffff" }} />
+                  </div>
+                ) : (
+                  <div className="will-list-flex">
+                    {wills !== null ? wills.map((will) => (
+                      <div className="will-list-item" key={will.willId}>
+                        <img src={trustfund} alt="trustfund" />
 
-                      <p className="name">Will Name</p>
+                        <p className="name">{will.willName}</p>
 
-                      <div className="d-flex">
-                        <p>Value</p>
-                        <p>300eth</p>
+                        <div className="d-flex">
+                          <p>Value</p>
+                          <p> {"$" +
+                            multiplyByPrice(
+                              Number(
+                                ethers.formatUnits(will.totalAmount.toString(), 18)
+                              )
+                            ).toLocaleString()}</p>
+                        </div>
+
+                        <div className="d-flex">
+                          <p>Beneficiaries</p>
+                          <p>{will.beneficiaryCount}</p>
+                        </div>
+
+                        <div className="d-flex">
+                          <p>Activity Period</p>
+                          <p>{formatActivityPeriod(will.activityPeriod)} days</p>
+                        </div>
+
+                        <div className="d-flex">
+                          <p>Grace Period</p>
+                          <p>{formatGracePeriod(will.gracePeriod)} days</p>
+                        </div>
+
+                        <div className="btn-flex">
+                          <Button
+                            onClick={() => {
+                              setSelectedWill(will);
+                              setOpenAddBeneficiaryModal(true);
+                            }}
+                            className="radiant-btn"
+                          >
+                            Add Beneficiary
+                          </Button>
+                          <IconButton
+                            onClick={() => {
+                              setSelectedWill(will);
+                              setOpenViewModal(true);
+                            }}
+                            className="icon-btn"
+                          >
+                            <EyeIcon stroke="#ffffff" />
+                          </IconButton>
+                        </div>
                       </div>
-
-                      <div className="d-flex">
-                        <p>Beneficiaries</p>
-                        <p>7</p>
-                      </div>
-
-                      <div className="d-flex">
-                        <p>Activity Period</p>
-                        <p>200 days</p>
-                      </div>
-
-                      <div className="d-flex">
-                        <p>Grace Period</p>
-                        <p>20 days</p>
-                      </div>
-
-                      <div className="btn-flex">
-                        <Button
-                          onClick={() => {
-                            setSelectedWill(item);
-                            setOpenAddBeneficiaryModal(true);
-                          }}
-                          className="radiant-btn"
-                        >
-                          Add Beneficiary
-                        </Button>
-                        <IconButton
-                          onClick={() => {
-                            setSelectedWill(item);
-                            setOpenViewModal(true);
-                          }}
-                          className="icon-btn"
-                        >
-                          <EyeIcon stroke="#ffffff" />
-                        </IconButton>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                    )) : <EmptyState text="No wills found" />}
+                  </div>
+                )
               ) : (
-                // <div className="relative overflow-x-auto shadow-md ">
-                //   <table className="w-full text-sm text-left border-[#FF56A999] border-solid border-[1px]">
-                //     <thead className="text-xs uppercase ">
-                //       <tr className="border-[#FF56A999] border-b ">
-                //         <th
-                //           scope="col"
-                //           className="px-6 py-8 text-[#ffffff] text-center"
-                //         >
-                //           Beneficiaries
-                //         </th>
-
-                //         <th
-                //           scope="col"
-                //           className="px-6 py-8 text-[#ffffff] text-center "
-                //         >
-                //           Amount
-                //         </th>
-                //         <th
-                //           scope="col"
-                //           className="px-6 py-8 text-[#ffffff] text-center"
-                //         >
-                //           Activity Period
-                //         </th>
-                //         <th
-                //           scope="col"
-                //           className="px-6 py-8 text-[#ffffff] text-center"
-                //         >
-                //           Grace Period
-                //         </th>
-                //         <th
-                //           scope="col"
-                //           className="px-6 py-8 text-[#ffffff] text-center"
-                //         >
-                //           Action
-                //         </th>
-                //       </tr>
-                //     </thead>
-                //     <tbody>
-                //       {[1, 2, 3, 4].map((item) => (
-                //         <tr className=" border-[#FF56A999] border-b  ">
-                //           <td
-                //             scope="row"
-                //             className=" text-center px-6 py-4 font-medium  whitespace-nowrap text-[#ffffff]"
-                //           >
-                //             7
-                //           </td>
-
-                //           <td className="text-center px-6 py-4 text-[#ffffff]">
-                //             1,000
-                //           </td>
-                //           <td className="text-center px-6 py-4 text-[#ffffff]">
-                //             200 days
-                //           </td>
-                //           <td className="text-center px-6 py-4 text-[#ffffff]">
-                //             20 days
-                //           </td>
-                //           <td className="px-6 py-4 text-right">
-                //             <div className="flex items-center justify-center">
-                //               <IconButton
-                //                 onClick={() => {
-                //                   setSelectedWill(item);
-                //                   setOpenViewModal(true);
-                //                 }}
-                //               >
-                //                 <EyeIcon />
-                //               </IconButton>
-
-                //               <IconButton
-                //                 onClick={() => {
-                //                   setSelectedWill(item);
-                //                   setOpenAddBeneficiaryModal(true);
-                //                 }}
-                //               >
-                //                 <EditIcon />
-                //               </IconButton>
-                //             </div>
-                //           </td>
-                //         </tr>
-                //       ))}
-                //     </tbody>
-                //   </table>
-                // </div>
-                <EmptyState text="You have no activity yet" />
+                <EmptyState text="Connect wallet to view activity" />
               )}
             </div>
           </div>

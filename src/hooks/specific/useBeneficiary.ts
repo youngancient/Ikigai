@@ -74,6 +74,7 @@ export const useBeneficiaryWills = () => {
     }
     try {
       setIsClaiming(true);
+      console.log({willId});
       const tx = await willContract.claimInheritance(
         willId,
         {
@@ -92,7 +93,7 @@ export const useBeneficiaryWills = () => {
     } catch (error) {
       const {name} = await errorDecoder.decode(error);
       console.error(name);
-      toast.error("Claiming failed!");
+      toast.error(name);
     } finally {
       setIsClaiming(false);
     }

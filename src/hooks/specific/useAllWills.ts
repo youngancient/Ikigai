@@ -16,6 +16,7 @@ export const useWillStat = () => {
 
   const [isLoading, setIsLoading] = useState(false);
 
+
   const { address } = useAppKitAccount();
   const readOnlyWillRegistry = useWillContract();
 
@@ -37,7 +38,7 @@ export const useWillStat = () => {
     setTotalBeneficiaries(null);
     setTotalWills(null);
   };
-  const fetchWill = useCallback(async () => {
+  const fetchWillStat = useCallback(async () => {
     if (!readOnlyWillRegistry) {
       resetState();
       return;
@@ -49,12 +50,13 @@ export const useWillStat = () => {
     }
     try {
       setIsLoading(true);
-      const _totalTokenWilled =
-        await readOnlyWillRegistry.getTotalTokensWilled();
+      const _totalTokenWilled = await readOnlyWillRegistry.getTotalTokensWilled(
+        address
+      );
       setTotalTokensWilled(_totalTokenWilled);
 
       const _totalBeneficiaries =
-        await readOnlyWillRegistry.getTotalUniqueBeneficiaries();
+        await readOnlyWillRegistry.getTotalUniqueBeneficiaries(address);
       setTotalBeneficiaries(_totalBeneficiaries);
 
       const _totalWills = await readOnlyWillRegistry.getTotalWillsCreated(
@@ -70,9 +72,9 @@ export const useWillStat = () => {
   }, [readOnlyWillRegistry, address]);
 
   useEffect(() => {
-    fetchWill();
-  }, [fetchWill]);
+    fetchWillStat();
+  }, [fetchWillStat]);
 
+  
   return { totalWills, totalTokensWilled, totalBeneficiaries, isLoading };
 };
-

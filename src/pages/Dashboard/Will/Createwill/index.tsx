@@ -170,8 +170,14 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
     }));
   };
 
-  const { registerWill, isRegisterLoading, isDone, reset, isLoadingApproval } =
-    useRegisterWill(formData.asset);
+  const {
+    registerWill,
+    isRegisterLoading,
+    isDone,
+    reset,
+    isLoadingApproval,
+    transactionHash,
+  } = useRegisterWill(formData.asset);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -201,18 +207,13 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
       },
     ];
 
-    console.log(totalAmount, tokenAllocations, "total");
-
-    console.log(
-      {
-        Name,
-        totalAmount: `${totalAmount}`,
-        gracePeriod,
-        activityThreshold,
-        tokenAllocations,
-      },
-      "final"
-    );
+    console.log({
+      Name,
+      totalAmount,
+      gracePeriod,
+      activityThreshold,
+      tokenAllocations,
+    });
 
     if (step === TOTALSTEP) {
       // setIsLoading(true);
@@ -343,8 +344,17 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
               <img src={check_circle} alt="check" />
 
               <h5>Action Completed!</h5>
-
-              <a href="">Confirm on Explorer</a>
+              {transactionHash ? (
+                <a
+                  href={`https://sepolia-blockscout.lisk.com/tx/${transactionHash}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Confirm on Blockscout
+                </a>
+              ) : (
+                <p>Transaction completed but hash not available</p>
+              )}
             </div>
           )}
 

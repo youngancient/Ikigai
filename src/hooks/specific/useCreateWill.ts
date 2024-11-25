@@ -15,6 +15,7 @@ export const useRegisterWill = (tokenAddress: string) => {
   const [isRegisterLoading, setIsLoading] = useState(false);
   const [isLoadingApproval, setIsLoadingApproval] = useState(false);
   const [isDone, setIsDone] = useState(false);
+  const [transactionHash, setTransactionHash] = useState<string>("");
 
   const willContract = useWillContract(true);
   console.log(tokenAddress);
@@ -136,6 +137,8 @@ export const useRegisterWill = (tokenAddress: string) => {
           }
         );
 
+        setTransactionHash(tx.hash);
+
         const receipt = await tx.wait();
         if (receipt.status === 1) {
           console.log(receipt, "receipt");
@@ -145,6 +148,7 @@ export const useRegisterWill = (tokenAddress: string) => {
         }
       } catch (error) {
         console.log(error);
+        setTransactionHash("");
         toast.error("Will creation unsuccessful");
       } finally {
         setIsLoadingApproval(false);
@@ -155,6 +159,14 @@ export const useRegisterWill = (tokenAddress: string) => {
   );
   const reset = () => {
     setIsDone(false);
+    setTransactionHash("");
   };
-  return { registerWill, isRegisterLoading, isDone, reset, isLoadingApproval };
+  return {
+    registerWill,
+    isRegisterLoading,
+    isDone,
+    reset,
+    isLoadingApproval,
+    transactionHash,
+  };
 };
