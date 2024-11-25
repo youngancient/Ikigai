@@ -6,14 +6,13 @@ import folder from "../../../assets/icons/avatar.svg";
 import "./style.scss";
 import { EmptyState } from "../../../components/EmptyState";
 import CreateWill from "./Createwill";
-import { Button, CircularProgress, IconButton } from "@mui/material";
+import { Button, IconButton } from "@mui/material";
 import DropDownWrapper from "../../../components/DropDownWrapper";
 import { PrimaryFillIcon } from "../../../assets/icons/PrimaryFillIcon";
 
 import { EyeIcon } from "../../../assets/icons/EyeIcon";
 import ViewWill from "./ViewWill";
 import AddBeneficiaryToWill from "./AddBeneficiary";
-// import { useWill } from "../../../hooks/specific/useCreateWill";
 import { useTokenBalance } from "../../../hooks/specific/useERC20";
 import { ethers } from "ethers";
 import { floorToDecimals } from "../../../utils/helpers";

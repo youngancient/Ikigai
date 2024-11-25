@@ -1,14 +1,15 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { ethers } from "ethers";
-import { Button, IconButton } from "@mui/material";
+import { Button, CircularProgress, IconButton } from "@mui/material";
 
 import { CancelIcon } from "../../../../assets/icons/CancelIcon";
 
 import Modal from "../../../../components/Modal/modal";
 import InputField from "../../../../components/form/InputField";
 
-// import { useAppKitAccount } from "@reown/appkit/react";
+import { useAppKitAccount } from "@reown/appkit/react";
 import { toast } from "react-toastify";
+import axios from "axios";
 
 interface IBeneficiary {
   name: string;
@@ -26,7 +27,10 @@ type propType = {
 
 const AddBeneficiary = ({ closeModal, openModal, selectedWill }: propType) => {
   // const { address, isConnected } = useAppKitAccount();
+  const [tokenList, setTokenList] = useState([]);
+  const { address, isConnected } = useAppKitAccount();
 
+  const [amountLeft, setAmountLeft] = useState(0);
   const [beneficiaries, setBeneficiaries] = useState<IBeneficiary[]>([
     {
       name: "",
@@ -51,7 +55,7 @@ const AddBeneficiary = ({ closeModal, openModal, selectedWill }: propType) => {
       if (!isNaN(percentageValue)) {
         updatedBeneficiaries[index].beneficiary_amount = (
           (percentageValue / 100) *
-          Number(selectedWill?.amount || 0)
+          Number(amountLeft || 0)
         ).toFixed(2);
       } else {
         updatedBeneficiaries[index].beneficiary_amount = "";
@@ -79,6 +83,18 @@ const AddBeneficiary = ({ closeModal, openModal, selectedWill }: propType) => {
       const updatedBeneficiaries = beneficiaries.filter((_, i) => i !== index);
       setBeneficiaries(updatedBeneficiaries);
     }
+  };
+
+  const fetchTokens = async (address: string) => {
+    if (!address) {
+      return;
+    }
+    try {
+      const response = await axios.get(
+        `https://sepolia-blockscout.lisk.com/api/v2/addresses/${address}/tokens`
+      );
+      setTokenList(response?.data?.items || []);
+    } catch (err) {}
   };
 
   const isFormValid = (): boolean => {
@@ -124,15 +140,23 @@ const AddBeneficiary = ({ closeModal, openModal, selectedWill }: propType) => {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const tokenAllocations = [
-      {
-        beneficiaries: beneficiaries?.map((item) => item.beneficiary_address),
-      },
-    ];
+    let filteredList: any[] = tokenList.filter(
+      (item: any) => item?.token?.address
+    );
 
-    console.log({
-      tokenAllocations,
-    });
+    const payload = {
+      willId: selectedWill.willId,
+      beneficiaries: beneficiaries?.map((item) => item.beneficiary_address),
+      amounts: beneficiaries?.map(
+        (item) =>
+          `${
+            Number(item.beneficiary_amount) *
+            10 ** Number(filteredList[0]?.token?.decimals || 18)
+          }`
+      ),
+    };
+
+    console.log(payload, "payload");
 
     if (isFormValid()) {
       // registerWill(tokenAllocations);
@@ -156,6 +180,20 @@ const AddBeneficiary = ({ closeModal, openModal, selectedWill }: propType) => {
     clearForm();
   };
 
+  useEffect(() => {
+    if (selectedWill) {
+      setAmountLeft(300);
+    }
+  }, [selectedWill]);
+
+  useEffect(() => {
+    if (isConnected && address) {
+      fetchTokens(address);
+    } else {
+      setTokenList([]);
+    }
+  }, [address, isConnected]);
+
   return (
     <Modal
       closeModal={closeModalFunc}
@@ -165,7 +203,7 @@ const AddBeneficiary = ({ closeModal, openModal, selectedWill }: propType) => {
       <div className="create-will-modal">
         <div className="modal-contents">
           <div className="title">
-            <h4>Add Beneficiary</h4>
+            <h4>Add More Beneficiaries</h4>
 
             <IconButton onClick={closeModalFunc}>
               <CancelIcon />
@@ -257,10 +295,14 @@ const AddBeneficiary = ({ closeModal, openModal, selectedWill }: propType) => {
 
               <div className="btn-flex">
                 <Button onClick={addBeneficiary} className="cancel">
-                  Add Beneficiary
+                  Add More
                 </Button>
                 <Button className="submit-button" type="submit">
-                  Next
+                  {false ? (
+                    <CircularProgress size="2rem" sx={{ color: "#ffffff" }} />
+                  ) : (
+                    "Save Beneficiaries"
+                  )}
                 </Button>
               </div>
             </div>
