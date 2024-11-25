@@ -51,6 +51,7 @@ export const useWills = () => {
     } catch (error) {
       setWills(null);
       console.log(error);
+      toast.error("Something went wrong");
     } finally {
       setIsFetching(false);
       setRefetch(false);
