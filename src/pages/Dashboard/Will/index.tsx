@@ -45,11 +45,9 @@ const WillPage = () => {
     sent: 0,
   });
   const [selectedWill, setSelectedWill] = useState<any>(null);
-  // const { will } = useWill();
   const changeUserToken = (token: { symbol: string; address: string }) => {
     setUserSelectedToken(token);
   };
-  // console.log(will);
 
   const { tokenBalance, isLoadingBalance } = useTokenBalance(
     userSelectedToken.address
@@ -82,8 +80,7 @@ const WillPage = () => {
     setOpenModal(true);
   };
 
-  const { wills, isFetching } = useWills();
-  
+  const { wills, isFetching, setRefetch } = useWills();
 
   return (
     <>
@@ -199,20 +196,59 @@ const WillPage = () => {
               </div>
 
               <div className="vault-list">
-                {[1, 2].map((item) => (
-                  <div className="vault-item" key={item}>
-                    <img src={folder} alt="folder" />
+                {wills !== null && wills?.length ? (
+                  wills?.map((item, i) => {
+                    if (i < 2) {
+                      return (
+                        <div className="vault-item" key={i}>
+                          <img src={folder} alt="folder" />
 
-                    <div className="name-and-view">
-                      <div className="name">
-                        <h5>Family Will</h5>
-                        <p>Total Asset willed: 2 ETH</p>
-                      </div>
+                          <div className="name-and-view">
+                            <div className="name">
+                              <h5>{item.willName}</h5>
+                              <p>
+                                Total Asset willed:{" "}
+                                {"$" +
+                                  multiplyByPrice(
+                                    Number(
+                                      ethers.formatUnits(
+                                        item.totalAmount.toString(),
+                                        18
+                                      )
+                                    )
+                                  ).toLocaleString()}
+                              </p>
+                            </div>
 
-                      <button>View</button>
-                    </div>
-                  </div>
-                ))}
+                            <Button
+                              onClick={() => {
+                                setSelectedWill(item);
+                                setOpenViewModal(true);
+                              }}
+                            >
+                              View
+                            </Button>
+                          </div>
+                        </div>
+                      );
+                    } else {
+                      return "";
+                    }
+                  })
+                ) : (
+                  <Button
+                    onClick={() => {
+                      if (address) {
+                        handleOpenModal();
+                      } else {
+                        toast.error("Connect wallet to continue");
+                      }
+                    }}
+                    className="radiant-btn"
+                  >
+                    Create Will
+                  </Button>
+                )}
               </div>
             </div>
           </div>
@@ -228,59 +264,70 @@ const WillPage = () => {
                   </div>
                 ) : (
                   <div className="will-list-flex">
-                    {wills !== null ? wills.map((will) => (
-                      <div className="will-list-item" key={will.willId}>
-                        <img src={trustfund} alt="trustfund" />
+                    {wills !== null && wills?.length ? (
+                      wills.map((will) => (
+                        <div className="will-list-item" key={will.willId}>
+                          <img src={trustfund} alt="trustfund" />
 
-                        <p className="name">{will.willName}</p>
+                          <p className="name">{will.willName}</p>
 
-                        <div className="d-flex">
-                          <p>Value</p>
-                          <p> {"$" +
-                            multiplyByPrice(
-                              Number(
-                                ethers.formatUnits(will.totalAmount.toString(), 18)
-                              )
-                            ).toLocaleString()}</p>
+                          <div className="d-flex">
+                            <p>Value</p>
+                            <p>
+                              {"$" +
+                                multiplyByPrice(
+                                  Number(
+                                    ethers.formatUnits(
+                                      will.totalAmount.toString(),
+                                      18
+                                    )
+                                  )
+                                ).toLocaleString()}
+                            </p>
+                          </div>
+
+                          <div className="d-flex">
+                            <p>Beneficiaries</p>
+                            <p>{will.beneficiaryCount}</p>
+                          </div>
+
+                          <div className="d-flex">
+                            <p>Activity Period</p>
+                            <p>
+                              {formatActivityPeriod(will.activityPeriod)} days
+                            </p>
+                          </div>
+
+                          <div className="d-flex">
+                            <p>Grace Period</p>
+                            <p>{formatGracePeriod(will.gracePeriod)} days</p>
+                          </div>
+
+                          <div className="btn-flex">
+                            <Button
+                              onClick={() => {
+                                setSelectedWill(will);
+                                setOpenAddBeneficiaryModal(true);
+                              }}
+                              className="radiant-btn"
+                            >
+                              Add Beneficiary
+                            </Button>
+                            <IconButton
+                              onClick={() => {
+                                setSelectedWill(will);
+                                setOpenViewModal(true);
+                              }}
+                              className="icon-btn"
+                            >
+                              <EyeIcon stroke="#ffffff" />
+                            </IconButton>
+                          </div>
                         </div>
-
-                        <div className="d-flex">
-                          <p>Beneficiaries</p>
-                          <p>{will.beneficiaryCount}</p>
-                        </div>
-
-                        <div className="d-flex">
-                          <p>Activity Period</p>
-                          <p>{formatActivityPeriod(will.activityPeriod)} days</p>
-                        </div>
-
-                        <div className="d-flex">
-                          <p>Grace Period</p>
-                          <p>{formatGracePeriod(will.gracePeriod)} days</p>
-                        </div>
-
-                        <div className="btn-flex">
-                          <Button
-                            onClick={() => {
-                              setSelectedWill(will);
-                              setOpenAddBeneficiaryModal(true);
-                            }}
-                            className="radiant-btn"
-                          >
-                            Add Beneficiary
-                          </Button>
-                          <IconButton
-                            onClick={() => {
-                              setSelectedWill(will);
-                              setOpenViewModal(true);
-                            }}
-                            className="icon-btn"
-                          >
-                            <EyeIcon stroke="#ffffff" />
-                          </IconButton>
-                        </div>
-                      </div>
-                    )) : <EmptyState text="No wills found" />}
+                      ))
+                    ) : (
+                      <EmptyState text="No wills found" />
+                    )}
                   </div>
                 )
               ) : (
@@ -293,6 +340,7 @@ const WillPage = () => {
       <CreateWill
         openModal={openModal}
         closeModal={() => setOpenModal(false)}
+        setRefetch={setRefetch}
       />
       <ViewWill
         openModal={openViewModal}

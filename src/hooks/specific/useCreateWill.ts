@@ -17,10 +17,12 @@ export const useRegisterWill = (tokenAddress: string) => {
   const [isDone, setIsDone] = useState(false);
   const [transactionHash, setTransactionHash] = useState<string>("");
 
-
   const willContract = useWillContract(true);
   console.log(tokenAddress);
-  console.log("Will Contract Address1:", import.meta.env.VITE_WILL_CONTRACT_ADDRESS);
+  console.log(
+    "Will Contract Address1:",
+    import.meta.env.VITE_WILL_CONTRACT_ADDRESS
+  );
 
   // const { approve } = useTokenApproval(tokenAddress);
   // const [isApprovalLoading, setisLoadingBalance] = useState(false);
@@ -32,13 +34,15 @@ export const useRegisterWill = (tokenAddress: string) => {
   const registerWill = useCallback(
     async (
       name: string,
-      totalAmount : string,
+      totalAmount: string,
       gracePeriod: number,
       activityThreshold: number,
       tokenAllocations: any
     ) => {
-
-      console.log("Debug - Contract Address:", import.meta.env.VITE_WILL_CONTRACT_ADDRESS);
+      console.log(
+        "Debug - Contract Address:",
+        import.meta.env.VITE_WILL_CONTRACT_ADDRESS
+      );
       console.log("Debug - Will Contract Instance:", willContract);
       console.log("Debug - Token Address:", tokenAddress);
       console.log("Debug - ERC20 Contract:", erc20Contract);
@@ -57,7 +61,7 @@ export const useRegisterWill = (tokenAddress: string) => {
         toast.error("Token Contract not found");
         return;
       }
-      if(!tokenAddress){
+      if (!tokenAddress) {
         toast.error("Token Address not found");
         return;
       }
@@ -69,25 +73,23 @@ export const useRegisterWill = (tokenAddress: string) => {
         toast.error("You are not connected to the right network");
         return;
       }
-      
+
       try {
-        
         const _amount = BigInt(totalAmount);
 
         console.log("approve: ", _amount);
-        
+
         const contractAddress = import.meta.env.VITE_WILL_CONTRACT_ADDRESS;
         console.log("Contract Address:", contractAddress);
-      
+
         if (!contractAddress) {
           throw new Error("Contract address is not set or is empty");
         }
-      
+
         // Validate the contract address format
         if (!/^0x[a-fA-F0-9]{40}$/.test(contractAddress)) {
           throw new Error("Invalid contract address format");
         }
-      
 
         const allowance = await erc20Contract.allowance(
           address,
@@ -139,7 +141,7 @@ export const useRegisterWill = (tokenAddress: string) => {
 
         const receipt = await tx.wait();
         if (receipt.status === 1) {
-          console.log(receipt);
+          console.log(receipt, "receipt");
           toast.success("Will creation successful");
           setIsDone(true);
           return;
@@ -147,6 +149,7 @@ export const useRegisterWill = (tokenAddress: string) => {
       } catch (error) {
         console.log(error);
         setTransactionHash("");
+        toast.error("Will creation unsuccessful");
       } finally {
         setIsLoadingApproval(false);
         setIsLoading(false);
@@ -158,5 +161,12 @@ export const useRegisterWill = (tokenAddress: string) => {
     setIsDone(false);
     setTransactionHash("");
   };
-  return { registerWill, isRegisterLoading, isDone, reset, isLoadingApproval, transactionHash  };
+  return {
+    registerWill,
+    isRegisterLoading,
+    isDone,
+    reset,
+    isLoadingApproval,
+    transactionHash,
+  };
 };
