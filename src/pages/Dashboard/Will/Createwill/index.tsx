@@ -29,11 +29,12 @@ interface IBeneficiary {
 type propType = {
   openModal: boolean;
   closeModal: () => void;
+  setRefetch: (val: boolean) => void;
 };
 
 const TOTALSTEP = 4;
 
-const CreateWill = ({ closeModal, openModal }: propType) => {
+const CreateWill = ({ closeModal, openModal, setRefetch }: propType) => {
   const [step, setStep] = useState(1);
   const { address, isConnected } = useAppKitAccount();
 
@@ -179,7 +180,7 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
     transactionHash,
   } = useRegisterWill(formData.asset);
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const Name = formData.will_name;
@@ -204,24 +205,18 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
       },
     ];
 
-    console.log({
-      Name,
-      totalAmount,
-      gracePeriod,
-      activityThreshold,
-      tokenAllocations,
-    });
-
     if (step === TOTALSTEP) {
       // setIsLoading(true);
       // sign function goes here
-      registerWill(
+      await registerWill(
         Name,
         `${totalAmount}`,
         gracePeriod,
         activityThreshold,
         tokenAllocations
       );
+
+      setRefetch(true);
       // setIsSubmitted(true);
     } else {
       if (step === 2) {

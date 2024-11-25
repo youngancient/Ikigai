@@ -45,11 +45,9 @@ const WillPage = () => {
     sent: 0,
   });
   const [selectedWill, setSelectedWill] = useState<any>(null);
-  // const { will } = useWill();
   const changeUserToken = (token: { symbol: string; address: string }) => {
     setUserSelectedToken(token);
   };
-  // console.log(will);
 
   const { tokenBalance, isLoadingBalance } = useTokenBalance(
     userSelectedToken.address
@@ -82,7 +80,7 @@ const WillPage = () => {
     setOpenModal(true);
   };
 
-  const { wills, isFetching } = useWills();
+  const { wills, isFetching, setRefetch } = useWills();
 
   return (
     <>
@@ -342,6 +340,7 @@ const WillPage = () => {
       <CreateWill
         openModal={openModal}
         closeModal={() => setOpenModal(false)}
+        setRefetch={setRefetch}
       />
       <ViewWill
         openModal={openViewModal}
