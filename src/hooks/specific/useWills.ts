@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 // import useRunners from "../useRunners";
 
 export interface IWill {
+  amountLeft: number;
   willId: number;
   willName: string;
   tokenAddress: string;
