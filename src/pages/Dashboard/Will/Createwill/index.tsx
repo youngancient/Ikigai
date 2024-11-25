@@ -29,11 +29,12 @@ interface IBeneficiary {
 type propType = {
   openModal: boolean;
   closeModal: () => void;
+  setRefetch: (val: boolean) => void;
 };
 
 const TOTALSTEP = 4;
 
-const CreateWill = ({ closeModal, openModal }: propType) => {
+const CreateWill = ({ closeModal, openModal, setRefetch }: propType) => {
   const [step, setStep] = useState(1);
   const { address, isConnected } = useAppKitAccount();
 
@@ -179,19 +180,15 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
     transactionHash,
   } = useRegisterWill(formData.asset);
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const Name = formData.will_name;
     const gracePeriod = parseInt(formData.grace_period);
     const activityThreshold = parseInt(formData.activity_period);
 
-    // const amounts = beneficiaries?.map((item) =>
-    //   item.beneficiary_amount + "0".repeat(Number(formData.assetDecimals))
-    // );
     const totalAmount =
-      formData.amount + "0".repeat(Number(formData.assetDecimals));
-
+      Number(formData.amount) * 10 ** Number(formData.assetDecimals);
     const tokenAllocations = [
       {
         tokenAddress: formData.asset,
@@ -199,31 +196,27 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
         tokenIds: [],
         amounts: beneficiaries?.map(
           (item) =>
-            Number(item.beneficiary_amount) +
-            "0".repeat(Number(formData.assetDecimals))
+            `${
+              Number(item.beneficiary_amount) *
+              10 ** Number(formData.assetDecimals)
+            }`
         ),
         beneficiaries: beneficiaries?.map((item) => item.beneficiary_address),
       },
     ];
 
-    console.log({
-      Name,
-      totalAmount,
-      gracePeriod,
-      activityThreshold,
-      tokenAllocations,
-    });
-
     if (step === TOTALSTEP) {
       // setIsLoading(true);
       // sign function goes here
-      registerWill(
+      await registerWill(
         Name,
-        totalAmount,
+        `${totalAmount}`,
         gracePeriod,
         activityThreshold,
         tokenAllocations
       );
+
+      setRefetch(true);
       // setIsSubmitted(true);
     } else {
       if (step === 2) {
