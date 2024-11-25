@@ -10,6 +10,7 @@ import InputField from "../../../../components/form/InputField";
 import { useAppKitAccount } from "@reown/appkit/react";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { IWill } from "../../../../hooks/specific/useWills";
 
 interface IBeneficiary {
   name: string;
@@ -22,7 +23,7 @@ interface IBeneficiary {
 type propType = {
   openModal: boolean;
   closeModal: () => void;
-  selectedWill: any;
+  selectedWill: IWill | null;
 };
 
 const AddBeneficiary = ({ closeModal, openModal, selectedWill }: propType) => {
@@ -145,7 +146,7 @@ const AddBeneficiary = ({ closeModal, openModal, selectedWill }: propType) => {
     );
 
     const payload = {
-      willId: selectedWill.willId,
+      willId: selectedWill?.willId,
       beneficiaries: beneficiaries?.map((item) => item.beneficiary_address),
       amounts: beneficiaries?.map(
         (item) =>

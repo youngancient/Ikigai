@@ -18,7 +18,7 @@ import { ethers } from "ethers";
 import { floorToDecimals } from "../../../utils/helpers";
 import { useAppKitAccount } from "@reown/appkit/react";
 import { toast } from "react-toastify";
-import { useWills } from "../../../hooks/specific/useWills";
+import { IWill, useWills } from "../../../hooks/specific/useWills";
 import { multiplyByPrice } from "../../../utils/getPrice";
 import { formatActivityPeriod, formatGracePeriod } from "../../../utils/format";
 
@@ -43,7 +43,7 @@ const WillPage = () => {
     wallet: 0,
     sent: 0,
   });
-  const [selectedWill, setSelectedWill] = useState<any>(null);
+  const [selectedWill, setSelectedWill] = useState<IWill | null>(null);
   const changeUserToken = (token: { symbol: string; address: string }) => {
     setUserSelectedToken(token);
   };
@@ -353,7 +353,21 @@ const WillPage = () => {
                           </div>
 
                           <div className="btn-flex">
-                            <Button
+                            {will?.amountLeft === 0 ? (
+                              ""
+                            ) : (
+                              <Button
+                                onClick={() => {
+                                  setSelectedWill(will);
+                                  setOpenAddBeneficiaryModal(true);
+                                }}
+                                className="radiant-btn"
+                              >
+                                Add Beneficiary
+                              </Button>
+                            )}
+
+                            {/* <Button
                               onClick={() => {
                                 setSelectedWill(will);
                                 setOpenAddBeneficiaryModal(true);
@@ -361,7 +375,7 @@ const WillPage = () => {
                               className="radiant-btn"
                             >
                               Add Beneficiary
-                            </Button>
+                            </Button> */}
                             <IconButton
                               onClick={() => {
                                 setSelectedWill(will);
