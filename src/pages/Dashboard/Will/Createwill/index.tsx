@@ -18,7 +18,6 @@ import { useAppKitAccount } from "@reown/appkit/react";
 import { useRegisterWill } from "../../../../hooks/specific/useCreateWill";
 import { toast } from "react-toastify";
 
-
 interface IBeneficiary {
   name: string;
   email: string;
@@ -171,9 +170,8 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
     }));
   };
 
-  const { registerWill, isRegisterLoading, isDone, reset, isLoadingApproval } = useRegisterWill(
-    formData.asset
-  );
+  const { registerWill, isRegisterLoading, isDone, reset, isLoadingApproval } =
+    useRegisterWill(formData.asset);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -185,8 +183,8 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
     // const amounts = beneficiaries?.map((item) =>
     //   item.beneficiary_amount + "0".repeat(Number(formData.assetDecimals))
     // );
-    const totalAmount = formData.amount + "0".repeat(Number(formData.assetDecimals));
-
+    const totalAmount =
+      Number(formData.amount) * 10 ** Number(formData.assetDecimals);
     const tokenAllocations = [
       {
         tokenAddress: formData.asset,
@@ -194,21 +192,34 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
         tokenIds: [],
         amounts: beneficiaries?.map(
           (item) =>
-            Number(item.beneficiary_amount) +
-            "0".repeat(Number(formData.assetDecimals))
+            `${
+              Number(item.beneficiary_amount) *
+              10 ** Number(formData.assetDecimals)
+            }`
         ),
         beneficiaries: beneficiaries?.map((item) => item.beneficiary_address),
       },
     ];
 
-    console.log({ Name, totalAmount, gracePeriod, activityThreshold, tokenAllocations });
-    
+    console.log(totalAmount, tokenAllocations, "total");
+
+    console.log(
+      {
+        Name,
+        totalAmount: `${totalAmount}`,
+        gracePeriod,
+        activityThreshold,
+        tokenAllocations,
+      },
+      "final"
+    );
+
     if (step === TOTALSTEP) {
       // setIsLoading(true);
       // sign function goes here
       registerWill(
         Name,
-        totalAmount,
+        `${totalAmount}`,
         gracePeriod,
         activityThreshold,
         tokenAllocations
@@ -315,7 +326,7 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
             </div>
           )}
 
-           {isLoadingApproval && (
+          {isLoadingApproval && (
             <div className="loading-state">
               <img src={refresh} alt="refresh" className="animate-spin" />
 
@@ -337,7 +348,7 @@ const CreateWill = ({ closeModal, openModal }: propType) => {
             </div>
           )}
 
-          {!isRegisterLoading && !isDone &&  !isLoadingApproval && (
+          {!isRegisterLoading && !isDone && !isLoadingApproval && (
             <form onSubmit={handleSubmit}>
               {step === 1 && (
                 <div className="form-step-one">
