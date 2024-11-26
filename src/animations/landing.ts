@@ -63,6 +63,10 @@ export const textVariant = {
       opacity: 0,
       y: 80,
     },
+    initial2: {
+      opacity: 0,
+      y: 40,
+    },
     final: {
       opacity: 1,
       y: 0,

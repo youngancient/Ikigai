@@ -51,6 +51,60 @@
   position: relative;
   overflow: hidden;
 
+  .summary-flex {
+    margin: auto;
+    padding-top: 80px;
+    display: flex;
+    max-width: 1920px;
+    width: 70%;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    row-gap: 20px;
+    flex-wrap: wrap;
+    @include mq(768px) {
+      width: 90%;
+    }
+    .summary-item {
+      height: 130px;
+      width: 24%;
+      min-width: 230px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      flex-shrink: 0;
+      border-radius: 12px;
+      border: 1px solid rgba(72, 72, 72, 0.38);
+      background: #272727;
+      @include mq(1000px) {
+        min-width: unset;
+        width: 48%;
+      }
+      @include mq(768px) {
+        min-width: unset;
+        width: 100%;
+      }
+      p {
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 500;
+        color: #d0d5dd;
+      }
+      h4 {
+        margin-top: 16px;
+        font-size: 1.8em;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 24px;
+        background: var(--gradient9);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+    }
+  }
+
   .ring-parent {
     width: 100%;
     display: flex;
