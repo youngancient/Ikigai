@@ -415,13 +415,18 @@
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
-
+        flex-wrap: wrap;
+        row-gap: 20px;
         @include mq(768px) {
           width: 100%;
         }
 
         .section-item {
           width: 48%;
+
+          @include mq(768px) {
+            width: 100% !important;
+          }
           img {
             width: 48px;
           }
