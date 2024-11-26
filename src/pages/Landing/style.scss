@@ -467,6 +467,8 @@
       }
 
       .text-container {
+        width: 100%;
+
         h3 {
           font-size: 3em;
           font-style: normal;
@@ -498,13 +500,20 @@
           }
         }
 
-        button {
+        a {
           padding: 10px;
           border-radius: 200px;
           background: var(--grey900);
           width: 163px;
           height: 52px;
           color: var(--white);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          @include mq(768px) {
+            width: 100%;
+          }
         }
       }
 
