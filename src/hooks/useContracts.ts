@@ -86,8 +86,8 @@ export function useTrustFundContract(withSigner = false) {
     return useMemo(() => {
         const contractAddress = getContractAddress();
         
-        console.log("Debug - Environment Contract Address:", contractAddress);
-        console.log("Debug - Environment Variables:", import.meta.env);
+        // console.log("Debug - Environment Contract Address:", contractAddress);
+        // console.log("Debug - Environment Variables:", import.meta.env);
 
         if (!contractAddress || contractAddress === "") {
             console.error("Contract address is empty or undefined");

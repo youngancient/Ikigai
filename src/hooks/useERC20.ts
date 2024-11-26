@@ -9,7 +9,7 @@ export const useERC20Contract = (withSigner = false, tokenContractAddress : stri
     return useMemo(() => {
 
         if (!tokenContractAddress) {
-            console.log("Token address not yet available");
+            // console.log("Token address not yet available");
             return null;
         }
 

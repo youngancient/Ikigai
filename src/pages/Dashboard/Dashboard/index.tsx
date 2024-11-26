@@ -15,6 +15,8 @@ import { ErrorArrowIcon } from "../../../assets/icons/errorArrow";
 import { useWillStat } from "../../../hooks/specific/useAllWills";
 import { ethers } from "ethers";
 import { multiplyByPrice } from "../../../utils/getPrice";
+import { motion } from "framer-motion";
+import { contVariant } from "../../../animations/landing";
 
 const userToken = [
   { symbol: "CWT", address: "0xaFcA068ECDb7576720f480B6868120a13e7c7461" },
@@ -30,10 +32,16 @@ export const SummaryItem = ({
   text: string | number;
 }) => {
   return (
-    <div className="summary-item">
+    <motion.div
+      className="summary-item"
+      initial="initial2"
+      whileInView="final"
+      viewport={{ once: true }}
+      variants={contVariant}
+    >
       <p>{title}</p>
       <h4>{text}</h4>
-    </div>
+    </motion.div>
   );
 };
 
