@@ -7,11 +7,12 @@ import {
   formatActivityPeriod,
   formatGracePeriod,
 } from "../../../../utils/format";
+import { IWill } from "../../../../hooks/specific/useWills";
 
 type propType = {
   openModal: boolean;
   closeModal: () => void;
-  selectedWill: any;
+  selectedWill: IWill | null;
 };
 
 const ViewWill = ({ closeModal, openModal, selectedWill }: propType) => {
@@ -37,7 +38,11 @@ const ViewWill = ({ closeModal, openModal, selectedWill }: propType) => {
                 <h6>Summary;</h6>
 
                 <div className="form-preview">
-                <div className="d-flex">
+                  <div className="d-flex">
+                    <p>Will Name</p>
+                    <p>{selectedWill?.willName}</p>
+                  </div>{" "}
+                  <div className="d-flex">
                     <p>Token type</p>
                     <p>
                       {selectedWill
