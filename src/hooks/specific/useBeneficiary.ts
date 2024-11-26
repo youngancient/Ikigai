@@ -41,7 +41,7 @@ export const useBeneficiaryWills = () => {
       setIsLoading(true);
       const _getAllEligibleWills =
         await readOnlyWillRegistry.getWillsWilledToBeneficiary(address);
-      console.log(_getAllEligibleWills);
+      // console.log(_getAllEligibleWills);
 
       setWills(_getAllEligibleWills);
     } catch (error) {
@@ -84,7 +84,7 @@ export const useBeneficiaryWills = () => {
       const receipt = await tx.wait();
 
         if (receipt.status === 1) {
-          console.log(receipt);
+          // console.log(receipt);
           toast.success("Will creation successful");
           setClaimCompleted(true);
           return;

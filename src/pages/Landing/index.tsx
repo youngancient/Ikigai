@@ -10,7 +10,7 @@ import eth4 from "../../assets/images/eth4.png";
 import rings from "../../assets/icons/rings.svg";
 
 import "./style.scss";
-import { useAppKit, useAppKitAccount } from "@reown/appkit/react";
+import { useAppKit, useAppKitAccount } from "@reown/appkit/react"; // import useAppKitProvider
 import { formatAddress } from "../../utils/helpers";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -27,6 +27,8 @@ const Landing = () => {
   const { address, isConnected } = useAppKitAccount();
   const navigate = useNavigate();
 
+  // const {walletProvider} = useAppKitProvider("eip155"); // uncomment 
+
   const handleConnectWallet = () => {
     open();
   };
@@ -34,9 +36,19 @@ const Landing = () => {
     if (!isConnected) {
       open();
     } else {
+      // onSignMessage();
       navigate("/dashboard");
     }
   };
+    
+// signMessage here
+  // const onSignMessage = async()=> {
+  //   const provider = new BrowserProvider(walletProvider as Eip1193Provider)
+  //   const signer = await provider.getSigner()
+  //   const signature = await signer?.signMessage('Hello, this is LegacyX')
+  //   console.log(signature)
+  // }
+
   return (
     <div className="landing-page">
       <div className="ring-parent">
@@ -109,9 +121,9 @@ const Landing = () => {
 
       <div className="second-section">
         <div className="summary-flex">
-          <SummaryItem title="Total Tokens Willed" text={`${"$"}0 `} />
-          <SummaryItem title="Total Beneficiary" text={`${0}`} />
-          <SummaryItem title="Wills Created" text={`${0}`} />
+          <SummaryItem title="Total Amount Locked" text={`${"$"}1,000 `} />
+          <SummaryItem title="Wills Created" text={`${10}`} />
+          <SummaryItem title="Total Beneficiary" text={`${10}`} />
         </div>
 
         <div className="d-flex">
@@ -180,7 +192,6 @@ const Landing = () => {
           <motion.div
             initial="initial"
             whileInView="final"
-            // viewport={{ once: true }}
             variants={contVariant}
           >
             <img src={iphone} alt="iphone" />
