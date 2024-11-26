@@ -911,25 +911,6 @@
         "inputs": [
             {
                 "internalType": "address",
-                "name": "beneficiary",
-                "type": "address"
-            }
-        ],
-        "name": "getWillsAsBeneficiary",
-        "outputs": [
-            {
-                "internalType": "address[]",
-                "name": "",
-                "type": "address[]"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
                 "name": "owner",
                 "type": "address"
             }
