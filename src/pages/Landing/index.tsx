@@ -20,6 +20,7 @@ import {
   contVariant,
 } from "../../animations/landing";
 import logo from "../../assets/images/logo.png";
+import { SummaryItem } from "../Dashboard/Dashboard";
 
 const Landing = () => {
   const { open } = useAppKit();
@@ -107,6 +108,12 @@ const Landing = () => {
       </div>
 
       <div className="second-section">
+        <div className="summary-flex">
+          <SummaryItem title="Total Tokens Willed" text={`${"$"}0 `} />
+          <SummaryItem title="Total Beneficiary" text={`${0}`} />
+          <SummaryItem title="Wills Created" text={`${0}`} />
+        </div>
+
         <div className="d-flex">
           <div className="about-app">
             <h4>Ready to get started?</h4>
@@ -185,7 +192,7 @@ const Landing = () => {
         </div>
 
         <div className="connect-wallet-flex">
-        <img src={logo} className="w-[114px]" alt="logo" />
+          <img src={logo} className="w-[114px]" alt="logo" />
           <button className="get-started-btn" onClick={handleConnectWallet}>
             {isConnected ? formatAddress(address ?? "") : "Connect Wallet"}
           </button>

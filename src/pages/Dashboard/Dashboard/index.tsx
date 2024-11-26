@@ -22,7 +22,7 @@ const userToken = [
   { symbol: "CPGT", address: "0xaFcA068ECDb7576720f480B6868120a13e7c7461" },
 ];
 
-const SummaryItem = ({
+export const SummaryItem = ({
   title,
   text,
 }: {
@@ -30,7 +30,7 @@ const SummaryItem = ({
   text: string | number;
 }) => {
   return (
-    <div className="summary-container">
+    <div className="summary-item">
       <p>{title}</p>
       <h4>{text}</h4>
     </div>
