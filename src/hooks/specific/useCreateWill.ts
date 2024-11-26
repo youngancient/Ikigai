@@ -123,15 +123,15 @@ export const useRegisterWill = (tokenAddress: string) => {
         console.log("Parameters:", {
           name,
           tokenAllocations,
-          gracePeriodInSeconds: gracePeriod * 86400,
-          activityThresholdInSeconds: activityThreshold * 30 * 24 * 60 * 60,
+          gracePeriodInSeconds: gracePeriod ,
+          activityThresholdInSeconds: activityThreshold,
         });
 
         const tx = await willContract.createWill(
           name,
           tokenAllocations,
-          gracePeriod * 86400,
-          activityThreshold * 24 * 60 * 60, // convert to seconds
+          gracePeriod , // convert to sec
+          activityThreshold , // convert to seconds
           {
             gasLimit: 1000000,
           }
