@@ -10,7 +10,7 @@ import eth4 from "../../assets/images/eth4.png";
 import rings from "../../assets/icons/rings.svg";
 
 import "./style.scss";
-import { useAppKit, useAppKitAccount } from "@reown/appkit/react";
+import { useAppKit, useAppKitAccount } from "@reown/appkit/react"; // import useAppKitProvider
 import { formatAddress } from "../../utils/helpers";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -20,11 +20,16 @@ import {
   contVariant,
 } from "../../animations/landing";
 import logo from "../../assets/images/logo.png";
+// import { BrowserProvider } from "ethers"; // uncomment
+// import { Eip1193Provider } from "ethers"; // uncomment
+
 
 const Landing = () => {
   const { open } = useAppKit();
   const { address, isConnected } = useAppKitAccount();
   const navigate = useNavigate();
+
+  // const {walletProvider} = useAppKitProvider("eip155"); // uncomment 
 
   const handleConnectWallet = () => {
     open();
@@ -33,9 +38,19 @@ const Landing = () => {
     if (!isConnected) {
       open();
     } else {
+      // onSignMessage();
       navigate("/dashboard");
     }
   };
+    
+// signMessage here
+  // const onSignMessage = async()=> {
+  //   const provider = new BrowserProvider(walletProvider as Eip1193Provider)
+  //   const signer = await provider.getSigner()
+  //   const signature = await signer?.signMessage('Hello, this is LegacyX')
+  //   console.log(signature)
+  // }
+
   return (
     <div className="landing-page">
       <div className="ring-parent">
