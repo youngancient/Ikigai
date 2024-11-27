@@ -38,6 +38,7 @@ const ClaimWillModal = ({ closeModal, openModal, selectedItem }: propType) => {
       toast.error("Invalid will selected");
       return;
     }
+    // console.log("got here");
     claimWill(Number(selectedItem.id));
     // setIsLoading(true);
     // setIsSubmitted(false);
