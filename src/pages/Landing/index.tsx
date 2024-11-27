@@ -121,9 +121,9 @@ const Landing = () => {
 
       <div className="second-section">
         <div className="summary-flex">
-          <SummaryItem title="Total Amount Locked" text={`${"$"}1,000 `} />
-          <SummaryItem title="Wills Created" text={`${10}`} />
-          <SummaryItem title="Total Beneficiary" text={`${10}`} />
+          <SummaryItem title="Total Amount Locked" text={`${"$"}2,200 `} />
+          <SummaryItem title="Wills Created" text={`${5}`} />
+          <SummaryItem title="Total Beneficiary" text={`${7}`} />
         </div>
 
         <div className="d-flex">
