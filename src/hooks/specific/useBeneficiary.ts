@@ -58,7 +58,7 @@ export const useBeneficiaryWills = () => {
   const errorDecoder = ErrorDecoder.create([WILL_ABI]);
 
   const claimWill = useCallback(async (willId : number) => {
-
+    console.log(willId);
     if (!willContract) {
       setWills(null);
       return;
@@ -74,6 +74,7 @@ export const useBeneficiaryWills = () => {
     }
     try {
       setIsClaiming(true);
+      console.log("got here");
       console.log({willId});
       const tx = await willContract.claimInheritance(
         willId,
