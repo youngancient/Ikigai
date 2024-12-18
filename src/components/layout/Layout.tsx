@@ -37,16 +37,21 @@ export const Layout = ({
                       
                       className=" logo-text cursor-pointer"
                     > */}
-                      {/* LegacyX
+                    {/* LegacyX
                     </p> */}
-                    <img src={logo} className="w-[114px] cursor-pointer" alt="logo" onClick={() => navigate("/")} />
+                    <img
+                      src={logo}
+                      className="w-[114px] cursor-pointer"
+                      alt="logo"
+                      onClick={() => navigate("/")}
+                    />
                   </div>
                 </div>
               </nav>
             </div>
 
             <NavLink className={"w-full mt-20 "} to={"/dashboard"}>
-              <div className="w-full flex items-centertext-xl">
+              <div className="w-full flex items-center text-xl">
                 <div>
                   <span>
                     <svg
@@ -167,11 +172,20 @@ export const Layout = ({
           </div>
         </div>
         {showSidebar && (
-          <div className="w-full fixed z-20 bg-black top-0 left-0 h-full bg-opacity-10 backdrop-blur-lg">
-            <div className="w-[250px] p-[1px] bg-gradient-to-r from-[#8AD4EC99] via-[#EF96FF99] to-[#FF56A999] h-[98%] max-h-full fixed rounded-lg flex lg:hidden">
+          <div
+            className="w-full fixed z-20 bg-black top-0 left-0 h-full bg-opacity-10 backdrop-blur-lg"
+            onClick={() => setShowSidebar(!showSidebar)}
+          >
+            <div className="w-[250px] p-[1px] bg-gradient-to-r from-[#8AD4EC99] via-[#EF96FF99] to-[#FF56A999] h-[108%] max-h-full fixed rounded-lg flex lg:hidden">
               <div className="w-full h-full bg-black rounded-[inherit] p-4 flex flex-col text-white">
                 <div className="w-full flex items-center justify-between">
-                  <img className="max-w-[150px]" src={logo} />
+                  <img
+                    className="max-w-[150px]"
+                    src={logo}
+                    onClick={() => {
+                      navigate("/");
+                    }}
+                  />
 
                   <span onClick={() => setShowSidebar(!showSidebar)}>
                     <IoClose color="white" size={26} />
@@ -324,8 +338,11 @@ export const Layout = ({
 
             <div className="flex gap-4">
               {titleChild}
-              <button className="bg-gradient-to-r from-[#8AD4EC99] via-[#EF96FF99] to-[#FF56A999] px-4 py-2 rounded-xl" onClick={handleConnectWallet} >
-              {isConnected ? formatAddress(address ?? "") : "Connect Wallet"}
+              <button
+                className="bg-gradient-to-r from-[#8AD4EC99] via-[#EF96FF99] to-[#FF56A999] px-4 py-2 rounded-xl"
+                onClick={handleConnectWallet}
+              >
+                {isConnected ? formatAddress(address ?? "") : "Connect Wallet"}
               </button>
             </div>
           </div>
