@@ -1,22 +1,19 @@
 import { CaipNetwork, createAppKit } from "@reown/appkit/react";
 import { EthersAdapter } from "@reown/appkit-adapter-ethers";
-
+import { liskSepolia as rawLiskSepolia } from "@reown/appkit/networks";
 
 export const liskSepoliaNetwork: CaipNetwork = {
-  id: "eip155:4202",
-  chainId: 4202,
+  ...rawLiskSepolia,
+  id: 4202,
   chainNamespace: "eip155",
-  name: "Lisk Sepolia",
-  currency: "ETH",
-  explorerUrl: import.meta.env.VITE_LISK_SEPOLIA_EXPLORER_URL,
-  rpcUrl: import.meta.env.VITE_LISK_SEPOLIA_RPC_URL,
+  caipNetworkId: "eip155:4202",
 };
 
 // 1. Get projectId
 const projectId = import.meta.env.VITE_APPKIT_PROJECT_ID;
 
 // 2. Set the networks
-const networks = [liskSepoliaNetwork];
+const networks: [CaipNetwork, ...CaipNetwork[]] = [liskSepoliaNetwork];
 
 // 3. Create a metadata object - optional
 const metadata = {
@@ -43,4 +40,3 @@ export const appkit = createAppKit({
     socials: [],
   },
 });
-

@@ -28,7 +28,7 @@ export const useTokenApproval = (tokenAddress : string) => {
           toast.error("Connect your wallet!");
           return;
         }
-        if (Number(chainId) !== liskSepoliaNetwork.chainId) {
+        if (Number(chainId) !== liskSepoliaNetwork.id) {
           toast.error("You are not connected to the right network");
           return;
         }

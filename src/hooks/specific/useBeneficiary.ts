@@ -68,7 +68,7 @@ export const useBeneficiaryWills = () => {
       setWills(null);
       return;
     }
-    if (Number(chainId) !== liskSepoliaNetwork.chainId) {
+    if (Number(chainId) !== liskSepoliaNetwork.id) {
       toast.error("You are not connected to the right network");
       return;
     }
